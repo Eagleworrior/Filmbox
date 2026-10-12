@@ -1,8 +1,11 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.FilmBox" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    <style name="Base.Theme.FilmBox" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Dark mode palette for Kenya Movie Box -->
+        <item name="colorPrimary">#00E5FF</item>
+        <item name="colorSecondary">#FFD700</item>
+        <item name="android:statusBarColor">#0B0F17</item>
+        <item name="android:navigationBarColor">#0B0F17</item>
     </style>
 
     <style name="Theme.FilmBox" parent="Base.Theme.FilmBox" />

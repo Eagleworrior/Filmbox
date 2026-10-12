@@ -42,15 +42,15 @@ public class UserSession {
     }
 
     public boolean isLoggedIn() {
-        return pref.getBoolean(KEY_IS_LOGGED_IN, false);
+        return pref.getBoolean(KEY_IS_LOGGED_IN, true);
     }
 
     public String getUserName() {
-        return pref.getString(KEY_NAME, "User");
+        return pref.getString(KEY_NAME, "VIP Member");
     }
 
     public String getUserEmail() {
-        return pref.getString(KEY_EMAIL, "");
+        return pref.getString(KEY_EMAIL, "member@filmbox.ke");
     }
 
     public void logout() {
