@@ -10,41 +10,66 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   </head>
   <body class="bg-[#0B0F17] text-slate-100 antialiased m-0 p-0 min-h-screen flex flex-col font-['Plus_Jakarta_Sans',sans-serif]">
-    <!-- Header -->
-    <header class="sticky top-0 z-40 w-full bg-[#0B0F17]/95 backdrop-blur-md border-b border-slate-800/80 px-4 py-3 flex items-center justify-between gap-3">
-      <div class="flex items-center gap-2.5 shrink-0">
-        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-700 via-indigo-600 to-yellow-500 p-0.5 shadow-lg">
-          <div class="w-full h-full bg-[#0B0F17] rounded-[10px] flex items-center justify-center text-yellow-400 font-bold">
-            🎬
+    <!-- Header with Safe Area Padding & App Icon -->
+    <header class="sticky top-0 z-40 w-full bg-[#0B0F17]/95 backdrop-blur-md border-b border-slate-800/80 px-4 pt-8 sm:pt-4 pb-3 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div class="flex items-center justify-between w-full sm:w-auto gap-2.5">
+        <div class="flex items-center gap-2.5 shrink-0 cursor-pointer" onclick="switchTab('all')">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-700 via-indigo-600 to-yellow-500 p-0.5 shadow-lg">
+            <div class="w-full h-full bg-[#0B0F17] rounded-[10px] flex items-center justify-center text-yellow-400 font-bold">
+              🎬
+            </div>
+          </div>
+          <div>
+            <h1 class="text-base sm:text-lg font-black text-white tracking-wide font-['Bebas_Neue',sans-serif]">DAILY PASS CINEMA</h1>
+            <p class="text-[10px] text-slate-400 -mt-1">Kenya Movie Box</p>
           </div>
         </div>
-        <div>
-          <h1 class="text-sm sm:text-base font-black text-white tracking-wide font-['Bebas_Neue',sans-serif]">KENYA MOVIE BOX</h1>
-          <p class="text-[10px] text-slate-400 -mt-1">Daily Pass Cinema 🇰🇪</p>
-        </div>
+
+        <!-- Mobile Pass Badge -->
+        <button onclick="alert('VIP Pass Active (24h M-Pesa Pass)')" class="sm:hidden px-3 py-1.5 rounded-xl bg-gradient-to-r from-yellow-500 to-amber-500 text-black font-black text-xs shadow-md">
+          PASS ACTIVE ⚡
+        </button>
       </div>
 
-      <!-- Search Bar -->
-      <div class="flex-1 max-w-md mx-2">
+      <!-- Prominent Top Search Bar with Instant Auto-Suggestions Dropdown -->
+      <div class="relative flex-1 max-w-lg w-full">
         <input
           type="text"
           id="searchInput"
           oninput="handleSearch(this.value)"
-          placeholder="🔍 Search all movies, series, actors..."
-          class="w-full px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-yellow-500"
+          placeholder="🔍 Search movies, series, actors..."
+          class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-xs sm:text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-yellow-500 shadow-inner"
         />
+        <!-- Auto-suggestions dropdown -->
+        <div id="searchDropdown" class="absolute left-0 right-0 top-full mt-1.5 bg-[#0F1626] border border-slate-700 rounded-xl shadow-2xl overflow-hidden z-50 max-h-80 overflow-y-auto hidden"></div>
       </div>
 
-      <div class="shrink-0">
-        <button onclick="alert('VIP Pass Active (24h M-Pesa Pass)')" class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-yellow-500 to-amber-500 text-black font-black text-xs shadow-md">
+      <!-- Desktop Navigation Tabs & Pass Badge -->
+      <div class="hidden sm:flex items-center gap-2 shrink-0">
+        <button onclick="switchTab('all')" id="tab-all" class="nav-tab px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-white cursor-pointer">Home</button>
+        <button onclick="switchTab('downloads')" id="tab-downloads" class="nav-tab px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-900 text-slate-300 border border-slate-800 cursor-pointer flex items-center gap-1">
+          <span>💾 Downloads</span>
+          <span id="dlCount" class="px-1.5 py-0.2 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px]">0</span>
+        </button>
+        <button onclick="alert('VIP Pass Active (24h M-Pesa Pass)')" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-yellow-500 to-amber-500 text-black font-black text-xs shadow-md cursor-pointer">
           PASS ACTIVE ⚡
         </button>
       </div>
     </header>
 
-    <!-- Category Filter Tabs -->
-    <div class="max-w-7xl mx-auto px-4 py-3 w-full overflow-x-auto flex gap-2 scrollbar-none" style="scrollbar-width: none;">
-      <button onclick="filterCategory('all')" id="cat-all" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-yellow-500 text-black shadow-md cursor-pointer">✨ All</button>
+    <!-- Mobile Navigation Bar -->
+    <div class="sm:hidden flex items-center justify-around bg-[#0E1524] border-b border-slate-800 py-2 px-4 shrink-0">
+      <button onclick="switchTab('all')" class="text-xs font-bold text-yellow-400">🏠 Home</button>
+      <button onclick="switchTab('downloads')" class="text-xs font-bold text-emerald-400 flex items-center gap-1">
+        <span>💾 Downloads (<span id="mobDlCount">0</span>)</span>
+      </button>
+      <button onclick="filterCategory('kenyan')" class="text-xs font-bold text-red-400">🇰🇪 Kenyan Hits</button>
+      <button onclick="filterCategory('series')" class="text-xs font-bold text-blue-400">📺 Series</button>
+    </div>
+
+    <!-- Category Filter Chips -->
+    <div class="max-w-7xl mx-auto px-4 py-2 w-full overflow-x-auto flex gap-2 scrollbar-none shrink-0" style="scrollbar-width: none;">
+      <button onclick="filterCategory('all')" id="cat-all" class="cat-btn px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap bg-yellow-500 text-black shadow-md cursor-pointer">✨ All</button>
       <button onclick="filterCategory('trending')" id="cat-trending" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-900 text-slate-300 border border-slate-800 cursor-pointer">🔥 Trending</button>
       <button onclick="filterCategory('kenyan')" id="cat-kenyan" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-900 text-slate-300 border border-slate-800 cursor-pointer">📺 Kenyan Hits</button>
       <button onclick="filterCategory('african')" id="cat-african" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-900 text-slate-300 border border-slate-800 cursor-pointer">🌍 African Movies</button>
@@ -57,14 +82,15 @@
 
     <!-- Main Catalog Grid -->
     <main class="flex-1 max-w-7xl mx-auto px-4 py-4 w-full space-y-6">
+      <div id="sectionTitle" class="text-sm font-black text-yellow-400 uppercase tracking-wider"></div>
       <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3.5" id="movieGrid">
         <!-- Populated by JS -->
       </div>
     </main>
 
-    <!-- Video Player Modal -->
+    <!-- Video Player Modal with Rotation & Episode Selector -->
     <div id="videoModal" class="fixed inset-0 z-50 bg-black/95 flex flex-col hidden">
-      <div class="px-4 py-3 bg-[#0B0F17] border-b border-slate-800 flex items-center justify-between gap-2">
+      <div class="px-4 py-3 bg-[#0B0F17] border-b border-slate-800 flex items-center justify-between gap-2 shrink-0">
         <div class="flex items-center gap-2 min-w-0">
           <h3 id="modalTitle" class="text-sm font-bold text-white truncate">Streaming Movie</h3>
           <span id="seasonBadge" class="text-xs px-2 py-0.5 rounded bg-blue-600 text-white font-bold hidden">S1:E1</span>
@@ -75,18 +101,18 @@
             <option value="vidsrc">⚡ Server 2: VidSrc Ultra</option>
             <option value="embedsu">🌐 Server 3: Embed.su HD</option>
             <option value="superstream">🍿 Server 4: SuperStream</option>
-            <option value="autoembed">🎬 Server 5: AutoEmbed</option>
           </select>
+          <button onclick="toggleRotate()" class="px-3 py-1.5 rounded-lg bg-yellow-500 text-black font-bold text-xs cursor-pointer" title="Rotate video">🔄 Rotate</button>
           <button onclick="closeModal()" class="px-3 py-1.5 rounded-lg bg-red-600/20 text-red-400 font-bold text-xs cursor-pointer">Close ✕</button>
         </div>
       </div>
 
-      <div class="flex-1 bg-black relative flex items-center justify-center">
+      <div id="playerWrapper" class="flex-1 bg-black relative flex items-center justify-center overflow-hidden">
         <iframe id="streamFrame" class="w-full h-full border-0" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe>
       </div>
 
       <!-- TV Series Seasons & Episodes Bar -->
-      <div id="tvEpisodesBar" class="bg-[#080D15] border-t border-slate-800 p-3 max-h-48 overflow-y-auto hidden">
+      <div id="tvEpisodesBar" class="bg-[#080D15] border-t border-slate-800 p-3 max-h-48 overflow-y-auto hidden shrink-0">
         <div class="flex items-center justify-between gap-2 mb-2">
           <span class="text-xs font-bold text-yellow-400">Select Season:</span>
           <div id="seasonPills" class="flex gap-1.5 overflow-x-auto"></div>
@@ -98,43 +124,61 @@
 
     <script>
       const movies = [
-        { id: 130737, title: "Nairobi Half Life", poster: "https://image.tmdb.org/t/p/w500/1QYW51WrwmSsJBm1y9ZkdEeHp6q.jpg", rating: "6.9", year: "2012", type: "movie", isKenyan: true },
-        { id: 1063242, title: "Disconnect: Wedding Planner", poster: "https://image.tmdb.org/t/p/w500/co6doQ2d3f5ZaTTvORV76wrTFit.jpg", rating: "6.9", year: "2023", type: "movie", isKenyan: true },
-        { id: 205722, title: "Country Queen", poster: "https://image.tmdb.org/t/p/w500/39rLohFji3qUKu6A5OXZW4NMJ8l.jpg", rating: "8.2", year: "2022", type: "tv", isKenyan: true, seasons: 1, episodes: 6 },
-        { id: 493915, title: "Supa Modo", poster: "https://image.tmdb.org/t/p/w500/gvRrPZQlYX1bwwTxxtuerrADviz.jpg", rating: "7.4", year: "2018", type: "movie", isKenyan: true },
-        { id: 47559, title: "The First Grader", poster: "https://image.tmdb.org/t/p/w500/jstfYxEYMFfSO6tQaYL6O0AMUol.jpg", rating: "7.1", year: "2010", type: "movie", isKenyan: true },
-        { id: 1129249, title: "Click Click Bang", poster: "https://image.tmdb.org/t/p/w500/1TQ7FAqdtPk5VOCT1wgQvpEETlL.jpg", rating: "8.0", year: "2023", type: "movie", isKenyan: true },
-        { id: 229205, title: "Crime and Justice", poster: "https://image.tmdb.org/t/p/w500/qLvoPmfyi1vEAo6KCdICTiYvnGS.jpg", rating: "7.8", year: "2021", type: "tv", isKenyan: true, seasons: 3, episodes: 24 },
-        { id: 1206988, title: "A Tribe Called Judah", poster: "https://image.tmdb.org/t/p/w500/9aMG2ftIFqFAN69FdjovKJY0hsd.jpg", rating: "9.1", year: "2023", type: "movie", isAfrican: true },
-        { id: 1172009, title: "The Black Book", poster: "https://image.tmdb.org/t/p/w500/kn28W24slBLyGr8ZIZnxNE5YZrY.jpg", rating: "6.7", year: "2023", type: "movie", isAfrican: true },
-        { id: 1023994, title: "Aníkúlápó", poster: "https://image.tmdb.org/t/p/w500/xb30hkUpBm23stnVgDJGYGsC0R0.jpg", rating: "7.1", year: "2022", type: "movie", isAfrican: true },
-        { id: 103411, title: "Blood & Water", poster: "https://image.tmdb.org/t/p/w500/NFHy3z1taQ8nzudDHeVIJnih3J.jpg", rating: "7.8", year: "2020", type: "tv", isAfrican: true, seasons: 3, episodes: 24 },
-        { id: 1163045, title: "Jagun Jagun", poster: "https://image.tmdb.org/t/p/w500/uPZtE5DSo9VIX2N3NPtmTayhgP8.jpg", rating: "6.7", year: "2023", type: "movie", isAfrican: true },
-        { id: 533535, title: "Deadpool & Wolverine", poster: "https://image.tmdb.org/t/p/w500/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg", rating: "7.6", year: "2024", type: "movie" },
-        { id: 558449, title: "Gladiator II", poster: "https://image.tmdb.org/t/p/w500/2cxhvwyEwRlysAmRH4iodkvo0z5.jpg", rating: "6.6", year: "2024", type: "movie" },
-        { id: 693134, title: "Dune: Part Two", poster: "https://image.tmdb.org/t/p/w500/6izwz7rsy95ARzTR3poZ8H6c5pp.jpg", rating: "8.1", year: "2024", type: "movie" },
-        { id: 1022789, title: "Inside Out 2", poster: "https://image.tmdb.org/t/p/w500/vpnVM9B6NMmQpWeZvzLvDESb2QY.jpg", rating: "7.5", year: "2024", type: "movie" },
-        { id: 1241982, title: "Moana 2", poster: "https://image.tmdb.org/t/p/w500/aLVkiINlIeCkcZIzb7XHzPYgO6L.jpg", rating: "7.0", year: "2024", type: "movie" },
-        { id: 872585, title: "Oppenheimer", poster: "https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg", rating: "8.0", year: "2023", type: "movie" },
-        { id: 76600, title: "Avatar: The Way of Water", poster: "https://image.tmdb.org/t/p/w500/t6HIqrRAclMCA60NsSmeqe9RmNV.jpg", rating: "7.6", year: "2022", type: "movie" },
-        { id: 157336, title: "Interstellar", poster: "https://image.tmdb.org/t/p/w500/yQvGrMoipbRoddT0ZR8tPoR7NfX.jpg", rating: "8.5", year: "2014", type: "movie" },
-        { id: 126308, title: "Shōgun", poster: "https://image.tmdb.org/t/p/w500/7O4iVfOMQmdCSxhOg1WnzG1AgYT.jpg", rating: "8.4", year: "2024", type: "tv", seasons: 3, episodes: 24 },
-        { id: 94997, title: "House of the Dragon", poster: "https://image.tmdb.org/t/p/w500/7V0Ebks0GgpKvQ7QbLAIdX5dos4.jpg", rating: "8.4", year: "2022", type: "tv", seasons: 3, episodes: 24 },
-        { id: 93405, title: "Squid Game", poster: "https://image.tmdb.org/t/p/w500/1QdXdRYfktUSONkl1oD5gc6Be0s.jpg", rating: "7.9", year: "2021", type: "tv", seasons: 3, episodes: 24 },
-        { id: 66732, title: "Stranger Things", poster: "https://image.tmdb.org/t/p/w500/uOOtwVbSr4QDjAGIifLDwpb2Pdl.jpg", rating: "8.5", year: "2016", type: "tv", seasons: 3, episodes: 24 },
-        { id: 1396, title: "Breaking Bad", poster: "https://image.tmdb.org/t/p/w500/anFx9aTOOYqgS3v7x3R84Kz67ly.jpg", rating: "9.0", year: "2008", type: "tv", seasons: 3, episodes: 24 },
-        { id: 1399, title: "Game of Thrones", poster: "https://image.tmdb.org/t/p/w500/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg", rating: "8.5", year: "2011", type: "tv", seasons: 3, episodes: 24 },
-        { id: 85937, title: "Demon Slayer", poster: "https://image.tmdb.org/t/p/w500/xUfRZu2mi8jH6SzQEJGP6tjBuYj.jpg", rating: "8.6", year: "2019", type: "tv", seasons: 3, episodes: 24 },
-        { id: 127532, title: "Solo Leveling", poster: "https://image.tmdb.org/t/p/w500/geCRueV3ElhRTr0xtJuEWJt6dJ1.jpg", rating: "8.7", year: "2024", type: "tv", seasons: 3, episodes: 24 }
+        { id: 130737, title: "Nairobi Half Life", poster: "https://image.tmdb.org/t/p/w500/1QYW51WrwmSsJBm1y9ZkdEeHp6q.jpg", rating: "6.9", year: "2012", runtime: "1h 36m", type: "movie", isKenyan: true, overview: "Mwas, a young aspiring actor from upcountry Kenya dreams of becoming an accomplished actor one day..." },
+        { id: 1063242, title: "Disconnect: Wedding Planner", poster: "https://image.tmdb.org/t/p/w500/co6doQ2d3f5ZaTTvORV76wrTFit.jpg", rating: "6.9", year: "2023", runtime: "1h 42m", type: "movie", isKenyan: true, overview: "After falling victim to a scam, a desperate man races the clock as he attempts to plan a luxurious destination wedding..." },
+        { id: 205722, title: "Country Queen", poster: "https://image.tmdb.org/t/p/w500/39rLohFji3qUKu6A5OXZW4NMJ8l.jpg", rating: "8.2", year: "2022", runtime: "45m / ep", type: "tv", isKenyan: true, seasons: 1, episodes: 6, overview: "A Nairobi event planner returns to her rural village after 10 years, where she confronts her past..." },
+        { id: 493915, title: "Supa Modo", poster: "https://image.tmdb.org/t/p/w500/gvRrPZQlYX1bwwTxxtuerrADviz.jpg", rating: "7.4", year: "2018", runtime: "1h 15m", type: "movie", isKenyan: true, overview: "Jo, a witty 9-year old terminally ill girl is taken back to her rural village to live out the rest of her short life..." },
+        { id: 47559, title: "The First Grader", poster: "https://image.tmdb.org/t/p/w500/jstfYxEYMFfSO6tQaYL6O0AMUol.jpg", rating: "7.1", year: "2010", runtime: "1h 43m", type: "movie", isKenyan: true, overview: "The true story of an 84 year-old Kenyan villager and ex Mau Mau freedom fighter who fights for his right to go to school..." },
+        { id: 1129249, title: "Click Click Bang", poster: "https://image.tmdb.org/t/p/w500/1TQ7FAqdtPk5VOCT1wgQvpEETlL.jpg", rating: "8.0", year: "2023", runtime: "1h 30m", type: "movie", isKenyan: true, overview: "When Kev, a super talented footballer's dream come crushing down, he is left with no choice but to join the criminal world." },
+        { id: 229205, title: "Crime and Justice", poster: "https://image.tmdb.org/t/p/w500/qLvoPmfyi1vEAo6KCdICTiYvnGS.jpg", rating: "7.8", year: "2021", runtime: "50m / ep", type: "tv", isKenyan: true, seasons: 3, episodes: 24, overview: "Leading Kenyan investigative procedural following top detectives solving high-profile crimes in Nairobi." },
+        { id: 1206988, title: "A Tribe Called Judah", poster: "https://image.tmdb.org/t/p/w500/9aMG2ftIFqFAN69FdjovKJY0hsd.jpg", rating: "9.1", year: "2023", runtime: "2h 05m", type: "movie", isAfrican: true, overview: "With the help of their mother, the Judah boys plan to rob a small mall. But when they arrive, they're met by real armed robbers." },
+        { id: 1172009, title: "The Black Book", poster: "https://image.tmdb.org/t/p/w500/kn28W24slBLyGr8ZIZnxNE5YZrY.jpg", rating: "6.7", year: "2023", runtime: "2h 10m", type: "movie", isAfrican: true, overview: "After his son is wrongly accused of kidnapping, a deacon fights a crooked police gang to clear him." },
+        { id: 1023994, title: "Aníkúlápó", poster: "https://image.tmdb.org/t/p/w500/xb30hkUpBm23stnVgDJGYGsC0R0.jpg", rating: "7.1", year: "2022", runtime: "2h 24m", type: "movie", isAfrican: true, overview: "After an affair with a queen leads to his demise, an eager traveler encounters a mystical bird with the power to give him another life." },
+        { id: 103411, title: "Blood & Water", poster: "https://image.tmdb.org/t/p/w500/NFHy3z1taQ8nzudDHeVIJnih3J.jpg", rating: "7.8", year: "2020", runtime: "52m / ep", type: "tv", isAfrican: true, seasons: 3, episodes: 24, overview: "After crossing paths at a party, a Cape Town teen sets out to prove whether a private-school swimming star is her sister." },
+        { id: 533535, title: "Deadpool & Wolverine", poster: "https://image.tmdb.org/t/p/w500/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg", rating: "7.6", year: "2024", runtime: "2h 08m", type: "movie", overview: "A listless Wade Wilson toils away in civilian life. But when his homeworld faces an existential threat, Wade must reluctantly suit-up." },
+        { id: 558449, title: "Gladiator II", poster: "https://image.tmdb.org/t/p/w500/2cxhvwyEwRlysAmRH4iodkvo0z5.jpg", rating: "6.6", year: "2024", runtime: "2h 28m", type: "movie", overview: "Years after witnessing the death of the revered hero Maximus, Lucius is forced to enter the Colosseum." },
+        { id: 693134, title: "Dune: Part Two", poster: "https://image.tmdb.org/t/p/w500/6izwz7rsy95ARzTR3poZ8H6c5pp.jpg", rating: "8.1", year: "2024", runtime: "2h 46m", type: "movie", overview: "Follow the mythic journey of Paul Atreides as he unites with Chani and the Fremen while on a path of revenge." },
+        { id: 1022789, title: "Inside Out 2", poster: "https://image.tmdb.org/t/p/w500/vpnVM9B6NMmQpWeZvzLvDESb2QY.jpg", rating: "7.5", year: "2024", runtime: "1h 36m", type: "movie", overview: "Teenager Riley's mind headquarters is undergoing a sudden demolition to make room for new Emotions!" },
+        { id: 1241982, title: "Moana 2", poster: "https://image.tmdb.org/t/p/w500/aLVkiINlIeCkcZIzb7XHzPYgO6L.jpg", rating: "7.0", year: "2024", runtime: "1h 40m", type: "movie", overview: "Moana journeys alongside Maui and a new crew to the far seas of Oceania." },
+        { id: 872585, title: "Oppenheimer", poster: "https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg", rating: "8.0", year: "2023", runtime: "3h 00m", type: "movie", overview: "The story of J. Robert Oppenheimer's role in the development of the atomic bomb during World War II." },
+        { id: 76600, title: "Avatar: The Way of Water", poster: "https://image.tmdb.org/t/p/w500/t6HIqrRAclMCA60NsSmeqe9RmNV.jpg", rating: "7.6", year: "2022", runtime: "3h 12m", type: "movie", overview: "Set more than a decade after the events of the first film, learn the story of the Sully family." },
+        { id: 157336, title: "Interstellar", poster: "https://image.tmdb.org/t/p/w500/yQvGrMoipbRoddT0ZR8tPoR7NfX.jpg", rating: "8.5", year: "2014", runtime: "2h 49m", type: "movie", overview: "Explorers make use of a newly discovered wormhole to surpass human space travel limitations." },
+        { id: 126308, title: "Shōgun", poster: "https://image.tmdb.org/t/p/w500/7O4iVfOMQmdCSxhOg1WnzG1AgYT.jpg", rating: "8.4", year: "2024", runtime: "55m / ep", type: "tv", seasons: 3, episodes: 24, overview: "In Japan in the year 1600, at the dawn of a civil war, Lord Yoshii Toranaga fights for his life." },
+        { id: 94997, title: "House of the Dragon", poster: "https://image.tmdb.org/t/p/w500/7V0Ebks0GgpKvQ7QbLAIdX5dos4.jpg", rating: "8.4", year: "2022", runtime: "60m / ep", type: "tv", seasons: 3, episodes: 24, overview: "The Targaryen dynasty begins its slow fall when King Viserys names his daughter Rhaenyra heir." },
+        { id: 93405, title: "Squid Game", poster: "https://image.tmdb.org/t/p/w500/1QdXdRYfktUSONkl1oD5gc6Be0s.jpg", rating: "7.9", year: "2021", runtime: "55m / ep", type: "tv", seasons: 3, episodes: 24, overview: "Hundreds of cash-strapped players accept a strange invitation to compete in children's games for deadly high stakes." },
+        { id: 66732, title: "Stranger Things", poster: "https://image.tmdb.org/t/p/w500/uOOtwVbSr4QDjAGIifLDwpb2Pdl.jpg", rating: "8.5", year: "2016", runtime: "50m / ep", type: "tv", seasons: 3, episodes: 24, overview: "When a young boy vanishes, a small town uncovers a mystery involving secret experiments and supernatural forces." },
+        { id: 1396, title: "Breaking Bad", poster: "https://image.tmdb.org/t/p/w500/anFx9aTOOYqgS3v7x3R84Kz67ly.jpg", rating: "9.0", year: "2008", runtime: "48m / ep", type: "tv", seasons: 3, episodes: 24, overview: "A chemistry teacher diagnosed with inoperable lung cancer turns to manufacturing methamphetamine." },
+        { id: 85937, title: "Demon Slayer", poster: "https://image.tmdb.org/t/p/w500/xUfRZu2mi8jH6SzQEJGP6tjBuYj.jpg", rating: "8.6", year: "2019", runtime: "24m / ep", type: "tv", seasons: 3, episodes: 24, overview: "Tanjiro embarks upon a perilous journey to find a cure for his sister and avenge his family." }
       ];
 
       let currentMovie = null;
       let currentSeason = 1;
       let currentEpisode = 1;
+      let currentTab = 'all';
+
+      // Anti-white screen state preservation on page show / resume
+      window.addEventListener('pageshow', (event) => {
+        if (event.persisted) {
+          renderMovies(movies);
+        }
+      });
 
       function renderMovies(list) {
         const grid = document.getElementById('movieGrid');
+        const titleEl = document.getElementById('sectionTitle');
         grid.innerHTML = '';
+
+        if (currentTab === 'downloads') {
+          titleEl.innerText = "💾 Saved Offline Downloads (" + list.length + " Titles)";
+        } else {
+          titleEl.innerText = "✨ Master Cinema Catalog (" + list.length + " Titles Available)";
+        }
+
+        if (list.length === 0) {
+          grid.innerHTML = `<div class="col-span-full py-16 text-center text-slate-400 text-xs">No movies found. Try searching for another title.</div>`;
+          return;
+        }
+
         list.forEach(m => {
           const card = document.createElement('div');
           card.className = "bg-[#111726] border border-slate-800/80 rounded-xl overflow-hidden shadow-lg cursor-pointer hover:border-yellow-500 transition flex flex-col";
@@ -142,11 +186,16 @@
             <div class="relative aspect-[2/3] w-full bg-slate-950 overflow-hidden">
               <img src="${m.poster}" alt="${m.title}" loading="lazy" class="w-full h-full object-cover hover:scale-105 transition-transform" />
               <div class="absolute top-2 left-2 bg-black/75 px-2 py-0.5 rounded text-yellow-400 font-bold text-[10px]">⭐ ${m.rating}</div>
+              <div class="absolute bottom-2 left-2 bg-black/80 px-1.5 py-0.5 rounded text-emerald-400 font-mono font-bold text-[9px]">⏱ ${m.runtime || '2h 00m'}</div>
               ${m.isKenyan ? '<div class="absolute top-2 right-2 bg-red-600 px-1.5 py-0.5 rounded text-white font-bold text-[9px]">🇰🇪 KE</div>' : ''}
-              ${m.type === 'tv' ? '<div class="absolute bottom-2 right-2 bg-blue-600 px-1.5 py-0.5 rounded text-white font-bold text-[9px]">TV</div>' : ''}
+              ${m.type === 'tv' ? '<div class="absolute top-2 right-2 bg-blue-600 px-1.5 py-0.5 rounded text-white font-bold text-[9px]">TV</div>' : ''}
             </div>
             <div class="p-2.5 flex-1 flex flex-col justify-between bg-[#111726]">
               <h4 class="text-xs font-bold text-white line-clamp-1">${m.title}</h4>
+              <div class="flex items-center justify-between text-[10px] text-slate-400 mt-1">
+                <span>${m.year}</span>
+                <span class="text-emerald-400 font-bold">${m.type === 'tv' ? 'Series' : 'FHD'}</span>
+              </div>
               <button onclick="playMovie(${m.id})" class="mt-2 w-full py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-bold text-[11px] cursor-pointer">▶ Play Now</button>
             </div>
           `;
@@ -156,7 +205,27 @@
 
       renderMovies(movies);
 
+      function switchTab(tab) {
+        currentTab = tab;
+        document.querySelectorAll('.nav-tab').forEach(b => b.className = "nav-tab px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-900 text-slate-300 border border-slate-800 cursor-pointer");
+        if (tab === 'downloads') {
+          document.getElementById('tab-downloads').className = "nav-tab px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/50 cursor-pointer flex items-center gap-1";
+          // Load offline downloads from localStorage
+          try {
+            const raw = localStorage.getItem('my_offline_movies');
+            const offlineList = raw ? JSON.parse(raw) : [];
+            renderMovies(offlineList);
+          } catch(e) {
+            renderMovies([]);
+          }
+        } else {
+          document.getElementById('tab-all').className = "nav-tab px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-white cursor-pointer";
+          renderMovies(movies);
+        }
+      }
+
       function filterCategory(cat) {
+        currentTab = 'all';
         document.querySelectorAll('.cat-btn').forEach(b => {
           b.className = "cat-btn px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-900 text-slate-300 border border-slate-800 cursor-pointer";
         });
@@ -174,14 +243,49 @@
         else renderMovies(movies);
       }
 
+      // Instant search with live auto-suggestions dropdown as you type
       function handleSearch(q) {
         const query = q.toLowerCase().trim();
+        const dropdown = document.getElementById('searchDropdown');
+
         if (!query) {
+          dropdown.classList.add('hidden');
           renderMovies(movies);
           return;
         }
+
         const filtered = movies.filter(m => m.title.toLowerCase().includes(query));
         renderMovies(filtered);
+
+        // Render live suggestions dropdown
+        if (filtered.length > 0) {
+          dropdown.innerHTML = '';
+          filtered.slice(0, 6).forEach(m => {
+            const item = document.createElement('div');
+            item.className = "flex items-center gap-3 p-2.5 hover:bg-slate-800 cursor-pointer border-b border-slate-800 last:border-0";
+            item.innerHTML = `
+              <img src="${m.poster}" alt="${m.title}" class="w-9 h-12 object-cover rounded bg-slate-950 shrink-0" />
+              <div class="flex-1 min-w-0">
+                <h5 class="text-xs font-bold text-white truncate">${m.title}</h5>
+                <div class="flex items-center gap-2 text-[11px] text-slate-400 mt-0.5">
+                  <span class="text-yellow-400 font-semibold">★ ${m.rating}</span>
+                  <span>•</span>
+                  <span>${m.year}</span>
+                  <span class="text-emerald-400 font-semibold">⏱ ${m.runtime || '2h'}</span>
+                </div>
+              </div>
+            `;
+            item.onclick = () => {
+              dropdown.classList.add('hidden');
+              document.getElementById('searchInput').value = m.title;
+              playMovie(m.id);
+            };
+            dropdown.appendChild(item);
+          });
+          dropdown.classList.remove('hidden');
+        } else {
+          dropdown.classList.add('hidden');
+        }
       }
 
       function playMovie(id) {
@@ -246,10 +350,8 @@
           url = type === 'tv' ? `https://vidsrc.to/embed/tv/${id}/${currentSeason}/${currentEpisode}` : `https://vidsrc.to/embed/movie/${id}`;
         } else if (server === 'embedsu') {
           url = type === 'tv' ? `https://embed.su/embed/tv/${id}/${currentSeason}/${currentEpisode}` : `https://embed.su/embed/movie/${id}`;
-        } else if (server === 'superstream') {
-          url = type === 'tv' ? `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${currentSeason}&e=${currentEpisode}` : `https://multiembed.mov/?video_id=${id}&tmdb=1`;
         } else {
-          url = type === 'tv' ? `https://player.autoembed.cc/embed/tv/${id}/${currentSeason}/${currentEpisode}` : `https://player.autoembed.cc/embed/movie/${id}`;
+          url = type === 'tv' ? `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${currentSeason}&e=${currentEpisode}` : `https://multiembed.mov/?video_id=${id}&tmdb=1`;
         }
 
         document.getElementById('streamFrame').src = url;
@@ -259,7 +361,23 @@
         loadStream();
       }
 
+      function toggleRotate() {
+        const wrapper = document.getElementById('playerWrapper');
+        if (document.fullscreenElement) {
+          document.exitFullscreen();
+        } else {
+          if (wrapper.requestFullscreen) {
+            wrapper.requestFullscreen();
+          } else if (wrapper.webkitRequestFullscreen) {
+            wrapper.webkitRequestFullscreen();
+          }
+        }
+      }
+
       function closeModal() {
+        if (document.fullscreenElement) {
+          document.exitFullscreen();
+        }
         document.getElementById('streamFrame').src = "about:blank";
         document.getElementById('videoModal').classList.add('hidden');
       }
