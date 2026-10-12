@@ -1,8 +1,7 @@
-# Task List - App Launch Crash Resolution & Direct Home Feed Launch
+# Task List - Login Removal & Image Loader Safety Fix
 
-- [x] Identified cause of app closing on launch: Theme mismatch between Material3 parent theme and MaterialComponents OutlinedBox TextInputLayout in login views throwing `IllegalArgumentException`
-- [x] Changed parent theme in `themes.xml` and `values-night/themes.xml` to `Theme.MaterialComponents.DayNight.NoActionBar`
-- [x] Configured `MainActivity.java` as primary launcher activity in `AndroidManifest.xml` and auto-logged in guest user session so app opens straight to Home Cinema Feed
+- [x] Completely removed Login/Register authentication requirement from `MainActivity.java` and `UserSession.java`
+- [x] Wrapped all image loader calls in `MediaCardAdapter.java`, `BannerAdapter.java`, `MediaAdapter.java`, `EpisodeAdapter.java`, and `DetailActivity.java` in try-catch safety blocks
 - [x] Verified build (`gradle app:assembleDebug`) with 0 errors
-- [x] Pushed commit directly to GitHub (`https://github.com/Eagleworrior/Filmbox.git`)
+- [x] Pushed commit `d2129fc` directly to GitHub (`https://github.com/Eagleworrior/Filmbox.git`)
 - [x] Updated walkthrough artifact
