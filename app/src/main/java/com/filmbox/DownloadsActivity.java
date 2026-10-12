@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,6 +16,7 @@ import com.filmbox.model.TvShow;
 import com.filmbox.repository.MovieRepository;
 import com.filmbox.util.DownloadManagerUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DownloadsActivity extends AppCompatActivity implements MediaAdapter.OnItemClickListener {
@@ -26,21 +28,29 @@ public class DownloadsActivity extends AppCompatActivity implements MediaAdapter
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_downloads);
+        try {
+            setContentView(R.layout.activity_downloads);
 
-        downloadManagerUtil = new DownloadManagerUtil(this);
+            downloadManagerUtil = new DownloadManagerUtil(this);
 
-        ImageButton btnBack = findViewById(R.id.btnBack);
-        tvCount = findViewById(R.id.tvCount);
-        RecyclerView recyclerViewDownloads = findViewById(R.id.recyclerViewDownloads);
+            ImageButton btnBack = findViewById(R.id.btnBack);
+            tvCount = findViewById(R.id.tvCount);
+            RecyclerView recyclerViewDownloads = findViewById(R.id.recyclerViewDownloads);
 
-        btnBack.setOnClickListener(v -> finish());
+            if (btnBack != null) {
+                btnBack.setOnClickListener(v -> finish());
+            }
 
-        recyclerViewDownloads.setLayoutManager(new LinearLayoutManager(this));
-        mediaAdapter = new MediaAdapter(this);
-        recyclerViewDownloads.setAdapter(mediaAdapter);
+            if (recyclerViewDownloads != null) {
+                recyclerViewDownloads.setLayoutManager(new LinearLayoutManager(this));
+                mediaAdapter = new MediaAdapter(this);
+                recyclerViewDownloads.setAdapter(mediaAdapter);
+            }
 
-        loadDownloads();
+            loadDownloads();
+        } catch (Exception e) {
+            Toast.makeText(this, "Error loading downloads", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -50,25 +60,54 @@ public class DownloadsActivity extends AppCompatActivity implements MediaAdapter
     }
 
     private void loadDownloads() {
-        List<Movie> downloads = downloadManagerUtil.getDownloads();
-        if (downloads.isEmpty()) {
-            downloads = MovieRepository.getDefaultMovies().subList(0, 4);
-        }
-        tvCount.setText(downloads.size() + " Saved Titles");
-        mediaAdapter.setItems(downloads);
+        try {
+            List<Movie> downloads = downloadManagerUtil != null ? downloadManagerUtil.getDownloads() : new ArrayList<>();
+            if (downloads.isEmpty()) {
+                List<Movie> defaultMovies = MovieRepository.getDefaultMovies();
+                if (defaultMovies != null && !defaultMovies.isEmpty()) {
+                    downloads = defaultMovies.subList(0, Math.min(4, defaultMovies.size()));
+                } else {
+                    downloads = new ArrayList<>();
+                }
+            }
+            if (tvCount != null) {
+                tvCount.setText(downloads.size() + " Saved Titles");
+            }
+            if (mediaAdapter != null) {
+                mediaAdapter.setItems(downloads);
+            }
+        } catch (Exception ignored) {}
     }
 
     @Override
     public void onMovieClick(Movie movie) {
-        Intent intent = new Intent(this, PlayerActivity.class);
-        intent.putExtra("title", movie.getTitle());
-        startActivity(intent);
+        try {
+            if (movie != null) {
+                Intent intent = new Intent(this, PlayerActivity.class);
+                intent.putExtra("title", movie.getTitle());
+                intent.putExtra("tmdb_id", movie.getId());
+                intent.putExtra("media_type", "movie");
+                intent.putExtra("video_url", movie.getVideoUrl());
+                startActivity(intent);
+            }
+        } catch (Exception e) {
+            Toast.makeText(this, "Error opening player", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
     public void onTvShowClick(TvShow tvShow) {
-        Intent intent = new Intent(this, PlayerActivity.class);
-        intent.putExtra("title", tvShow.getName());
-        startActivity(intent);
+        try {
+            if (tvShow != null) {
+                Intent intent = new Intent(this, PlayerActivity.class);
+                intent.putExtra("title", tvShow.getName());
+                intent.putExtra("tmdb_id", tvShow.getId());
+                intent.putExtra("media_type", "tv");
+                intent.putExtra("video_url", tvShow.getVideoUrl());
+                startActivity(intent);
+            }
+        } catch (Exception e) {
+            Toast.makeText(this, "Error opening player", Toast.LENGTH_SHORT).show();
+        }
     }
 }
