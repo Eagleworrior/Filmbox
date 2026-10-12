@@ -1,8 +1,7 @@
-# Task List - Codebase-Wide Defensive Hardening
+# Task List - UI Thread Freeze & ANR Resolution
 
-- [x] Audited and hardened `DetailActivity.java` with try-catch exception guards and explicit null checks
-- [x] Audited and hardened `DownloadsActivity.java` with try-catch exception guards and explicit null checks
-- [x] Audited and hardened `PlayerActivity.java` with try-catch exception guards and explicit null checks
+- [x] Identified potential UI thread blocking when loading remote WebView embed URLs synchronously during `onCreate`
+- [x] Implemented asynchronous stream loading via `Handler` post-delay in `PlayerActivity.java` so the UI never freezes or blocks
 - [x] Verified build integrity (`gradle app:assembleDebug`) with 0 errors
-- [x] Pushed commit `68f532d` directly to GitHub (`https://github.com/Eagleworrior/Filmbox.git`)
-- [x] Created walkthrough artifact
+- [x] Pushed commit `c65047e` directly to GitHub (`https://github.com/Eagleworrior/Filmbox.git`)
+- [x] Updated walkthrough artifact
