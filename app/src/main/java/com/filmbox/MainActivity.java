@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -34,6 +35,8 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements MediaCardAdapter.OnCardClickListener, BannerAdapter.OnBannerClickListener, GenreAdapter.OnGenreClickListener {
 
+    private static final String TAG = "MainActivity";
+
     private TextView tvWelcomeUser;
     private ViewPager2 viewPagerBanner;
     private EditText etSearch;
@@ -49,123 +52,135 @@ public class MainActivity extends AppCompatActivity implements MediaCardAdapter.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        try {
+            setContentView(R.layout.activity_main);
+            Log.d(TAG, "MainActivity setContentView completed successfully");
 
-        tvWelcomeUser = findViewById(R.id.tvWelcomeUser);
-        ImageButton btnLogout = findViewById(R.id.btnLogout);
-        viewPagerBanner = findViewById(R.id.viewPagerBanner);
-        etSearch = findViewById(R.id.etSearch);
-        recyclerViewGenres = findViewById(R.id.recyclerViewGenres);
-        rvTrending = findViewById(R.id.rvTrending);
-        rvPopularMovies = findViewById(R.id.rvPopularMovies);
-        rvPopularTv = findViewById(R.id.rvPopularTv);
-        rvAction = findViewById(R.id.rvAction);
-        rvHorror = findViewById(R.id.rvHorror);
-        bottomNavigation = findViewById(R.id.bottomNavigation);
+            tvWelcomeUser = findViewById(R.id.tvWelcomeUser);
+            ImageButton btnLogout = findViewById(R.id.btnLogout);
+            viewPagerBanner = findViewById(R.id.viewPagerBanner);
+            etSearch = findViewById(R.id.etSearch);
+            recyclerViewGenres = findViewById(R.id.recyclerViewGenres);
+            rvTrending = findViewById(R.id.rvTrending);
+            rvPopularMovies = findViewById(R.id.rvPopularMovies);
+            rvPopularTv = findViewById(R.id.rvPopularTv);
+            rvAction = findViewById(R.id.rvAction);
+            rvHorror = findViewById(R.id.rvHorror);
+            bottomNavigation = findViewById(R.id.bottomNavigation);
 
-        if (tvWelcomeUser != null) {
-            tvWelcomeUser.setText("VIP Member ✨");
-        }
+            if (tvWelcomeUser != null) {
+                tvWelcomeUser.setText("VIP Member ✨");
+            }
 
-        if (btnLogout != null) {
-            btnLogout.setOnClickListener(v -> {
-                populateSections();
-                Toast.makeText(MainActivity.this, "Refreshed Kenya Movie Box Catalog", Toast.LENGTH_SHORT).show();
-            });
-        }
-
-        bannerAdapter = new BannerAdapter(this);
-        if (viewPagerBanner != null) {
-            viewPagerBanner.setAdapter(bannerAdapter);
-        }
-
-        if (recyclerViewGenres != null) {
-            recyclerViewGenres.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-            genreAdapter = new GenreAdapter(this);
-            recyclerViewGenres.setAdapter(genreAdapter);
-            setupGenreList();
-        }
-
-        setupCarousels();
-
-        if (etSearch != null) {
-            etSearch.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    String query = s.toString().trim();
-                    if (!query.isEmpty()) {
-                        performSearch(query);
-                    } else {
-                        populateSections();
-                    }
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {}
-            });
-        }
-
-        if (bottomNavigation != null) {
-            bottomNavigation.setOnItemSelectedListener(item -> {
-                int itemId = item.getItemId();
-                if (itemId == R.id.nav_home) {
+            if (btnLogout != null) {
+                btnLogout.setOnClickListener(v -> {
                     populateSections();
-                    return true;
-                } else if (itemId == R.id.nav_movies) {
-                    adapterMovies.setItems(MovieRepository.getDefaultMovies());
-                    Toast.makeText(this, "Showing All Movies", Toast.LENGTH_SHORT).show();
-                    return true;
-                } else if (itemId == R.id.nav_tv) {
-                    adapterTv.setItems(MovieRepository.getDefaultTvShows());
-                    Toast.makeText(this, "Showing TV Series & Seasons", Toast.LENGTH_SHORT).show();
-                    return true;
-                } else if (itemId == R.id.nav_downloads) {
-                    startActivity(new Intent(MainActivity.this, DownloadsActivity.class));
-                    return true;
-                } else if (itemId == R.id.nav_profile) {
-                    Toast.makeText(this, "Kenya Movie Box VIP Pass Active", Toast.LENGTH_LONG).show();
-                    return true;
-                }
-                return false;
-            });
-        }
+                    Toast.makeText(MainActivity.this, "Refreshed Kenya Movie Box Catalog", Toast.LENGTH_SHORT).show();
+                });
+            }
 
-        populateSections();
+            bannerAdapter = new BannerAdapter(this);
+            if (viewPagerBanner != null) {
+                viewPagerBanner.setAdapter(bannerAdapter);
+            }
+
+            if (recyclerViewGenres != null) {
+                recyclerViewGenres.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+                genreAdapter = new GenreAdapter(this);
+                recyclerViewGenres.setAdapter(genreAdapter);
+                setupGenreList();
+            }
+
+            setupCarousels();
+
+            if (etSearch != null) {
+                etSearch.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        String query = s.toString().trim();
+                        if (!query.isEmpty()) {
+                            performSearch(query);
+                        } else {
+                            populateSections();
+                        }
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {}
+                });
+            }
+
+            if (bottomNavigation != null) {
+                bottomNavigation.setOnItemSelectedListener(item -> {
+                    int itemId = item.getItemId();
+                    if (itemId == R.id.nav_home) {
+                        populateSections();
+                        return true;
+                    } else if (itemId == R.id.nav_movies) {
+                        if (adapterMovies != null) {
+                            adapterMovies.setItems(MovieRepository.getDefaultMovies());
+                        }
+                        Toast.makeText(this, "Showing All Movies", Toast.LENGTH_SHORT).show();
+                        return true;
+                    } else if (itemId == R.id.nav_tv) {
+                        if (adapterTv != null) {
+                            adapterTv.setItems(MovieRepository.getDefaultTvShows());
+                        }
+                        Toast.makeText(this, "Showing TV Series & Seasons", Toast.LENGTH_SHORT).show();
+                        return true;
+                    } else if (itemId == R.id.nav_downloads) {
+                        startActivity(new Intent(MainActivity.this, DownloadsActivity.class));
+                        return true;
+                    } else if (itemId == R.id.nav_profile) {
+                        Toast.makeText(this, "Kenya Movie Box VIP Pass Active", Toast.LENGTH_LONG).show();
+                        return true;
+                    }
+                    return false;
+                });
+            }
+
+            populateSections();
+        } catch (Exception e) {
+            Log.e(TAG, "Critical error in MainActivity onCreate", e);
+            Toast.makeText(this, "App start error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
     }
 
     private void setupCarousels() {
-        if (rvTrending != null) {
-            rvTrending.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-            adapterTrending = new MediaCardAdapter(this);
-            rvTrending.setAdapter(adapterTrending);
-        }
+        try {
+            if (rvTrending != null) {
+                rvTrending.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+                adapterTrending = new MediaCardAdapter(this);
+                rvTrending.setAdapter(adapterTrending);
+            }
 
-        if (rvPopularMovies != null) {
-            rvPopularMovies.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-            adapterMovies = new MediaCardAdapter(this);
-            rvPopularMovies.setAdapter(adapterMovies);
-        }
+            if (rvPopularMovies != null) {
+                rvPopularMovies.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+                adapterMovies = new MediaCardAdapter(this);
+                rvPopularMovies.setAdapter(adapterMovies);
+            }
 
-        if (rvPopularTv != null) {
-            rvPopularTv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-            adapterTv = new MediaCardAdapter(this);
-            rvPopularTv.setAdapter(adapterTv);
-        }
+            if (rvPopularTv != null) {
+                rvPopularTv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+                adapterTv = new MediaCardAdapter(this);
+                rvPopularTv.setAdapter(adapterTv);
+            }
 
-        if (rvAction != null) {
-            rvAction.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-            adapterAction = new MediaCardAdapter(this);
-            rvAction.setAdapter(adapterAction);
-        }
+            if (rvAction != null) {
+                rvAction.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+                adapterAction = new MediaCardAdapter(this);
+                rvAction.setAdapter(adapterAction);
+            }
 
-        if (rvHorror != null) {
-            rvHorror.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-            adapterHorror = new MediaCardAdapter(this);
-            rvHorror.setAdapter(adapterHorror);
-        }
+            if (rvHorror != null) {
+                rvHorror.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+                adapterHorror = new MediaCardAdapter(this);
+                rvHorror.setAdapter(adapterHorror);
+            }
+        } catch (Exception ignored) {}
     }
 
     private void populateSections() {
@@ -173,34 +188,29 @@ public class MainActivity extends AppCompatActivity implements MediaCardAdapter.
             List<Movie> allMovies = MovieRepository.getDefaultMovies();
             List<TvShow> allTv = MovieRepository.getDefaultTvShows();
 
-            if (bannerAdapter != null) bannerAdapter.setMovies(allMovies.subList(0, Math.min(5, allMovies.size())));
-            if (adapterTrending != null) adapterTrending.setItems(allMovies.subList(0, Math.min(10, allMovies.size())));
-            if (adapterMovies != null) adapterMovies.setItems(allMovies);
-            if (adapterTv != null) adapterTv.setItems(allTv);
+            if (bannerAdapter != null && allMovies != null && !allMovies.isEmpty()) {
+                bannerAdapter.setMovies(allMovies.subList(0, Math.min(5, allMovies.size())));
+            }
+            if (adapterTrending != null && allMovies != null && !allMovies.isEmpty()) {
+                adapterTrending.setItems(allMovies.subList(0, Math.min(10, allMovies.size())));
+            }
+            if (adapterMovies != null && allMovies != null) {
+                adapterMovies.setItems(allMovies);
+            }
+            if (adapterTv != null && allTv != null) {
+                adapterTv.setItems(allTv);
+            }
 
             List<Movie> actionList = new ArrayList<>();
             List<Movie> horrorList = new ArrayList<>();
-            for (int i = 0; i < allMovies.size(); i++) {
-                if (i % 2 == 0) actionList.add(allMovies.get(i));
-                else horrorList.add(allMovies.get(i));
+            if (allMovies != null) {
+                for (int i = 0; i < allMovies.size(); i++) {
+                    if (i % 2 == 0) actionList.add(allMovies.get(i));
+                    else horrorList.add(allMovies.get(i));
+                }
             }
             if (adapterAction != null) adapterAction.setItems(actionList);
             if (adapterHorror != null) adapterHorror.setItems(horrorList);
-
-            ApiClient.getApiService().getPopularMovies(ApiClient.API_KEY, "en-US")
-                    .enqueue(new Callback<MovieResponse>() {
-                        @Override
-                        public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
-                            if (response.isSuccessful() && response.body() != null && response.body().getResults() != null && !response.body().getResults().isEmpty()) {
-                                List<Movie> liveMovies = response.body().getResults();
-                                if (adapterMovies != null) adapterMovies.setItems(liveMovies);
-                                if (adapterTrending != null) adapterTrending.setItems(liveMovies.subList(0, Math.min(10, liveMovies.size())));
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<MovieResponse> call, Throwable t) {}
-                    });
         } catch (Exception ignored) {}
     }
 
@@ -216,38 +226,24 @@ public class MainActivity extends AppCompatActivity implements MediaCardAdapter.
                 if (adapterTrending != null) adapterTrending.setItems(localMatched);
                 if (adapterMovies != null) adapterMovies.setItems(localMatched);
             }
-
-            ApiClient.getApiService().searchMulti(ApiClient.API_KEY, query)
-                    .enqueue(new Callback<MovieResponse>() {
-                        @Override
-                        public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
-                            if (response.isSuccessful() && response.body() != null && response.body().getResults() != null && !response.body().getResults().isEmpty()) {
-                                List<Movie> liveResults = response.body().getResults();
-                                if (adapterTrending != null) adapterTrending.setItems(liveResults);
-                                if (adapterMovies != null) adapterMovies.setItems(liveResults);
-                                if (adapterAction != null) adapterAction.setItems(liveResults);
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<MovieResponse> call, Throwable t) {}
-                    });
         } catch (Exception ignored) {}
     }
 
     private void setupGenreList() {
-        List<Genre> genres = new ArrayList<>();
-        genres.add(new Genre(1, "✨ All"));
-        genres.add(new Genre(2, "🔥 Trending"));
-        genres.add(new Genre(3, "📺 Kenyan Hits"));
-        genres.add(new Genre(4, "🌍 African Movies"));
-        genres.add(new Genre(5, "🎬 Hollywood"));
-        genres.add(new Genre(6, "📚 Series"));
-        genres.add(new Genre(7, "💥 Action"));
-        genres.add(new Genre(8, "🎨 Animation"));
-        genres.add(new Genre(9, "🚀 Sci-Fi"));
-        genres.add(new Genre(10, "😂 Comedy"));
-        if (genreAdapter != null) genreAdapter.setGenres(genres);
+        try {
+            List<Genre> genres = new ArrayList<>();
+            genres.add(new Genre(1, "✨ All"));
+            genres.add(new Genre(2, "🔥 Trending"));
+            genres.add(new Genre(3, "📺 Kenyan Hits"));
+            genres.add(new Genre(4, "🌍 African Movies"));
+            genres.add(new Genre(5, "🎬 Hollywood"));
+            genres.add(new Genre(6, "📚 Series"));
+            genres.add(new Genre(7, "💥 Action"));
+            genres.add(new Genre(8, "🎨 Animation"));
+            genres.add(new Genre(9, "🚀 Sci-Fi"));
+            genres.add(new Genre(10, "😂 Comedy"));
+            if (genreAdapter != null) genreAdapter.setGenres(genres);
+        } catch (Exception ignored) {}
     }
 
     @Override
@@ -289,26 +285,34 @@ public class MainActivity extends AppCompatActivity implements MediaCardAdapter.
 
     @Override
     public void onMovieClick(Movie movie) {
-        Intent intent = new Intent(this, PlayerActivity.class);
-        intent.putExtra("title", movie.getTitle());
-        intent.putExtra("tmdb_id", movie.getId());
-        intent.putExtra("media_type", "movie");
-        intent.putExtra("video_url", movie.getVideoUrl());
-        startActivity(intent);
+        try {
+            Intent intent = new Intent(this, PlayerActivity.class);
+            intent.putExtra("title", movie.getTitle());
+            intent.putExtra("tmdb_id", movie.getId());
+            intent.putExtra("media_type", "movie");
+            intent.putExtra("video_url", movie.getVideoUrl());
+            startActivity(intent);
+        } catch (Exception e) {
+            Toast.makeText(this, "Error opening player", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
     public void onTvShowClick(TvShow tvShow) {
-        Intent intent = new Intent(this, DetailActivity.class);
-        intent.putExtra("title", tvShow.getName());
-        intent.putExtra("overview", tvShow.getOverview());
-        intent.putExtra("backdrop", tvShow.getBackdropPath());
-        intent.putExtra("date", tvShow.getFirstAirDate());
-        intent.putExtra("rating", tvShow.getVoteAverage());
-        intent.putExtra("tv_id", tvShow.getId());
-        intent.putExtra("tmdb_id", tvShow.getId());
-        intent.putExtra("media_type", "tv");
-        intent.putExtra("video_url", tvShow.getVideoUrl());
-        startActivity(intent);
+        try {
+            Intent intent = new Intent(this, DetailActivity.class);
+            intent.putExtra("title", tvShow.getName());
+            intent.putExtra("overview", tvShow.getOverview());
+            intent.putExtra("backdrop", tvShow.getBackdropPath());
+            intent.putExtra("date", tvShow.getFirstAirDate());
+            intent.putExtra("rating", tvShow.getVoteAverage());
+            intent.putExtra("tv_id", tvShow.getId());
+            intent.putExtra("tmdb_id", tvShow.getId());
+            intent.putExtra("media_type", "tv");
+            intent.putExtra("video_url", tvShow.getVideoUrl());
+            startActivity(intent);
+        } catch (Exception e) {
+            Toast.makeText(this, "Error opening details", Toast.LENGTH_SHORT).show();
+        }
     }
 }
