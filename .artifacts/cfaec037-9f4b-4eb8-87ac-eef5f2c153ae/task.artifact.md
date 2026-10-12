@@ -1,8 +1,5 @@
-# Task List - Hybrid WebView Architecture Integration
+# Task List - UI Overhaul & Responsive Layout
 
-- [x] Created assets folder and wrote `app/src/main/assets/index.html` bundle
-- [x] Updated `activity_main.xml` with full-screen hardware-accelerated `WebView`
-- [x] Updated `MainActivity.java` to load `file:///android_asset/index.html` instantly with full JS/DOM/media permissions
-- [x] Verified build integrity (`gradle app:assembleDebug`) with 0 errors
-- [x] Pushed commit `3e66526` directly to GitHub (`https://github.com/Eagleworrior/Filmbox.git`)
-- [x] Updated walkthrough artifact
+- [/] Overhaul `app/src/main/assets/index.html` with professional Netflix/MovieBox responsive UI (zero text overlap, category filter tabs, search bar, and 1-tap player modal with seasons & episodes support)
+- [ ] Verify build integrity (`gradle app:assembleDebug`) with 0 errors
+- [ ] Update walkthrough artifact

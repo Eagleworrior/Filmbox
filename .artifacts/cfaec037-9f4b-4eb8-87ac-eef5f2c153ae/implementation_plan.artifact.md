@@ -1,29 +1,24 @@
-# FilmBox App - Hybrid WebView Architecture Plan
+# Kenya Movie Box - UI Overhaul & Responsive Layout Plan
 
-To resolve all startup crashes and ensure the app displays the exact **Kenya Movie Box web interface** (with all React components, M-Pesa STK push modal, video player modal, download modal, and movie catalog) exactly as designed, we are converting FilmBox into a **High-Performance Hybrid WebView Android App**.
+We are redesigning the frontend interface inside `app/src/main/assets/index.html` into a professional, Netflix/MovieBox-grade streaming layout that fixes all overlapping text and button alignment issues across all mobile devices.
 
 ---
 
 ## User Review Required
 
 > [!IMPORTANT]
-> **Why Hybrid WebView Architecture?**
-> 1. **Zero XML Inflation Crashes**: Eliminates all Android XML layout inflation deadlocks and "keeps stopping" errors.
-> 2. **Exact Web App UI**: Renders the complete React/Tailwind frontend (`index.html`, Header, HeroBanner, MovieCard, VideoPlayerModal, PaywallModal, DownloadModal) natively inside Android.
-> 3. **Instant Startup**: Loads instantly via local asset bundle (`file:///android_asset/index.html`) with full JavaScript, DOM storage, media autoplay, and M-Pesa STK push support.
+> **UI & Layout Fixes**
+> 1. **Zero Text Overlaps**: Restructured the header, hero banner, and movie cards with proper Tailwind CSS flex/grid spacing and padding so title text and poster artwork never overlap.
+> 2. **Visible & Responsive Category Tabs**: Added interactive category filter pills (✨ All, 🔥 Trending, 🇰🇪 Kenyan Hits, 🌍 African Movies, 🎬 Hollywood, 📺 Series, 💥 Action) right below the search bar.
+> 3. **Instant 1-Tap Response**: All movie cards, Play buttons, and search results have precise touch targets (`cursor-pointer`, z-index layering) so they respond instantly on every tap.
+> 4. **Clean Video Player Modal**: Full-screen cinema modal with embedded high-speed streaming (`vidlink.pro` / `vidsrc.to`), Server Switcher, and Close button.
 
 ---
 
 ## Proposed Changes
 
 ### Assets (`app/src/main/assets`)
-- **`index.html`**: Bundled HTML entry point containing the full Kenya Movie Box web application with Tailwind CSS, React, and video streaming embed servers.
-
-### Layout (`app/src/main/res/layout`)
-- **`activity_main.xml`**: Single full-screen hardware-accelerated `WebView`.
-
-### Activity (`com.filmbox`)
-- **`MainActivity.java`**: Hosts the full-screen `WebView`, configures JavaScript, DOM storage, geolocation, media playback, and local asset loading (`file:///android_asset/index.html`).
+- **`index.html`**: Completely overhauled Tailwind UI single-page application with responsive header, search bar, category filter pills, featured hero carousel, responsive movie cards grid, and video player modal.
 
 ---
 
@@ -33,4 +28,4 @@ To resolve all startup crashes and ensure the app displays the exact **Kenya Mov
 - Gradle debug build (`gradle_build("app:assembleDebug")`).
 
 ### Manual Verification
-- Deploy APK to verify the Kenya Movie Box web UI loads instantly on app launch without any freeze or crash.
+- Deploy app and verify UI renders cleanly with zero text overlap, visible category tabs, and instant playback response on tapping movies.

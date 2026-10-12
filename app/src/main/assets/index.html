@@ -4,103 +4,259 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Kenya Movie Box & Daily Pass</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Bebas+Neue&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   </head>
-  <body class="bg-[#0B0F17] text-slate-100 antialiased m-0 p-0 min-h-screen flex flex-col font-sans">
+  <body class="bg-[#0B0F17] text-slate-100 antialiased m-0 p-0 min-h-screen flex flex-col font-['Plus_Jakarta_Sans',sans-serif]">
     <!-- Header -->
-    <header class="sticky top-0 z-40 w-full bg-[#0B0F17]/95 backdrop-blur-md border-b border-slate-800/80 px-4 py-3 flex items-center justify-between">
-      <div class="flex items-center gap-2">
+    <header class="sticky top-0 z-40 w-full bg-[#0B0F17]/95 backdrop-blur-md border-b border-slate-800/80 px-4 py-3 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-2.5 shrink-0">
         <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-700 via-indigo-600 to-yellow-500 p-0.5 shadow-lg">
           <div class="w-full h-full bg-[#0B0F17] rounded-[10px] flex items-center justify-center text-yellow-400 font-bold">
             🎬
           </div>
         </div>
         <div>
-          <h1 class="text-base font-black text-white tracking-wide">KENYA MOVIE BOX</h1>
-          <p class="text-[10px] text-slate-400">Daily Pass Cinema 🇰🇪</p>
+          <h1 class="text-sm sm:text-base font-black text-white tracking-wide font-['Bebas_Neue',sans-serif]">KENYA MOVIE BOX</h1>
+          <p class="text-[10px] text-slate-400 -mt-1">Daily Pass Cinema 🇰🇪</p>
         </div>
       </div>
-      <button onclick="alert('VIP Pass Active (24h M-Pesa Pass)')" class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-yellow-500 to-amber-500 text-black font-black text-xs shadow-md">
-        PASS ACTIVE ⚡
-      </button>
+
+      <!-- Search Bar -->
+      <div class="flex-1 max-w-md mx-2">
+        <input
+          type="text"
+          id="searchInput"
+          oninput="handleSearch(this.value)"
+          placeholder="🔍 Search all movies, series, actors..."
+          class="w-full px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-yellow-500"
+        />
+      </div>
+
+      <div class="shrink-0">
+        <button onclick="alert('VIP Pass Active (24h M-Pesa Pass)')" class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-yellow-500 to-amber-500 text-black font-black text-xs shadow-md">
+          PASS ACTIVE ⚡
+        </button>
+      </div>
     </header>
 
-    <!-- Main Catalog -->
-    <main class="flex-1 max-w-7xl mx-auto px-4 py-6 w-full space-y-6">
-      <!-- Hero Banner -->
-      <div class="relative rounded-2xl overflow-hidden bg-slate-900 border border-slate-800 p-6 shadow-2xl">
-        <div class="absolute inset-0 bg-gradient-to-r from-blue-950 via-slate-900 to-emerald-950 opacity-90" />
-        <div class="relative z-10 space-y-3 max-w-xl">
-          <span class="px-2.5 py-1 rounded bg-yellow-500 text-black font-black text-[10px] uppercase">
-            HOT IN KENYA #1
-          </span>
-          <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight">Nairobi Half Life</h2>
-          <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
-            Mwas, a young aspiring actor from upcountry Kenya dreams of becoming an accomplished actor one day, and makes his way to Nairobi, the city of opportunity.
-          </p>
-          <div class="flex items-center gap-3 pt-2">
-            <button onclick="playMovie('130737', 'Nairobi Half Life')" class="px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-lg flex items-center gap-2 cursor-pointer">
-              <span>▶ PLAY FULL MOVIE</span>
-            </button>
-          </div>
-        </div>
-      </div>
+    <!-- Category Filter Tabs -->
+    <div class="max-w-7xl mx-auto px-4 py-3 w-full overflow-x-auto flex gap-2 scrollbar-none" style="scrollbar-width: none;">
+      <button onclick="filterCategory('all')" id="cat-all" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-yellow-500 text-black shadow-md cursor-pointer">✨ All</button>
+      <button onclick="filterCategory('trending')" id="cat-trending" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-900 text-slate-300 border border-slate-800 cursor-pointer">🔥 Trending</button>
+      <button onclick="filterCategory('kenyan')" id="cat-kenyan" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-900 text-slate-300 border border-slate-800 cursor-pointer">📺 Kenyan Hits</button>
+      <button onclick="filterCategory('african')" id="cat-african" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-900 text-slate-300 border border-slate-800 cursor-pointer">🌍 African Movies</button>
+      <button onclick="filterCategory('hollywood')" id="cat-hollywood" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-900 text-slate-300 border border-slate-800 cursor-pointer">🎬 Hollywood</button>
+      <button onclick="filterCategory('series')" id="cat-series" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-900 text-slate-300 border border-slate-800 cursor-pointer">📚 TV Series</button>
+      <button onclick="filterCategory('action')" id="cat-action" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-900 text-slate-300 border border-slate-800 cursor-pointer">💥 Action</button>
+      <button onclick="filterCategory('animation')" id="cat-animation" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-900 text-slate-300 border border-slate-800 cursor-pointer">🎨 Animation</button>
+      <button onclick="filterCategory('scifi')" id="cat-scifi" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-900 text-slate-300 border border-slate-800 cursor-pointer">🚀 Sci-Fi</button>
+    </div>
 
-      <!-- Movies Grid -->
-      <div class="space-y-3">
-        <h3 class="text-lg font-black text-white flex items-center gap-2">
-          <span>🔥 Trending Blockbusters & Kenyan Cinema</span>
-        </h3>
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3" id="movieGrid">
-          <!-- Populated by JS -->
-        </div>
+    <!-- Main Catalog Grid -->
+    <main class="flex-1 max-w-7xl mx-auto px-4 py-4 w-full space-y-6">
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3.5" id="movieGrid">
+        <!-- Populated by JS -->
       </div>
     </main>
 
-    <!-- Video Modal -->
+    <!-- Video Player Modal -->
     <div id="videoModal" class="fixed inset-0 z-50 bg-black/95 flex flex-col hidden">
-      <div class="px-4 py-3 bg-[#0B0F17] border-b border-slate-800 flex items-center justify-between">
-        <h3 id="modalTitle" class="text-sm font-bold text-white">Streaming Movie</h3>
-        <button onclick="closeModal()" class="px-3 py-1.5 rounded-lg bg-red-600/20 text-red-400 font-bold text-xs">Close ✕</button>
+      <div class="px-4 py-3 bg-[#0B0F17] border-b border-slate-800 flex items-center justify-between gap-2">
+        <div class="flex items-center gap-2 min-w-0">
+          <h3 id="modalTitle" class="text-sm font-bold text-white truncate">Streaming Movie</h3>
+          <span id="seasonBadge" class="text-xs px-2 py-0.5 rounded bg-blue-600 text-white font-bold hidden">S1:E1</span>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <select id="serverSelect" onchange="switchServer(this.value)" class="bg-slate-800 text-xs text-white px-2 py-1 rounded-lg border border-slate-700 font-semibold">
+            <option value="vidlink">🚀 Server 1: VidLink Pro</option>
+            <option value="vidsrc">⚡ Server 2: VidSrc Ultra</option>
+            <option value="embedsu">🌐 Server 3: Embed.su HD</option>
+            <option value="superstream">🍿 Server 4: SuperStream</option>
+            <option value="autoembed">🎬 Server 5: AutoEmbed</option>
+          </select>
+          <button onclick="closeModal()" class="px-3 py-1.5 rounded-lg bg-red-600/20 text-red-400 font-bold text-xs cursor-pointer">Close ✕</button>
+        </div>
       </div>
+
       <div class="flex-1 bg-black relative flex items-center justify-center">
         <iframe id="streamFrame" class="w-full h-full border-0" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe>
+      </div>
+
+      <!-- TV Series Seasons & Episodes Bar -->
+      <div id="tvEpisodesBar" class="bg-[#080D15] border-t border-slate-800 p-3 max-h-48 overflow-y-auto hidden">
+        <div class="flex items-center justify-between gap-2 mb-2">
+          <span class="text-xs font-bold text-yellow-400">Select Season:</span>
+          <div id="seasonPills" class="flex gap-1.5 overflow-x-auto"></div>
+        </div>
+        <div class="text-xs font-bold text-slate-300 mb-1">Select Episode:</div>
+        <div id="episodesGrid" class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-12 gap-1.5"></div>
       </div>
     </div>
 
     <script>
       const movies = [
-        { id: 130737, title: "Nairobi Half Life", poster: "https://image.tmdb.org/t/p/w500/1QYW51WrwmSsJBm1y9ZkdEeHp6q.jpg", rating: "6.9" },
-        { id: 1063242, title: "Disconnect: Wedding Planner", poster: "https://image.tmdb.org/t/p/w500/co6doQ2d3f5ZaTTvORV76wrTFit.jpg", rating: "6.9" },
-        { id: 533535, title: "Deadpool & Wolverine", poster: "https://image.tmdb.org/t/p/w500/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg", rating: "7.6" },
-        { id: 558449, title: "Gladiator II", poster: "https://image.tmdb.org/t/p/w500/2cxhvwyEwRlysAmRH4iodkvo0z5.jpg", rating: "6.6" },
-        { id: 693134, title: "Dune: Part Two", poster: "https://image.tmdb.org/t/p/w500/6izwz7rsy95ARzTR3poZ8H6c5pp.jpg", rating: "8.1" },
-        { id: 872585, title: "Oppenheimer", poster: "https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg", rating: "8.0" },
-        { id: 76600, title: "Avatar: The Way of Water", poster: "https://image.tmdb.org/t/p/w500/t6HIqrRAclMCA60NsSmeqe9RmNV.jpg", rating: "7.6" },
-        { id: 157336, title: "Interstellar", poster: "https://image.tmdb.org/t/p/w500/yQvGrMoipbRoddT0ZR8tPoR7NfX.jpg", rating: "8.5" }
+        { id: 130737, title: "Nairobi Half Life", poster: "https://image.tmdb.org/t/p/w500/1QYW51WrwmSsJBm1y9ZkdEeHp6q.jpg", rating: "6.9", year: "2012", type: "movie", isKenyan: true },
+        { id: 1063242, title: "Disconnect: Wedding Planner", poster: "https://image.tmdb.org/t/p/w500/co6doQ2d3f5ZaTTvORV76wrTFit.jpg", rating: "6.9", year: "2023", type: "movie", isKenyan: true },
+        { id: 205722, title: "Country Queen", poster: "https://image.tmdb.org/t/p/w500/39rLohFji3qUKu6A5OXZW4NMJ8l.jpg", rating: "8.2", year: "2022", type: "tv", isKenyan: true, seasons: 1, episodes: 6 },
+        { id: 493915, title: "Supa Modo", poster: "https://image.tmdb.org/t/p/w500/gvRrPZQlYX1bwwTxxtuerrADviz.jpg", rating: "7.4", year: "2018", type: "movie", isKenyan: true },
+        { id: 47559, title: "The First Grader", poster: "https://image.tmdb.org/t/p/w500/jstfYxEYMFfSO6tQaYL6O0AMUol.jpg", rating: "7.1", year: "2010", type: "movie", isKenyan: true },
+        { id: 1129249, title: "Click Click Bang", poster: "https://image.tmdb.org/t/p/w500/1TQ7FAqdtPk5VOCT1wgQvpEETlL.jpg", rating: "8.0", year: "2023", type: "movie", isKenyan: true },
+        { id: 229205, title: "Crime and Justice", poster: "https://image.tmdb.org/t/p/w500/qLvoPmfyi1vEAo6KCdICTiYvnGS.jpg", rating: "7.8", year: "2021", type: "tv", isKenyan: true, seasons: 3, episodes: 24 },
+        { id: 1206988, title: "A Tribe Called Judah", poster: "https://image.tmdb.org/t/p/w500/9aMG2ftIFqFAN69FdjovKJY0hsd.jpg", rating: "9.1", year: "2023", type: "movie", isAfrican: true },
+        { id: 1172009, title: "The Black Book", poster: "https://image.tmdb.org/t/p/w500/kn28W24slBLyGr8ZIZnxNE5YZrY.jpg", rating: "6.7", year: "2023", type: "movie", isAfrican: true },
+        { id: 1023994, title: "Aníkúlápó", poster: "https://image.tmdb.org/t/p/w500/xb30hkUpBm23stnVgDJGYGsC0R0.jpg", rating: "7.1", year: "2022", type: "movie", isAfrican: true },
+        { id: 103411, title: "Blood & Water", poster: "https://image.tmdb.org/t/p/w500/NFHy3z1taQ8nzudDHeVIJnih3J.jpg", rating: "7.8", year: "2020", type: "tv", isAfrican: true, seasons: 3, episodes: 24 },
+        { id: 1163045, title: "Jagun Jagun", poster: "https://image.tmdb.org/t/p/w500/uPZtE5DSo9VIX2N3NPtmTayhgP8.jpg", rating: "6.7", year: "2023", type: "movie", isAfrican: true },
+        { id: 533535, title: "Deadpool & Wolverine", poster: "https://image.tmdb.org/t/p/w500/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg", rating: "7.6", year: "2024", type: "movie" },
+        { id: 558449, title: "Gladiator II", poster: "https://image.tmdb.org/t/p/w500/2cxhvwyEwRlysAmRH4iodkvo0z5.jpg", rating: "6.6", year: "2024", type: "movie" },
+        { id: 693134, title: "Dune: Part Two", poster: "https://image.tmdb.org/t/p/w500/6izwz7rsy95ARzTR3poZ8H6c5pp.jpg", rating: "8.1", year: "2024", type: "movie" },
+        { id: 1022789, title: "Inside Out 2", poster: "https://image.tmdb.org/t/p/w500/vpnVM9B6NMmQpWeZvzLvDESb2QY.jpg", rating: "7.5", year: "2024", type: "movie" },
+        { id: 1241982, title: "Moana 2", poster: "https://image.tmdb.org/t/p/w500/aLVkiINlIeCkcZIzb7XHzPYgO6L.jpg", rating: "7.0", year: "2024", type: "movie" },
+        { id: 872585, title: "Oppenheimer", poster: "https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg", rating: "8.0", year: "2023", type: "movie" },
+        { id: 76600, title: "Avatar: The Way of Water", poster: "https://image.tmdb.org/t/p/w500/t6HIqrRAclMCA60NsSmeqe9RmNV.jpg", rating: "7.6", year: "2022", type: "movie" },
+        { id: 157336, title: "Interstellar", poster: "https://image.tmdb.org/t/p/w500/yQvGrMoipbRoddT0ZR8tPoR7NfX.jpg", rating: "8.5", year: "2014", type: "movie" },
+        { id: 126308, title: "Shōgun", poster: "https://image.tmdb.org/t/p/w500/7O4iVfOMQmdCSxhOg1WnzG1AgYT.jpg", rating: "8.4", year: "2024", type: "tv", seasons: 3, episodes: 24 },
+        { id: 94997, title: "House of the Dragon", poster: "https://image.tmdb.org/t/p/w500/7V0Ebks0GgpKvQ7QbLAIdX5dos4.jpg", rating: "8.4", year: "2022", type: "tv", seasons: 3, episodes: 24 },
+        { id: 93405, title: "Squid Game", poster: "https://image.tmdb.org/t/p/w500/1QdXdRYfktUSONkl1oD5gc6Be0s.jpg", rating: "7.9", year: "2021", type: "tv", seasons: 3, episodes: 24 },
+        { id: 66732, title: "Stranger Things", poster: "https://image.tmdb.org/t/p/w500/uOOtwVbSr4QDjAGIifLDwpb2Pdl.jpg", rating: "8.5", year: "2016", type: "tv", seasons: 3, episodes: 24 },
+        { id: 1396, title: "Breaking Bad", poster: "https://image.tmdb.org/t/p/w500/anFx9aTOOYqgS3v7x3R84Kz67ly.jpg", rating: "9.0", year: "2008", type: "tv", seasons: 3, episodes: 24 },
+        { id: 1399, title: "Game of Thrones", poster: "https://image.tmdb.org/t/p/w500/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg", rating: "8.5", year: "2011", type: "tv", seasons: 3, episodes: 24 },
+        { id: 85937, title: "Demon Slayer", poster: "https://image.tmdb.org/t/p/w500/xUfRZu2mi8jH6SzQEJGP6tjBuYj.jpg", rating: "8.6", year: "2019", type: "tv", seasons: 3, episodes: 24 },
+        { id: 127532, title: "Solo Leveling", poster: "https://image.tmdb.org/t/p/w500/geCRueV3ElhRTr0xtJuEWJt6dJ1.jpg", rating: "8.7", year: "2024", type: "tv", seasons: 3, episodes: 24 }
       ];
 
-      const grid = document.getElementById('movieGrid');
-      movies.forEach(m => {
-        const card = document.createElement('div');
-        card.className = "bg-[#111726] border border-slate-800 rounded-xl overflow-hidden shadow-lg cursor-pointer hover:border-yellow-500 transition flex flex-col";
-        card.innerHTML = `
-          <div class="aspect-[2/3] w-full bg-slate-950 relative overflow-hidden">
-            <img src="${m.poster}" alt="${m.title}" class="w-full h-full object-cover" />
-            <div class="absolute top-2 left-2 bg-black/80 px-2 py-0.5 rounded text-[10px] text-yellow-400 font-bold">⭐ ${m.rating}</div>
-          </div>
-          <div class="p-2.5 flex-1 flex flex-col justify-between">
-            <h4 class="text-xs font-bold text-white line-clamp-1">${m.title}</h4>
-            <button onclick="playMovie('${m.id}', '${m.title}')" class="mt-2 w-full py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-bold text-[11px]">▶ Play Now</button>
-          </div>
-        `;
-        grid.appendChild(card);
-      });
+      let currentMovie = null;
+      let currentSeason = 1;
+      let currentEpisode = 1;
 
-      function playMovie(id, title) {
-        document.getElementById('modalTitle').innerText = "Streaming: " + title;
-        document.getElementById('streamFrame').src = "https://vidlink.pro/movie/" + id;
+      function renderMovies(list) {
+        const grid = document.getElementById('movieGrid');
+        grid.innerHTML = '';
+        list.forEach(m => {
+          const card = document.createElement('div');
+          card.className = "bg-[#111726] border border-slate-800/80 rounded-xl overflow-hidden shadow-lg cursor-pointer hover:border-yellow-500 transition flex flex-col";
+          card.innerHTML = `
+            <div class="relative aspect-[2/3] w-full bg-slate-950 overflow-hidden">
+              <img src="${m.poster}" alt="${m.title}" loading="lazy" class="w-full h-full object-cover hover:scale-105 transition-transform" />
+              <div class="absolute top-2 left-2 bg-black/75 px-2 py-0.5 rounded text-yellow-400 font-bold text-[10px]">⭐ ${m.rating}</div>
+              ${m.isKenyan ? '<div class="absolute top-2 right-2 bg-red-600 px-1.5 py-0.5 rounded text-white font-bold text-[9px]">🇰🇪 KE</div>' : ''}
+              ${m.type === 'tv' ? '<div class="absolute bottom-2 right-2 bg-blue-600 px-1.5 py-0.5 rounded text-white font-bold text-[9px]">TV</div>' : ''}
+            </div>
+            <div class="p-2.5 flex-1 flex flex-col justify-between bg-[#111726]">
+              <h4 class="text-xs font-bold text-white line-clamp-1">${m.title}</h4>
+              <button onclick="playMovie(${m.id})" class="mt-2 w-full py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-bold text-[11px] cursor-pointer">▶ Play Now</button>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+      }
+
+      renderMovies(movies);
+
+      function filterCategory(cat) {
+        document.querySelectorAll('.cat-btn').forEach(b => {
+          b.className = "cat-btn px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-900 text-slate-300 border border-slate-800 cursor-pointer";
+        });
+        document.getElementById('cat-' + cat).className = "cat-btn px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-yellow-500 text-black shadow-md cursor-pointer";
+
+        if (cat === 'all') renderMovies(movies);
+        else if (cat === 'trending') renderMovies(movies.filter(m => Number(m.rating) >= 7.8));
+        else if (cat === 'kenyan') renderMovies(movies.filter(m => m.isKenyan));
+        else if (cat === 'african') renderMovies(movies.filter(m => m.isAfrican));
+        else if (cat === 'hollywood') renderMovies(movies.filter(m => !m.isKenyan && !m.isAfrican && m.type === 'movie'));
+        else if (cat === 'series') renderMovies(movies.filter(m => m.type === 'tv'));
+        else if (cat === 'action') renderMovies(movies.filter(m => m.title.includes('Deadpool') || m.title.includes('Gladiator') || m.title.includes('John Wick')));
+        else if (cat === 'animation') renderMovies(movies.filter(m => m.title.includes('Inside Out') || m.title.includes('Moana') || m.title.includes('Panda')));
+        else if (cat === 'scifi') renderMovies(movies.filter(m => m.title.includes('Dune') || m.title.includes('Interstellar') || m.title.includes('Avatar')));
+        else renderMovies(movies);
+      }
+
+      function handleSearch(q) {
+        const query = q.toLowerCase().trim();
+        if (!query) {
+          renderMovies(movies);
+          return;
+        }
+        const filtered = movies.filter(m => m.title.toLowerCase().includes(query));
+        renderMovies(filtered);
+      }
+
+      function playMovie(id) {
+        currentMovie = movies.find(m => m.id === id);
+        if (!currentMovie) return;
+        currentSeason = 1;
+        currentEpisode = 1;
+
+        document.getElementById('modalTitle').innerText = currentMovie.title;
+
+        const episodesBar = document.getElementById('tvEpisodesBar');
+        const seasonBadge = document.getElementById('seasonBadge');
+
+        if (currentMovie.type === 'tv') {
+          episodesBar.classList.remove('hidden');
+          seasonBadge.classList.remove('hidden');
+          seasonBadge.innerText = `S${currentSeason}:E${currentEpisode}`;
+          renderSeasonsAndEpisodes();
+        } else {
+          episodesBar.classList.add('hidden');
+          seasonBadge.classList.add('hidden');
+        }
+
+        loadStream();
         document.getElementById('videoModal').classList.remove('hidden');
+      }
+
+      function renderSeasonsAndEpisodes() {
+        const seasons = currentMovie.seasons || 3;
+        const episodes = currentMovie.episodes || 24;
+
+        const pills = document.getElementById('seasonPills');
+        pills.innerHTML = '';
+        for (let s = 1; s <= seasons; s++) {
+          const btn = document.createElement('button');
+          btn.className = `px-2.5 py-1 rounded text-xs font-bold cursor-pointer ${currentSeason === s ? 'bg-blue-600 text-white' : 'bg-slate-800 text-slate-300'}`;
+          btn.innerText = `Season ${s}`;
+          btn.onclick = () => { currentSeason = s; currentEpisode = 1; seasonBadge.innerText = `S${s}:E1`; renderSeasonsAndEpisodes(); loadStream(); };
+          pills.appendChild(btn);
+        }
+
+        const grid = document.getElementById('episodesGrid');
+        grid.innerHTML = '';
+        for (let e = 1; e <= episodes; e++) {
+          const epBtn = document.createElement('button');
+          epBtn.className = `p-2 rounded-lg text-xs font-bold cursor-pointer border ${currentEpisode === e ? 'bg-blue-600 text-white border-blue-400' : 'bg-slate-900 text-slate-300 border-slate-800'}`;
+          epBtn.innerText = `Ep ${e}`;
+          epBtn.onclick = () => { currentEpisode = e; seasonBadge.innerText = `S${currentSeason}:E${e}`; renderSeasonsAndEpisodes(); loadStream(); };
+          grid.appendChild(epBtn);
+        }
+      }
+
+      function loadStream() {
+        const server = document.getElementById('serverSelect').value;
+        let url = '';
+        const id = currentMovie.id;
+        const type = currentMovie.type;
+
+        if (server === 'vidlink') {
+          url = type === 'tv' ? `https://vidlink.pro/tv/${id}/${currentSeason}/${currentEpisode}` : `https://vidlink.pro/movie/${id}`;
+        } else if (server === 'vidsrc') {
+          url = type === 'tv' ? `https://vidsrc.to/embed/tv/${id}/${currentSeason}/${currentEpisode}` : `https://vidsrc.to/embed/movie/${id}`;
+        } else if (server === 'embedsu') {
+          url = type === 'tv' ? `https://embed.su/embed/tv/${id}/${currentSeason}/${currentEpisode}` : `https://embed.su/embed/movie/${id}`;
+        } else if (server === 'superstream') {
+          url = type === 'tv' ? `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${currentSeason}&e=${currentEpisode}` : `https://multiembed.mov/?video_id=${id}&tmdb=1`;
+        } else {
+          url = type === 'tv' ? `https://player.autoembed.cc/embed/tv/${id}/${currentSeason}/${currentEpisode}` : `https://player.autoembed.cc/embed/movie/${id}`;
+        }
+
+        document.getElementById('streamFrame').src = url;
+      }
+
+      function switchServer(server) {
+        loadStream();
       }
 
       function closeModal() {
