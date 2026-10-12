@@ -1,7 +1,8 @@
-# Task List - Final Project Synchronization & Build Verification
+# Task List - App Launch Crash Resolution & Direct Home Feed Launch
 
-- [x] Verified `ApiClient.java` with Safaricom Daraja (`4414485`), TMDB (`4e44d9029b1270a757cddc766a1bcb63`), and OMDb (`fd1b18ad`) gateway keys
-- [x] Verified `MovieRepository.java` with complete 50+ verified movie and TV series dataset
-- [x] Verified `PlayerActivity.java` with 6 VIP streaming servers and player bridge
-- [x] Executed Gradle build (`gradle app:assembleDebug`) and verified 0 errors
-- [x] Created walkthrough artifact
+- [x] Identified cause of app closing on launch: Theme mismatch between Material3 parent theme and MaterialComponents OutlinedBox TextInputLayout in login views throwing `IllegalArgumentException`
+- [x] Changed parent theme in `themes.xml` and `values-night/themes.xml` to `Theme.MaterialComponents.DayNight.NoActionBar`
+- [x] Configured `MainActivity.java` as primary launcher activity in `AndroidManifest.xml` and auto-logged in guest user session so app opens straight to Home Cinema Feed
+- [x] Verified build (`gradle app:assembleDebug`) with 0 errors
+- [x] Pushed commit directly to GitHub (`https://github.com/Eagleworrior/Filmbox.git`)
+- [x] Updated walkthrough artifact

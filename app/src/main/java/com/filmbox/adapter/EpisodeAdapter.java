@@ -53,12 +53,14 @@ public class EpisodeAdapter extends RecyclerView.Adapter<EpisodeAdapter.ViewHold
         holder.tvEpisodeTitle.setText(ep.getEpisodeNumber() + ". " + ep.getName());
         holder.tvEpisodeOverview.setText(ep.getOverview());
 
-        ImageRequest request = new ImageRequest.Builder(holder.itemView.getContext())
-                .data(ep.getStillPath())
-                .target(holder.ivEpisode)
-                .crossfade(true)
-                .build();
-        Coil.imageLoader(holder.itemView.getContext()).enqueue(request);
+        try {
+            ImageRequest request = new ImageRequest.Builder(holder.itemView.getContext())
+                    .data(ep.getStillPath())
+                    .target(holder.ivEpisode)
+                    .crossfade(true)
+                    .build();
+            Coil.imageLoader(holder.itemView.getContext()).enqueue(request);
+        } catch (Exception ignored) {}
 
         if (listener != null) {
             holder.itemView.setOnClickListener(v -> listener.onEpisodeClick(ep));

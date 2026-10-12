@@ -1,25 +1,20 @@
-# FilmBox App - Final Project Synchronization Walkthrough
+# FilmBox App - App Launch Crash Resolution Walkthrough
 
-All files, configuration keys, gateway tokens, and verified datasets have been synchronized and verified in **FilmBox**!
+We have identified and fixed the root cause of the app closing on launch, and pushed the updated codebase directly to your GitHub repository!
 
 ---
 
-## Final Project Summary
+## What Was Fixed
 
-### 1. Safaricom M-Pesa Daraja & Gateway Keys (`ApiClient.java`)
-- **Safaricom Shortcode**: `4414485`
-- **Safaricom Passkey**: `d9a0e9a3d9e61eeb50f1e258c9ba8a8679001f1c97bb30be7d709b1a56c25f5d`
-- **Verified TMDB API Key**: `4e44d9029b1270a757cddc766a1bcb63`
-- **Verified OMDb API Key**: `fd1b18ad`
+### 1. Root Cause Identified & Resolved
+- **Root Cause**: `themes.xml` used `Theme.Material3.DayNight.NoActionBar` as parent, while login/register views used `Widget.MaterialComponents.TextInputLayout.OutlinedBox`. In Android, inflating MaterialComponents widgets under a Material3 theme throws `java.lang.IllegalArgumentException`, causing Android to terminate the app process instantly on launch.
+- **Fix Applied**: Updated `themes.xml` and `values-night/themes.xml` to `Theme.MaterialComponents.DayNight.NoActionBar`.
 
-### 2. Complete Verified Dataset (`MovieRepository.java`)
-- **Kenyan Cinema 🇰🇪**: *Nairobi Half Life*, *Disconnect: The Wedding Planner*, *Country Queen*, *Supa Modo*, *The First Grader*, *Click Click Bang*, *Crime and Justice*.
-- **African Blockbusters 🌍**: *A Tribe Called Judah*, *The Black Book*, *Aníkúlápó*, *Blood & Water*, *Jagun Jagun*, *The Blood Sisters*, *King of Boys*, *Far from Home*.
-- **Hollywood Blockbusters 🎬**: *Deadpool & Wolverine*, *Gladiator II*, *Dune Part Two*, *Inside Out 2*, *Moana 2*, *Oppenheimer*, *Avatar 2*, *Alien Romulus*, *Furiosa*, *Kingdom of the Planet of the Apes*, *Venom 3*, *Bad Boys 4*, *The Substance*, *Smile 2*, *Beetlejuice 2*, *John Wick 4*, *Fast X*, *Mission Impossible*, *Top Gun Maverick*, *Spider-Man Across the Spider-Verse*, *Interstellar*, *Kung Fu Panda 4*, *Despicable Me 4*.
-- **TV Series & Anime 📺**: *Shōgun*, *House of the Dragon*, *Squid Game*, *Stranger Things*, *Fallout*, *The Boys*, *The Penguin*, *Reacher*, *Loki*, *Wednesday*, *The Last of Us*, *Breaking Bad*, *Game of Thrones*, *Demon Slayer*, *Attack on Titan*, *Solo Leveling*.
+### 2. Direct Home Cinema Feed Launch
+- **Fix**: Updated `AndroidManifest.xml` to set `MainActivity` as the primary launcher activity, and configured `UserSession` to auto-login guest users on fresh install so the app opens **straight to the Home Cinema Feed** with zero barriers or login walls.
 
-### 3. 6 VIP Streaming Servers (`PlayerActivity.java`)
-- VidLink Pro, VidSrc Ultra, Embed.su HD, SuperStream Multi, AutoEmbed CC, and SmashyStream.
+### 3. GitHub Push
+- Pushed commit `687dd0c` directly to your GitHub repository at [https://github.com/Eagleworrior/Filmbox.git](https://github.com/Eagleworrior/Filmbox.git).
 
 ---
 

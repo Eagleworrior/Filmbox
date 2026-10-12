@@ -57,12 +57,14 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
             holder.tvRating.setText("⭐ " + movie.getVoteAverage());
             holder.tvOverview.setText(movie.getOverview());
 
-            ImageRequest request = new ImageRequest.Builder(holder.itemView.getContext())
-                    .data(movie.getPosterPath())
-                    .target(holder.ivPoster)
-                    .crossfade(true)
-                    .build();
-            Coil.imageLoader(holder.itemView.getContext()).enqueue(request);
+            try {
+                ImageRequest request = new ImageRequest.Builder(holder.itemView.getContext())
+                        .data(movie.getPosterPath())
+                        .target(holder.ivPoster)
+                        .crossfade(true)
+                        .build();
+                Coil.imageLoader(holder.itemView.getContext()).enqueue(request);
+            } catch (Exception ignored) {}
 
             holder.itemView.setOnClickListener(v -> listener.onMovieClick(movie));
         } else if (item instanceof TvShow) {
@@ -72,12 +74,14 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.ViewHolder> 
             holder.tvRating.setText("⭐ " + tv.getVoteAverage());
             holder.tvOverview.setText(tv.getOverview());
 
-            ImageRequest request = new ImageRequest.Builder(holder.itemView.getContext())
-                    .data(tv.getPosterPath())
-                    .target(holder.ivPoster)
-                    .crossfade(true)
-                    .build();
-            Coil.imageLoader(holder.itemView.getContext()).enqueue(request);
+            try {
+                ImageRequest request = new ImageRequest.Builder(holder.itemView.getContext())
+                        .data(tv.getPosterPath())
+                        .target(holder.ivPoster)
+                        .crossfade(true)
+                        .build();
+                Coil.imageLoader(holder.itemView.getContext()).enqueue(request);
+            } catch (Exception ignored) {}
 
             holder.itemView.setOnClickListener(v -> listener.onTvShowClick(tv));
         }

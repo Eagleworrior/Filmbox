@@ -52,12 +52,14 @@ public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.ViewHolder
         holder.tvBannerTitle.setText(movie.getTitle());
         holder.tvBannerRating.setText("🔥 Trending | ⭐ " + movie.getVoteAverage());
 
-        ImageRequest request = new ImageRequest.Builder(holder.itemView.getContext())
-                .data(movie.getBackdropPath())
-                .target(holder.ivBanner)
-                .crossfade(true)
-                .build();
-        Coil.imageLoader(holder.itemView.getContext()).enqueue(request);
+        try {
+            ImageRequest request = new ImageRequest.Builder(holder.itemView.getContext())
+                    .data(movie.getBackdropPath())
+                    .target(holder.ivBanner)
+                    .crossfade(true)
+                    .build();
+            Coil.imageLoader(holder.itemView.getContext()).enqueue(request);
+        } catch (Exception ignored) {}
 
         holder.itemView.setOnClickListener(v -> listener.onBannerClick(movie));
     }

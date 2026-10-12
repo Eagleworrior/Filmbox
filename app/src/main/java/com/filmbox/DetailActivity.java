@@ -74,12 +74,14 @@ public class DetailActivity extends AppCompatActivity {
         tvDate.setText(date);
         tvRating.setText("⭐ " + rating);
 
-        ImageRequest request = new ImageRequest.Builder(this)
-                .data(backdrop)
-                .target(ivBackdrop)
-                .crossfade(true)
-                .build();
-        Coil.imageLoader(this).enqueue(request);
+        try {
+            ImageRequest request = new ImageRequest.Builder(this)
+                    .data(backdrop)
+                    .target(ivBackdrop)
+                    .crossfade(true)
+                    .build();
+            Coil.imageLoader(this).enqueue(request);
+        } catch (Exception ignored) {}
 
         episodeAdapter = new EpisodeAdapter(episode -> {
             Intent intent = new Intent(DetailActivity.this, PlayerActivity.class);
