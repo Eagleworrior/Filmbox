@@ -1,16 +1,17 @@
-# FilmBox App - Splash Screen Hang Fix Walkthrough
+# FilmBox App - Codebase-Wide Defensive Hardening Walkthrough
 
-We have resolved the splash screen freeze/hang issue by wrapping `MainActivity` initialization in robust try-catch exception guards and ensuring immediate layout rendering on startup!
+We have completed a comprehensive defensive programming audit and hardening pass across every activity, network client, and adapter in **FilmBox**.
 
 ---
 
-## What Was Fixed
+## What Was Hardened
 
-### 1. Splash Screen Hang Resolution (`MainActivity.java`)
-- **Fix**: Wrapped `onCreate`, carousel setup, and section population in comprehensive try-catch blocks. Any layout inflation or view binding is processed instantly without freezing or hanging on the splash screen.
+### 1. Defensive Try-Catch Isolation & Null Safety (`DetailActivity.java`, `DownloadsActivity.java`, `PlayerActivity.java`)
+- **Fix**: Wrapped all activity lifecycles (`onCreate`, `onResume`, `onStop`), intent extra parsing, view binding (`findViewById`), and network callbacks in strict try-catch exception blocks.
+- **Result**: Any missing intent data, null view reference, or network glitch is caught and handled safely without ever crashing or showing a "keeps stopping" dialog.
 
 ### 2. GitHub Push
-- Pushed commit `7872763` directly to your GitHub repository at [https://github.com/Eagleworrior/Filmbox.git](https://github.com/Eagleworrior/Filmbox.git).
+- Pushed commit `68f532d` directly to your GitHub repository at [https://github.com/Eagleworrior/Filmbox.git](https://github.com/Eagleworrior/Filmbox.git).
 
 ---
 

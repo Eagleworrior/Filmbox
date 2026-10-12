@@ -2,6 +2,8 @@ package com.filmbox;
 
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -26,6 +28,8 @@ public class PlayerActivity extends AppCompatActivity {
     private int seasonNumber = 1;
     private int episodeNumber = 1;
     private String movieTitle = "Movie";
+
+    private final Handler handler = new Handler(Looper.getMainLooper());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +104,7 @@ public class PlayerActivity extends AppCompatActivity {
                 });
             }
 
-            loadMovieBoxServer(1);
+            handler.postDelayed(() -> loadMovieBoxServer(1), 150);
         } catch (Exception e) {
             Toast.makeText(this, "Error starting player: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             finish();
@@ -126,27 +130,15 @@ public class PlayerActivity extends AppCompatActivity {
                 @Override
                 public void onPageFinished(WebView view, String url) {
                     super.onPageFinished(view, url);
-                    String unblockScript = "try { " +
-                            "if (window.top !== window.self) { " +
-                            "  Object.defineProperty(window, 'top', { get: () => window.self, configurable: true }); " +
-                            "  Object.defineProperty(window, 'parent', { get: () => window.self, configurable: true }); " +
-                            "} " +
-                            "var testKey = '__storage_test__';" +
-                            "window.localStorage.setItem(testKey, testKey);" +
-                            "window.localStorage.removeItem(testKey);" +
-                            "} catch(e) {" +
-                            "  var mem = {};" +
-                            "  var fakeStorage = {" +
-                            "    getItem: function(k) { return Object.prototype.hasOwnProperty.call(mem, k) ? mem[k] : null; }," +
-                            "    setItem: function(k, v) { mem[k] = String(v); }," +
-                            "    removeItem: function(k) { delete mem[k]; }," +
-                            "    clear: function() { mem = {}; }," +
-                            "    get length() { return Object.keys(mem).length; }," +
-                            "    key: function(i) { return Object.keys(mem)[i] || null; }" +
-                            "  };" +
-                            "  try { Object.defineProperty(window, 'localStorage', { value: fakeStorage, configurable: true }); } catch(err) {}" +
-                            "}";
-                    view.evaluateJavascript(unblockScript, null);
+                    try {
+                        String unblockScript = "try { " +
+                                "if (window.top !== window.self) { " +
+                                "  Object.defineProperty(window, 'top', { get: () => window.self, configurable: true }); " +
+                                "  Object.defineProperty(window, 'parent', { get: () => window.self, configurable: true }); " +
+                                "} " +
+                                "} catch(e) {}";
+                        view.evaluateJavascript(unblockScript, null);
+                    } catch (Exception ignored) {}
                 }
             });
         } catch (Exception ignored) {}
