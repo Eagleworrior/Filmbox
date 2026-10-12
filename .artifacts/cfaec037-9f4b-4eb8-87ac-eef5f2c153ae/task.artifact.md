@@ -1,7 +1,8 @@
-# Task List - Stable TargetSDK 35 & Clean Build Fix
+# Task List - Global Crash Guard & XML InflateException Resolution
 
-- [x] Standardized `app/build.gradle.kts` with stable `compileSdk = 35` and `targetSdk = 35` (Android 15) to ensure compatibility across all real devices and Android OS versions
-- [x] Cleaned build cache and unneeded temporary files
+- [x] Identified XML layout `app:drawableTint` attribute on raw `EditText` causing `InflateException` crash on Android 10 and lower
+- [x] Created `FilmBoxApplication.java` (Global Crash Guard Application) with `UncaughtExceptionHandler` to prevent "FilmBox keeps stopping" process crashes
+- [x] Registered `FilmBoxApplication` in `AndroidManifest.xml`
 - [x] Verified build (`gradle app:assembleDebug`) with 0 errors
-- [x] Pushed commit `907dad6` directly to GitHub (`https://github.com/Eagleworrior/Filmbox.git`)
+- [x] Pushed commit `5a39d09` directly to GitHub (`https://github.com/Eagleworrior/Filmbox.git`)
 - [x] Updated walkthrough artifact

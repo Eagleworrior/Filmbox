@@ -55,11 +55,18 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.ViewHolder> 
         }
 
         holder.itemView.setOnClickListener(v -> {
-            int previousPosition = selectedPosition;
-            selectedPosition = holder.getAdapterPosition();
-            notifyItemChanged(previousPosition);
-            notifyItemChanged(selectedPosition);
-            listener.onGenreClick(genre);
+            int currentPos = holder.getAdapterPosition();
+            if (currentPos != RecyclerView.NO_POSITION) {
+                int previousPosition = selectedPosition;
+                selectedPosition = currentPos;
+                if (previousPosition >= 0 && previousPosition < genres.size()) {
+                    notifyItemChanged(previousPosition);
+                }
+                notifyItemChanged(selectedPosition);
+                if (listener != null) {
+                    listener.onGenreClick(genre);
+                }
+            }
         });
     }
 
