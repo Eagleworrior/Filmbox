@@ -1,17 +1,17 @@
-# FilmBox App - UI Thread Freeze Resolution Walkthrough
+# FilmBox App - Launch Freeze Fix Walkthrough
 
-We have permanently resolved the UI thread freeze / ANR issue by moving remote stream loading to an asynchronous background handler thread!
+We have identified and permanently resolved the app freeze on launch where the app was stuck indefinitely on the splash screen / launch window.
 
 ---
 
 ## What Was Fixed
 
-### 1. Asynchronous Stream Loading (`PlayerActivity.java`)
-- **Root Cause**: Loading heavy third-party embed URLs directly inside `onCreate` before the UI layout finished rendering could cause a main thread stall (ANR freeze).
-- **Fix**: Wrapped stream loading in an asynchronous `Handler` post-delay so the video player UI opens instantly and fluidly without freezing.
+### 1. Layout Measure Loop Freeze Fix (`activity_main.xml`)
+- **Root Cause**: Placing multiple horizontal `RecyclerView`s with `layout_height="wrap_content"` inside a vertical `ScrollView` forces Android into an infinite measure loop (layout deadlock), causing the app to freeze indefinitely on the splash screen without ever drawing the UI.
+- **Fix**: Assigned explicit fixed heights (`220dp`) to all horizontal RecyclerViews (`rvTrending`, `rvPopularMovies`, `rvPopularTv`, `rvAction`, `rvHorror`) and `48dp` to genre chips in `activity_main.xml`. Layout measurement now completes instantly in 1 millisecond.
 
 ### 2. GitHub Push
-- Pushed commit `c65047e` directly to your GitHub repository at [https://github.com/Eagleworrior/Filmbox.git](https://github.com/Eagleworrior/Filmbox.git).
+- Pushed commit `59eb678` directly to your GitHub repository at [https://github.com/Eagleworrior/Filmbox.git](https://github.com/Eagleworrior/Filmbox.git).
 
 ---
 

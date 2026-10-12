@@ -1,29 +1,29 @@
-# Codebase-Wide Defensive Hardening & Crash Prevention Plan
+# FilmBox App - Hybrid WebView Architecture Plan
 
-We are conducting a comprehensive defensive programming audit and hardening pass across all activities (`DetailActivity`, `DownloadsActivity`, `PlayerActivity`, `MainActivity`), adapters, and network clients to ensure zero runtime exceptions, null pointer crashes, or "keeps stopping" dialogs anywhere in **FilmBox**.
+To resolve all startup crashes and ensure the app displays the exact **Kenya Movie Box web interface** (with all React components, M-Pesa STK push modal, video player modal, download modal, and movie catalog) exactly as designed, we are converting FilmBox into a **High-Performance Hybrid WebView Android App**.
 
 ---
 
 ## User Review Required
 
 > [!IMPORTANT]
-> **Defensive Hardening Strategy**
-> 1. **Defensive Null-Safety & Try-Catch Wrappers**:
->    - Wrap all lifecycle methods (`onCreate`, `onResume`, network callbacks, adapter bindings) in robust try-catch exception blocks.
->    - Add explicit null checks for every `findViewById`, intent extra, and view binding.
-> 2. **Network & Image Failure Isolation**:
->    - Isolate all Retrofit API calls and Coil image loaders so network drops or missing resources fail silently without crashing the main application thread.
-> 3. **Global Uncaught Exception Handler**:
->    - Ensure `FilmBoxApplication` catches any residual thread exception.
+> **Why Hybrid WebView Architecture?**
+> 1. **Zero XML Inflation Crashes**: Eliminates all Android XML layout inflation deadlocks and "keeps stopping" errors.
+> 2. **Exact Web App UI**: Renders the complete React/Tailwind frontend (`index.html`, Header, HeroBanner, MovieCard, VideoPlayerModal, PaywallModal, DownloadModal) natively inside Android.
+> 3. **Instant Startup**: Loads instantly via local asset bundle (`file:///android_asset/index.html`) with full JavaScript, DOM storage, media autoplay, and M-Pesa STK push support.
 
 ---
 
 ## Proposed Changes
 
-### Activities & Adapters (`com.filmbox`)
-- **`DetailActivity.java`**: Wrap `onCreate`, intent parsing, and network callbacks in defensive try-catch guards.
-- **`DownloadsActivity.java`**: Wrap offline storage loading and RecyclerView bindings in try-catch guards.
-- **`PlayerActivity.java`**: Wrap WebView initialization, intent extras, and stream loaders in defensive try-catch blocks.
+### Assets (`app/src/main/assets`)
+- **`index.html`**: Bundled HTML entry point containing the full Kenya Movie Box web application with Tailwind CSS, React, and video streaming embed servers.
+
+### Layout (`app/src/main/res/layout`)
+- **`activity_main.xml`**: Single full-screen hardware-accelerated `WebView`.
+
+### Activity (`com.filmbox`)
+- **`MainActivity.java`**: Hosts the full-screen `WebView`, configures JavaScript, DOM storage, geolocation, media playback, and local asset loading (`file:///android_asset/index.html`).
 
 ---
 
@@ -33,5 +33,4 @@ We are conducting a comprehensive defensive programming audit and hardening pass
 - Gradle debug build (`gradle_build("app:assembleDebug")`).
 
 ### Manual Verification
-- Verify build success with zero errors.
-- Confirm app launches smoothly and all activities handle navigation robustly.
+- Deploy APK to verify the Kenya Movie Box web UI loads instantly on app launch without any freeze or crash.
