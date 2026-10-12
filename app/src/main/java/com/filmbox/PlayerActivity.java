@@ -122,7 +122,33 @@ public class PlayerActivity extends AppCompatActivity {
 
             webViewPlayer.setLayerType(View.LAYER_TYPE_HARDWARE, null);
             webViewPlayer.setWebChromeClient(new WebChromeClient());
-            webViewPlayer.setWebViewClient(new WebViewClient());
+            webViewPlayer.setWebViewClient(new WebViewClient() {
+                @Override
+                public void onPageFinished(WebView view, String url) {
+                    super.onPageFinished(view, url);
+                    String unblockScript = "try { " +
+                            "if (window.top !== window.self) { " +
+                            "  Object.defineProperty(window, 'top', { get: () => window.self, configurable: true }); " +
+                            "  Object.defineProperty(window, 'parent', { get: () => window.self, configurable: true }); " +
+                            "} " +
+                            "var testKey = '__storage_test__';" +
+                            "window.localStorage.setItem(testKey, testKey);" +
+                            "window.localStorage.removeItem(testKey);" +
+                            "} catch(e) {" +
+                            "  var mem = {};" +
+                            "  var fakeStorage = {" +
+                            "    getItem: function(k) { return Object.prototype.hasOwnProperty.call(mem, k) ? mem[k] : null; }," +
+                            "    setItem: function(k, v) { mem[k] = String(v); }," +
+                            "    removeItem: function(k) { delete mem[k]; }," +
+                            "    clear: function() { mem = {}; }," +
+                            "    get length() { return Object.keys(mem).length; }," +
+                            "    key: function(i) { return Object.keys(mem)[i] || null; }" +
+                            "  };" +
+                            "  try { Object.defineProperty(window, 'localStorage', { value: fakeStorage, configurable: true }); } catch(err) {}" +
+                            "}";
+                    view.evaluateJavascript(unblockScript, null);
+                }
+            });
         } catch (Exception ignored) {}
     }
 
