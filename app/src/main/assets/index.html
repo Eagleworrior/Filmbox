@@ -6,7 +6,107 @@
     <title>Kenya Movie Box & Daily Pass</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   </head>
-  <body class="bg-[#0B0F17] text-slate-100 antialiased m-0 p-0 overflow-hidden h-screen flex flex-col">
-    <iframe src="https://vidlink.pro" class="w-full h-full border-0 flex-1" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe>
+  <body class="bg-[#0B0F17] text-slate-100 antialiased m-0 p-0 min-h-screen flex flex-col font-sans">
+    <!-- Header -->
+    <header class="sticky top-0 z-40 w-full bg-[#0B0F17]/95 backdrop-blur-md border-b border-slate-800/80 px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-700 via-indigo-600 to-yellow-500 p-0.5 shadow-lg">
+          <div class="w-full h-full bg-[#0B0F17] rounded-[10px] flex items-center justify-center text-yellow-400 font-bold">
+            🎬
+          </div>
+        </div>
+        <div>
+          <h1 class="text-base font-black text-white tracking-wide">KENYA MOVIE BOX</h1>
+          <p class="text-[10px] text-slate-400">Daily Pass Cinema 🇰🇪</p>
+        </div>
+      </div>
+      <button onclick="alert('VIP Pass Active (24h M-Pesa Pass)')" class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-yellow-500 to-amber-500 text-black font-black text-xs shadow-md">
+        PASS ACTIVE ⚡
+      </button>
+    </header>
+
+    <!-- Main Catalog -->
+    <main class="flex-1 max-w-7xl mx-auto px-4 py-6 w-full space-y-6">
+      <!-- Hero Banner -->
+      <div class="relative rounded-2xl overflow-hidden bg-slate-900 border border-slate-800 p-6 shadow-2xl">
+        <div class="absolute inset-0 bg-gradient-to-r from-blue-950 via-slate-900 to-emerald-950 opacity-90" />
+        <div class="relative z-10 space-y-3 max-w-xl">
+          <span class="px-2.5 py-1 rounded bg-yellow-500 text-black font-black text-[10px] uppercase">
+            HOT IN KENYA #1
+          </span>
+          <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight">Nairobi Half Life</h2>
+          <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+            Mwas, a young aspiring actor from upcountry Kenya dreams of becoming an accomplished actor one day, and makes his way to Nairobi, the city of opportunity.
+          </p>
+          <div class="flex items-center gap-3 pt-2">
+            <button onclick="playMovie('130737', 'Nairobi Half Life')" class="px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-lg flex items-center gap-2 cursor-pointer">
+              <span>▶ PLAY FULL MOVIE</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Movies Grid -->
+      <div class="space-y-3">
+        <h3 class="text-lg font-black text-white flex items-center gap-2">
+          <span>🔥 Trending Blockbusters & Kenyan Cinema</span>
+        </h3>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3" id="movieGrid">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </main>
+
+    <!-- Video Modal -->
+    <div id="videoModal" class="fixed inset-0 z-50 bg-black/95 flex flex-col hidden">
+      <div class="px-4 py-3 bg-[#0B0F17] border-b border-slate-800 flex items-center justify-between">
+        <h3 id="modalTitle" class="text-sm font-bold text-white">Streaming Movie</h3>
+        <button onclick="closeModal()" class="px-3 py-1.5 rounded-lg bg-red-600/20 text-red-400 font-bold text-xs">Close ✕</button>
+      </div>
+      <div class="flex-1 bg-black relative flex items-center justify-center">
+        <iframe id="streamFrame" class="w-full h-full border-0" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe>
+      </div>
+    </div>
+
+    <script>
+      const movies = [
+        { id: 130737, title: "Nairobi Half Life", poster: "https://image.tmdb.org/t/p/w500/1QYW51WrwmSsJBm1y9ZkdEeHp6q.jpg", rating: "6.9" },
+        { id: 1063242, title: "Disconnect: Wedding Planner", poster: "https://image.tmdb.org/t/p/w500/co6doQ2d3f5ZaTTvORV76wrTFit.jpg", rating: "6.9" },
+        { id: 533535, title: "Deadpool & Wolverine", poster: "https://image.tmdb.org/t/p/w500/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg", rating: "7.6" },
+        { id: 558449, title: "Gladiator II", poster: "https://image.tmdb.org/t/p/w500/2cxhvwyEwRlysAmRH4iodkvo0z5.jpg", rating: "6.6" },
+        { id: 693134, title: "Dune: Part Two", poster: "https://image.tmdb.org/t/p/w500/6izwz7rsy95ARzTR3poZ8H6c5pp.jpg", rating: "8.1" },
+        { id: 872585, title: "Oppenheimer", poster: "https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg", rating: "8.0" },
+        { id: 76600, title: "Avatar: The Way of Water", poster: "https://image.tmdb.org/t/p/w500/t6HIqrRAclMCA60NsSmeqe9RmNV.jpg", rating: "7.6" },
+        { id: 157336, title: "Interstellar", poster: "https://image.tmdb.org/t/p/w500/yQvGrMoipbRoddT0ZR8tPoR7NfX.jpg", rating: "8.5" }
+      ];
+
+      const grid = document.getElementById('movieGrid');
+      movies.forEach(m => {
+        const card = document.createElement('div');
+        card.className = "bg-[#111726] border border-slate-800 rounded-xl overflow-hidden shadow-lg cursor-pointer hover:border-yellow-500 transition flex flex-col";
+        card.innerHTML = `
+          <div class="aspect-[2/3] w-full bg-slate-950 relative overflow-hidden">
+            <img src="${m.poster}" alt="${m.title}" class="w-full h-full object-cover" />
+            <div class="absolute top-2 left-2 bg-black/80 px-2 py-0.5 rounded text-[10px] text-yellow-400 font-bold">⭐ ${m.rating}</div>
+          </div>
+          <div class="p-2.5 flex-1 flex flex-col justify-between">
+            <h4 class="text-xs font-bold text-white line-clamp-1">${m.title}</h4>
+            <button onclick="playMovie('${m.id}', '${m.title}')" class="mt-2 w-full py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-bold text-[11px]">▶ Play Now</button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+
+      function playMovie(id, title) {
+        document.getElementById('modalTitle').innerText = "Streaming: " + title;
+        document.getElementById('streamFrame').src = "https://vidlink.pro/movie/" + id;
+        document.getElementById('videoModal').classList.remove('hidden');
+      }
+
+      function closeModal() {
+        document.getElementById('streamFrame').src = "about:blank";
+        document.getElementById('videoModal').classList.add('hidden');
+      }
+    </script>
   </body>
 </html>
