@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0B0F17">
+    android:background="#070A10">
 
     <WebView
         android:id="@+id/webViewApp"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-</RelativeLayout>
+    <FrameLayout
+        android:id="@+id/customViewContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:background="#000000" />
+
+</FrameLayout>

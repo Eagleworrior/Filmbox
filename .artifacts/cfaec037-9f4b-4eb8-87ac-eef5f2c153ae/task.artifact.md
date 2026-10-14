@@ -1,5 +1,5 @@
-# Task List - UI Overhaul & Responsive Layout
+# Task List - Fix M-Pesa Amount & CSS Layout
 
-- [/] Overhaul `app/src/main/assets/index.html` with status bar safe padding, top search bar with instant auto-suggestions dropdown, clean header branding (icon + "DAILY PASS CINEMA", no flag), offline downloads tab, movie runtime length indicators, and enhanced video player with rotation & episode selector
-- [ ] Verify build integrity (`gradle app:assembleDebug`) with 0 errors
-- [ ] Update walkthrough artifact
+- [x] Sanitize M-Pesa amount in `index.html` to remove commas (`2,500` -> `2500`) `[x]`
+- [x] Restore Tailwind CSS CDN script and robust CSS grid fallbacks `[x]`
+- [x] Verify build via gradle `app:assembleDebug` `[x]`
