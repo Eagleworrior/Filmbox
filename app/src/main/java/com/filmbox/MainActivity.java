@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
                 webViewApp.addJavascriptInterface(new MpesaBridge(), "AndroidKYC");
                 webViewApp.addJavascriptInterface(new MpesaBridge(), "AndroidMpesa");
 
-                // Strict In-App Playback (No External Browser Redirects)
+                // Strict In-App Playback & Browser Lockdown (No External Browser Redirects)
                 webViewApp.setWebViewClient(new WebViewClient() {
                     @Override
                     public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                             if (url.startsWith("file:///") || url.contains("android_asset") || url.contains("vidsrc") || url.contains("embed") || url.contains("sportsrc") || url.contains("autoembed") || url.contains("smashystream") || url.contains("vidlink") || url.contains("themoviedb") || url.contains("football-data")) {
                                 return false;
                             }
-                            return false;
+                            return true; // STRICTLY BLOCK EXTERNAL BROWSER LAUNCHES
                         }
                         return false;
                     }
@@ -207,6 +207,41 @@ public class MainActivity extends AppCompatActivity {
         public MpesaBridge() {}
 
         @JavascriptInterface
+        public void setFullscreenMode(boolean enabled) {
+            runOnUiThread(() -> {
+                try {
+                    if (enabled) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                            if (getWindow().getInsetsController() != null) {
+                                getWindow().getInsetsController().hide(android.view.WindowInsets.Type.statusBars() | android.view.WindowInsets.Type.navigationBars());
+                                getWindow().getInsetsController().setSystemBarsBehavior(android.view.WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+                            }
+                        } else {
+                            getWindow().getDecorView().setSystemUiVisibility(
+                                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                            | View.SYSTEM_UI_FLAG_FULLSCREEN
+                                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                            );
+                        }
+                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+                    } else {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                            if (getWindow().getInsetsController() != null) {
+                                getWindow().getInsetsController().show(android.view.WindowInsets.Type.statusBars() | android.view.WindowInsets.Type.navigationBars());
+                            }
+                        } else {
+                            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+                        }
+                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+                    }
+                } catch (Exception ignored) {}
+            });
+        }
+
+        @JavascriptInterface
         public void triggerMpesaSTKPush(String phone, String amountStr, String callbackName) {
             new Thread(() -> {
                 try {
@@ -255,6 +290,8 @@ public class MainActivity extends AppCompatActivity {
                     String endpointUrl = isProduction ? "https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest" : "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest";
                     URL stkUrl = new URL(endpointUrl);
                     HttpURLConnection stkConn = (HttpURLConnection) stkUrl.openConnection();
+                    stkConn.setConnectTimeout(3000);
+                    stkConn.setReadTimeout(3000);
                     stkConn.setRequestMethod("POST");
                     stkConn.setRequestProperty("Authorization", "Bearer " + accessToken);
                     stkConn.setRequestProperty("Content-Type", "application/json");
@@ -318,16 +355,73 @@ public class MainActivity extends AppCompatActivity {
 
         @JavascriptInterface
         public void queryMpesaSTKStatus(String checkoutRequestId, String callbackName) {
-            runOnUiThread(() -> {
+            new Thread(() -> {
                 try {
-                    JSONObject statusJson = new JSONObject();
-                    statusJson.put("ResultCode", "0");
-                    statusJson.put("ResultDesc", "The service request is processed successfully.");
-                    if (webViewApp != null) {
-                        webViewApp.evaluateJavascript(callbackName + "(" + statusJson.toString() + ");", null);
+                    String consumerKey = "GAbKWM1S2Gmk3GuReoUoC52bVzBOXrIDyqzjiZbBYAJiyILs";
+                    String consumerSecret = "jdv9jcXAD1PNenMXbHGhcPu3VXE4BKkNT9BqP72xxGlXsxY9t0hFlwb0AHjjPGO9";
+                    String passkey = "d9a0e9a3d9e61eeb50f1e258c9ba8a8679001f1c97bb30be7d709b1a56c25f5d";
+                    String shortcode = "4414485";
+
+                    String auth = consumerKey + ":" + consumerSecret;
+                    String encodedAuth = android.util.Base64.encodeToString(auth.getBytes(StandardCharsets.UTF_8), android.util.Base64.NO_WRAP);
+                    String accessToken = getOAuthToken("https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials", encodedAuth);
+
+                    String timestamp = new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault()).format(new Date());
+                    String passwordStr = shortcode + passkey + timestamp;
+                    String password = android.util.Base64.encodeToString(passwordStr.getBytes(StandardCharsets.UTF_8), android.util.Base64.NO_WRAP);
+
+                    JSONObject queryPayload = new JSONObject();
+                    queryPayload.put("BusinessShortCode", shortcode);
+                    queryPayload.put("Password", password);
+                    queryPayload.put("Timestamp", timestamp);
+                    queryPayload.put("CheckoutRequestID", checkoutRequestId);
+
+                    URL queryUrl = new URL("https://api.safaricom.co.ke/mpesa/stkpushquery/v1/query");
+                    HttpURLConnection queryConn = (HttpURLConnection) queryUrl.openConnection();
+                    queryConn.setConnectTimeout(3000);
+                    queryConn.setReadTimeout(3000);
+                    queryConn.setRequestMethod("POST");
+                    queryConn.setRequestProperty("Authorization", "Bearer " + accessToken);
+                    queryConn.setRequestProperty("Content-Type", "application/json");
+                    queryConn.setDoOutput(true);
+
+                    try (OutputStream os = queryConn.getOutputStream()) {
+                        byte[] input = queryPayload.toString().getBytes(StandardCharsets.UTF_8);
+                        os.write(input, 0, input.length);
                     }
-                } catch(Exception ignored) {}
-            });
+
+                    int queryCode = queryConn.getResponseCode();
+                    Scanner scanner;
+                    if (queryCode >= 200 && queryCode < 300) {
+                        scanner = new Scanner(queryConn.getInputStream());
+                    } else {
+                        scanner = new Scanner(queryConn.getErrorStream() != null ? queryConn.getErrorStream() : queryConn.getInputStream());
+                    }
+                    StringBuilder responseStr = new StringBuilder();
+                    while (scanner.hasNext()) responseStr.append(scanner.nextLine());
+                    scanner.close();
+
+                    JSONObject resultJson = new JSONObject(responseStr.toString());
+                    final String finalJsonStr = resultJson.toString();
+
+                    runOnUiThread(() -> {
+                        if (webViewApp != null) {
+                            webViewApp.evaluateJavascript(callbackName + "(" + finalJsonStr + ");", null);
+                        }
+                    });
+                } catch (Exception e) {
+                    runOnUiThread(() -> {
+                        try {
+                            JSONObject errJson = new JSONObject();
+                            errJson.put("ResultCode", "1037");
+                            errJson.put("ResultDesc", "STK Query pending.");
+                            if (webViewApp != null) {
+                                webViewApp.evaluateJavascript(callbackName + "(" + errJson.toString() + ");", null);
+                            }
+                        } catch(Exception ignored) {}
+                    });
+                }
+            }).start();
         }
 
         private String getOAuthToken(String urlStr, String encodedAuth) {
