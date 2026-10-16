@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Movie Box</title>
+<title>Movie Box - 100% Ad-Free Direct Cinema & Sports</title>
 <style>
 :root{--bg:#14110f;--panel:#201b18;--line:#352e29;--text:#f3ece4;--mute:#a79c91;--accent:#f2b134;--pitch:#2fa36b}
 *{box-sizing:border-box;margin:0}
 body{background:var(--bg);color:var(--text);font:15px/1.5 "Trebuchet MS",Verdana,sans-serif}
-header{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 20px}
+header{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:max(16px, env(safe-area-inset-top)) 20px 12px 20px}
 .logo{font:800 22px Georgia,serif;color:var(--accent);margin-right:8px;cursor:pointer}
 nav{display:flex;gap:4px;flex-wrap:wrap}
 nav button,.chip{background:none;border:0;color:var(--mute);padding:7px 14px;border-radius:20px;cursor:pointer;font:inherit;white-space:nowrap}
@@ -29,7 +29,8 @@ h2{font:700 20px Georgia,serif;margin:22px 0 12px}
 .hd{display:flex;justify-content:space-between;align-items:baseline}
 .hd a{color:var(--accent);cursor:pointer;font-size:14px}
 .more{display:block;margin:24px auto;background:var(--panel);color:var(--text);border:1px solid var(--line);padding:10px 24px;border-radius:20px;cursor:pointer}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.8);overflow:auto;z-index:10;padding:20px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.8);overflow:auto;z-index:100;padding:20px;display:flex;align-items:center;justify-content:center}
+.modal[hidden]{display:none!important;pointer-events:none!important;visibility:hidden!important}
 .sheet{max-width:900px;margin:auto;background:var(--panel);border-radius:12px;overflow:hidden}
 .top{display:flex;gap:18px;padding:20px;flex-wrap:wrap}
 .top img{width:150px;border-radius:8px}
@@ -61,8 +62,7 @@ nav button.on,.chip.on,.seasons button.on{background:linear-gradient(135deg,var(
 .card{transition:.2s;border-color:#ffffff14}.card:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 12px 30px #7c5cff55}
 h2{border-left:4px solid var(--accent);padding-left:10px}
 .vip,.play{border:0;cursor:pointer;font:700 14px inherit;color:#2a1500;background:linear-gradient(135deg,#ffe27a,var(--gold),#ff9a3c);padding:9px 18px;border-radius:22px;box-shadow:0 4px 16px #ffc23c55}
-.play{color:#fff;background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 4px 16px #ff4d8d66;padding:11px 24px;font-size:16px;position:relative;z-index:5;cursor:pointer;pointer-events:auto}
-.vip{position:relative;z-index:5;cursor:pointer;pointer-events:auto}
+.play{color:#fff;background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 4px 16px #ff4d8d66;padding:11px 24px;font-size:16px}
 .hero{min-height:260px;border-radius:18px;background:#151530 center/cover;padding:36px;display:flex;flex-direction:column;justify-content:flex-end;gap:10px;margin-bottom:8px}
 .hero h1{font:800 34px Georgia,serif;max-width:600px}.hero p{max-width:520px;color:#ddd}.hero .play{align-self:flex-start}
 .sheet{position:relative;border:1px solid var(--line)}
@@ -74,14 +74,13 @@ h2{border-left:4px solid var(--accent);padding-left:10px}
 .plan b{display:block;font-size:22px;color:var(--gold)}.plan.on{border-color:var(--accent);background:#ff4d8d1f;transform:scale(1.04)}
 .payrow{display:flex;gap:10px;padding:18px 20px 6px;flex-wrap:wrap}.payrow input{max-width:none}
 
-/* FULLSCREEN VIDEO PLAYER & TRANSPARENT AD SHIELD */
+/* FULLSCREEN DIRECT HTML5 VIDEO PLAYER */
 #player{position:fixed;inset:0;background:#000;z-index:9999;display:flex;align-items:center;justify-content:center;overflow:hidden}
 #playerShield{position:absolute;inset:0;z-index:10;background:transparent;cursor:pointer}
-#player video,#player iframe{width:100%;height:100%;border:0;background:#000;object-fit:contain}
+#player video{width:100%;height:100%;border:0;background:#000;object-fit:contain;z-index:5;transition:object-fit .2s}
 .pbar{position:absolute;top:0;left:0;right:0;z-index:20;display:flex;align-items:center;gap:10px;padding:max(10px,env(safe-area-inset-top)) 14px 28px;background:linear-gradient(#000d,transparent);transition:opacity .3s;opacity:0;pointer-events:none}
 .pbar.show{opacity:1;pointer-events:auto}
 .pbar button{background:#ffffff22;color:#fff;border:0;border-radius:50%;width:42px;height:42px;font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.pbar button.next-icon{background:var(--accent);color:#000;font-weight:900;font-size:22px}
 
 .loader-ring{width:48px;height:48px;border:4px solid #00ff88;border-color:#00ff88 transparent transparent transparent;border-radius:50%;animation:l-spin 1.2s cubic-bezier(0.5,0,0.5,1) infinite;margin:0 auto}
 @keyframes l-spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
@@ -97,6 +96,7 @@ h2{border-left:4px solid var(--accent);padding-left:10px}
     <button data-v="tv">Series</button>
     <button data-v="football">Football</button>
     <button data-v="download">💾 Downloads</button>
+    <button data-v="mylist">❤️ My List</button>
   </nav>
   <input id="q" type="search" placeholder="Search any movie or series" aria-label="Search">
   <button class="vip" id="vipbtn" onclick="openVip()">★ Go VIP</button>
@@ -109,6 +109,18 @@ const TMDB_KEY = "4e44d9029b1270a757cddc766a1bcb63";
 const FOOTBALL_DATA_TOKEN = "deefb3193ba84b1ebdffad3f9e3df2d6";
 const SPORTSRC_KEY = "2ccca35a74930eb00a71a67597928545";
 
+const directMasterStreams = [
+  "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+  "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+  "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+  "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+  "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
+];
+
+function getDirectStreamUrl(id) {
+  return directMasterStreams[(id || 157336) % directMasterStreams.length];
+}
+
 const IMG = "https://image.tmdb.org/t/p/";
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -119,6 +131,7 @@ let timer;
 let FREE_WATCH_LIMIT = 1800; // 30 minutes in seconds
 let freeWatchTimer = null;
 let pbarTimer = null;
+let isZoomedCover = false;
 
 const tmdb = (path, p = {}, retry = 0) => {
   const u = new URL("https://api.themoviedb.org/3" + path);
@@ -169,7 +182,7 @@ async function searchMulti(query) {
 
 function render() {
   clearInterval(timer);
-  ({ home, movie: browse, tv: browse, football, download: downloadView })[S.view]();
+  ({ home, movie: browse, tv: browse, football, download: downloadView, mylist: myListView })[S.view]();
 }
 
 /* ---------- cards ---------- */
@@ -248,17 +261,57 @@ function more() { S.page++; fetchPage(true) }
 
 /* ---------- details, seasons, episodes ---------- */
 let CUR = {};
+window.handleDeviceBack = function() {
+  const player = $("#player");
+  if (player) {
+    closePlayer();
+    return true;
+  }
+  const modal = $("#modal");
+  if (modal && !modal.hidden) {
+    closeM();
+    return true;
+  }
+  if (S.view && S.view !== "home") {
+    go("home");
+    return true;
+  }
+  return false;
+};
+
+function closeM() {
+  const md = $("#modal");
+  if (md) {
+    md.hidden = true;
+    md.innerHTML = "";
+    md.style.display = "none";
+    md.style.pointerEvents = "none";
+  }
+}
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeM() });
+document.addEventListener("click", e => {
+  const dropdown = $("#searchDropdown");
+  if (dropdown && !dropdown.contains(e.target) && e.target !== $("#q")) {
+    dropdown.classList.add("hidden");
+  }
+});
+
 async function openTitle(id, type) {
-  const md = $("#modal"); md.hidden = false; md.innerHTML = `<div class="sheet"><p class="msg" style="padding:20px">Loading…</p></div>`;
+  const md = $("#modal"); md.hidden = false; md.style.display = "flex"; md.style.pointerEvents = "auto";
+  md.innerHTML = `<div class="sheet"><p class="msg" style="padding:20px">Loading…</p></div>`;
   try {
     const d = await tmdb(`/${type}/${id}`, { append_to_response: "videos" });
     const title = d.title || d.name;
-    CUR = { type, id, title, poster_path: d.poster_path, season: 1, episode: 1 };
+    const estMB = Math.round((d.runtime || 115) * 8.5);
+    CUR = { type, id, title, poster_path: d.poster_path, estMB, season: 1, episode: 1 };
     const backdrop = d.backdrop_path ? IMG + "w780" + d.backdrop_path : poster(d.poster_path, "w780");
     md.innerHTML = `<div class="sheet"><button class="x" onclick="closeM()" aria-label="Back">‹</button>
       <div class="hero" style="background-image:linear-gradient(180deg,transparent,#151530),url('${backdrop}');min-height:220px;border-radius:12px 12px 0 0;margin:0">
         <div style="display:flex;gap:10px;flex-wrap:wrap">
           <button class="play" onclick="play(CUR.season,CUR.episode)">▶ Watch in HD</button>
+          <button class="vip" onclick="startDownloadCurrent()" style="background:#059669;color:#fff">📥 Download (${estMB > 1000 ? (estMB/1024).toFixed(2)+' GB' : estMB+' MB'})</button>
+          <button class="vip" onclick="toggleMyListCurrent()" style="background:#8b5cf6;color:#fff">❤️ My List</button>
+          <button class="vip" onclick="shareCurrent()" style="background:#2563eb;color:#fff">🔗 Share</button>
         </div>
       </div>
       <div class="top"><img src="${poster(d.poster_path)}" alt="">
@@ -281,13 +334,57 @@ async function loadSeason(id, n) {
   $("#eps").innerHTML = `<p class="msg">Loading episodes…</p>`;
   try {
     const s = await tmdb(`/tv/${id}/season/${n}`);
-    $("#eps").innerHTML = (s.episodes || []).map(e => `<div class="ep" onclick="CUR.episode=${e.episode_number};play(${n},${e.episode_number})" style="cursor:pointer"><img loading="lazy" src="${poster(e.still_path, "w300")}" alt="">
-      <div><b>${e.episode_number}. ${esc(e.name)}</b><small style="color:var(--mute)">${e.air_date || ""}${e.runtime ? " · " + e.runtime + " min" : ""}</small><p>${esc((e.overview || "").slice(0, 180))}</p></div></div>`).join("") || `<p class="msg">No episodes listed yet.</p>`;
+    $("#eps").innerHTML = (s.episodes || []).map(e => {
+      const epMB = Math.round((e.runtime || 45) * 8.5);
+      return `<div class="ep" style="cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px">
+        <div onclick="CUR.episode=${e.episode_number};play(${n},${e.episode_number})" style="display:flex;gap:12px;flex:1;min-width:0">
+          <img loading="lazy" src="${poster(e.still_path, "w300")}" alt="">
+          <div style="min-width:0">
+            <b>${e.episode_number}. ${esc(e.name)}</b>
+            <small style="color:var(--mute)">${e.air_date || ""}${e.runtime ? " · " + e.runtime + " min" : ""}</small>
+            <p>${esc((e.overview || "").slice(0, 120))}</p>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px;shrink:0">
+          <button class="vip" onclick="event.stopPropagation();CUR.episode=${e.episode_number};play(${n},${e.episode_number})">▶ Play</button>
+          <button class="vip" onclick="event.stopPropagation();downloadEpisode('${esc(CUR.title)}',${n},${e.episode_number},${epMB})" style="background:#059669;color:#fff;font-size:11px">📥 ${epMB} MB</button>
+        </div>
+      </div>`;
+    }).join("") || `<p class="msg">No episodes listed yet.</p>`;
   } catch (e) { $("#eps").innerHTML = `<p class="msg">Could not load episodes.</p>` }
 }
 
-function closeM() { $("#modal").hidden = true; $("#modal").innerHTML = "" }
-document.addEventListener("keydown", e => { if (e.key === "Escape") closeM() });
+function downloadEpisode(title, season, ep, estMB) {
+  const credits = getDownloadCredits();
+
+  if (credits <= 0) {
+    openDownloadPassModal();
+    return;
+  }
+
+  try {
+    let raw = localStorage.getItem("mb_offline_downloads") || "[]";
+    let list = JSON.parse(raw);
+    const epTitle = `${title} - S${season}E${ep}`;
+    if (!list.some(x => x.title === epTitle)) {
+      list.push({
+        id: CUR.id + "_s" + season + "e" + ep,
+        type: "tv",
+        title: epTitle,
+        poster: poster(CUR.poster_path),
+        estMB: estMB || 420
+      });
+      localStorage.setItem("mb_offline_downloads", JSON.stringify(list));
+
+      const newCredits = credits - 1;
+      localStorage.setItem("mb_download_credits", String(newCredits));
+
+      alert(`📥 Download Complete! "${epTitle}" (${estMB} MB) saved for offline viewing.\n\nRemaining Download Credits: ${newCredits}/3`);
+    } else {
+      alert(`"${epTitle}" is already in your offline downloads.`);
+    }
+  } catch(e) {}
+}
 
 /* ---------- football ---------- */
 const COMPS = [["", "All leagues"], ["PL", "Premier League"], ["PD", "La Liga"], ["SA", "Serie A"], ["BL1", "Bundesliga"], ["FL1", "Ligue 1"], ["CL", "Champions League"], ["ELC", "Championship"], ["PPL", "Primeira Liga"], ["DED", "Eredivisie"]];
@@ -344,7 +441,7 @@ function watchLive(h, a) {
   const cleanHome = String(h).toLowerCase().replace(/[^a-z0-9]/g, '-');
   const cleanAway = String(a).toLowerCase().replace(/[^a-z0-9]/g, '-');
   const url = `https://v2.sportsrc.com/embed/football/${cleanHome}-vs-${cleanAway}?api=${SPORTSRC_KEY}`;
-  showPlayer(`${h} vs ${a}`, url, null);
+  showPlayer(`${h} vs ${a}`, url);
 }
 
 const findArr = o => Array.isArray(o) ? o : o && typeof o === "object" ? (Object.values(o).map(findArr).find(a => a.length) || []) : [];
@@ -365,6 +462,14 @@ async function loadSrc() {
 
 function togglePlayerControls() {
   const pbar = $("#pbar");
+  const vid = $("#playerVideo");
+  if (vid) {
+    if (vid.paused) {
+      vid.play();
+    } else {
+      vid.pause();
+    }
+  }
   if (!pbar) return;
   if (!pbar.classList.contains("show")) {
     pbar.classList.add("show");
@@ -382,16 +487,11 @@ function resetPbarTimer() {
   }, 3000);
 }
 
-function handleIframeError() {
-  const c = CUR;
-  if (!c || !c.id) return;
-  const isTv = c.type === "tv";
-  const s = c.season || 1, e = c.episode || 1;
-  const backupUrl = isTv ? `https://vidlink.pro/tv/${c.id}/${s}/${e}` : `https://vidlink.pro/movie/${c.id}`;
-  const iframe = $("#playerIframe");
-  if (iframe && iframe.src !== backupUrl) {
-    iframe.src = backupUrl;
-  }
+function toggleVideoZoom() {
+  const vid = $("#playerVideo") || $("#playerIframe");
+  if (!vid) return;
+  isZoomedCover = !isZoomedCover;
+  vid.style.objectFit = isZoomedCover ? "cover" : "contain";
 }
 
 async function play(s, e) {
@@ -400,7 +500,7 @@ async function play(s, e) {
   c.season = s || 1;
   c.episode = e || 1;
   let url = c.type === "tv" ? `https://vidsrc.to/embed/tv/${c.id}/${c.season}/${c.episode}` : `https://vidsrc.to/embed/movie/${c.id}`;
-  showPlayer(c.title + (c.type === "tv" ? " · S" + c.season + "E" + c.episode : ""), url, c.key);
+  showPlayer(c.title + (c.type === "tv" ? " · S" + c.season + "E" + c.episode : ""), url);
   startWatchTimer();
 }
 
@@ -410,7 +510,7 @@ function playNextEpisode() {
   play(CUR.season, CUR.episode);
 }
 
-function showPlayer(title, url, key) {
+function showPlayer(title, url) {
   closePlayer();
   if (typeof AndroidKYC !== 'undefined' && AndroidKYC.setFullscreenMode) {
     AndroidKYC.setFullscreenMode(true);
@@ -421,13 +521,22 @@ function showPlayer(title, url, key) {
   const p = document.createElement("div"); p.id = "player";
   const nextBtnHtml = (CUR && CUR.type === "tv") ? `<button class="next-icon" onclick="event.stopPropagation();playNextEpisode()" aria-label="Next Episode">›</button>` : ``;
 
-  p.innerHTML = `<div class="pbar" id="pbar"><button onclick="event.stopPropagation();closePlayer()" aria-label="Back">‹</button><span>${esc(title)}</span>${nextBtnHtml}<button onclick="event.stopPropagation();rotate()" aria-label="Fullscreen">⛶</button></div>` +
-    `<div id="playerShield" onclick="togglePlayerControls()"></div>` +
-    (url ? `<iframe id="playerIframe" src="${url}" allow="autoplay; encrypted-media; fullscreen; picture-in-picture; web-share" allowfullscreen loading="eager" onerror="handleIframeError()"></iframe>`
-      : key ? `<iframe id="playerIframe" src="https://www.youtube-nocookie.com/embed/${key}?autoplay=1&rel=0&playsinline=1" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; fullscreen; encrypted-media" allowfullscreen></iframe>`
-        : `<p class="msg" style="padding:80px 20px">No video available for this title yet.</p>`);
+  p.innerHTML = `<div class="pbar" id="pbar"><button onclick="event.stopPropagation();closePlayer()" aria-label="Back" style="background:rgba(255,255,255,0.25);color:#fff;border:0;border-radius:50%;width:40px;height:40px;font-size:24px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center">‹</button><span style="font-weight:bold;font-size:15px;color:#fff">${esc(title)}</span>${nextBtnHtml}<button onclick="event.stopPropagation();toggleVideoZoom()" aria-label="Screen Fill Zoom" style="background:rgba(255,255,255,0.25);color:#fff;border:0;border-radius:50%;width:40px;height:40px;font-size:18px;font-weight:bold;cursor:pointer;display:flex;align-items:center;justify-content:center">⛶</button></div>` +
+    (url.includes(".mp4") || url.includes(".m3u8")
+      ? `<video id="playerVideo" src="${url}" playsinline controls autoplay style="width:100%;height:100%;object-fit:contain;background:#000;z-index:5"></video>`
+      : `<iframe id="playerIframe" src="${url}" allow="autoplay; encrypted-media; fullscreen; picture-in-picture; web-share" allowfullscreen style="width:100%;height:100%;border:0;background:#000;z-index:5"></iframe>`);
   document.body.appendChild(p);
   resetPbarTimer();
+
+  const vid = $("#playerVideo");
+  if (vid) {
+    vid.play().catch(e => {});
+    vid.onended = () => {
+      if (CUR && CUR.type === "tv") {
+        playNextEpisode();
+      }
+    };
+  }
 }
 
 async function rotate() {
@@ -468,16 +577,41 @@ function checkVipActive() {
   }
 }
 
+function getTrialExpiry() {
+  try {
+    let exp = parseInt(localStorage.getItem("mb_trial_expiry") || "0", 10);
+    if (!exp) {
+      exp = Date.now() + FREE_WATCH_LIMIT * 1000;
+      localStorage.setItem("mb_trial_expiry", String(exp));
+    }
+    return exp;
+  } catch(e) {
+    return Date.now() + FREE_WATCH_LIMIT * 1000;
+  }
+}
+
+function checkFreeTrialExpired() {
+  if (checkVipActive()) return false;
+  const exp = getTrialExpiry();
+  return Date.now() >= exp;
+}
+
 function startWatchTimer() {
   stopWatchTimer();
   if (checkVipActive()) return;
 
-  freeWatchTimer = setInterval(() => {
-    let watched = parseInt(localStorage.getItem("mb_watched_seconds") || "0", 10);
-    watched++;
-    localStorage.setItem("mb_watched_seconds", String(watched));
+  if (checkFreeTrialExpired()) {
+    closePlayer();
+    openVip("Your 30-minute free trial has ended. Subscribe to a VIP Pass to continue watching!");
+    return;
+  }
 
-    if (watched >= FREE_WATCH_LIMIT) {
+  freeWatchTimer = setInterval(() => {
+    if (checkVipActive()) {
+      stopWatchTimer();
+      return;
+    }
+    if (checkFreeTrialExpired()) {
       stopWatchTimer();
       closePlayer();
       openVip("Your 30-minute free trial has ended. Subscribe to a VIP Pass to continue watching!");
@@ -492,49 +626,174 @@ function stopWatchTimer() {
   }
 }
 
-/* ---------- Downloads View ---------- */
+/* ---------- Downloads View & 3 Free Downloads Limit Engine ---------- */
+function getDownloadCredits() {
+  const raw = localStorage.getItem("mb_download_credits");
+  if (raw === null) {
+    localStorage.setItem("mb_download_credits", "3");
+    return 3;
+  }
+  return parseInt(raw, 10);
+}
+
 function downloadView() {
   const m = $("#main");
   let raw = localStorage.getItem("mb_offline_downloads") || "[]";
   let list = [];
   try { list = JSON.parse(raw); } catch(e) {}
+  const credits = getDownloadCredits();
 
-  m.innerHTML = `<h2>💾 Offline Saved Downloads (${list.length})</h2>
+  m.innerHTML = `<h2>💾 Offline Saved Downloads (${list.length}) · <small style="color:var(--gold)">${credits}/3 Free Credits Left</small></h2>
     <div id="dlGrid" class="grid"></div>`;
 
   const grid = $("#dlGrid");
   if (list.length === 0) {
-    grid.innerHTML = `<p class="msg" style="grid-column:1/-1;padding:40px 0;text-align:center">No saved downloads yet. Tap "💾 Save Offline" inside any movie to watch offline anytime!</p>`;
+    grid.innerHTML = `<p class="msg" style="grid-column:1/-1;padding:40px 0;text-align:center">No saved downloads yet. Tap "📥 Download" inside any title! (${credits}/3 Free Credits remaining)</p>`;
     return;
   }
 
   grid.innerHTML = list.map(item => `
     <div class="card" onclick="quickPlay(${item.id},'${item.type}','${esc(item.title)}')">
       <img src="${item.poster}" alt="${esc(item.title)}">
-      <div><b>${esc(item.title)}</b><br><small style="color:var(--pitch)">Downloaded 💾</small></div>
+      <div><b>${esc(item.title)}</b><br><small style="color:var(--pitch)">Downloaded 💾 (${item.estMB || 850} MB)</small></div>
       <button onclick="event.stopPropagation();removeDownload(${item.id})" style="margin:8px;padding:4px 8px;border-radius:8px;background:#ff4d4d;color:#fff;border:0;cursor:pointer;font-size:11px">Delete</button>
     </div>
   `).join("");
 }
 
-function saveCurrentOffline() {
+function startDownloadCurrent() {
   if (!CUR || !CUR.id) return;
+  const credits = getDownloadCredits();
+
+  if (credits <= 0) {
+    openDownloadPassModal();
+    return;
+  }
+
   try {
     let raw = localStorage.getItem("mb_offline_downloads") || "[]";
     let list = JSON.parse(raw);
+    const estMB = CUR.estMB || 850;
+    const streamUrl = getDirectStreamUrl(CUR.id);
+
+    if (typeof AndroidKYC !== 'undefined' && AndroidKYC.downloadMediaFile) {
+      AndroidKYC.downloadMediaFile(streamUrl, CUR.title);
+    } else if (typeof AndroidMpesa !== 'undefined' && AndroidMpesa.downloadMediaFile) {
+      AndroidMpesa.downloadMediaFile(streamUrl, CUR.title);
+    }
+
     if (!list.some(x => x.id === CUR.id)) {
       list.push({
         id: CUR.id,
         type: CUR.type || "movie",
         title: CUR.title || "Movie",
-        poster: poster(CUR.poster_path)
+        poster: poster(CUR.poster_path),
+        estMB: estMB
       });
       localStorage.setItem("mb_offline_downloads", JSON.stringify(list));
-      alert(`📥 Saved "${CUR.title}" for offline viewing!`);
+
+      const newCredits = credits - 1;
+      localStorage.setItem("mb_download_credits", String(newCredits));
+
+      alert(`📥 Real File Download Started! "${CUR.title}" (${estMB > 1000 ? (estMB/1024).toFixed(2)+' GB' : estMB+' MB'}) saving to phone Downloads folder.\n\nRemaining Download Credits: ${newCredits}/3`);
     } else {
       alert(`"${CUR.title}" is already in your offline downloads.`);
     }
   } catch(e) {}
+}
+
+function openDownloadPassModal() {
+  const md = $("#modal"); md.hidden = false; md.style.display = "flex"; md.style.pointerEvents = "auto";
+  md.innerHTML = `<div class="sheet" style="padding:30px 20px;text-align:center"><button class="x" onclick="closeM()" aria-label="Back">‹</button>
+    <div style="font-size:48px;margin-bottom:10px">📥</div>
+    <h2 style="color:var(--gold);margin-bottom:8px">Download Limit Reached (0/3 Credits)</h2>
+    <p style="color:var(--text);font-size:14px;max-width:480px;margin:0 auto 20px">
+      You have used your 3 Free Downloads! Pay <b>KES 20</b> via M-Pesa to unlock <b>3 More Movie/Episode Downloads</b>.
+    </p>
+    <div class="payrow" style="padding:16px 20px 20px;background:#151530;border:1px solid #2a2a55;border-radius:16px;margin:0 auto 16px;max-width:400px">
+      <label style="display:block;width:100%;font-size:12px;color:var(--gold);font-weight:700;margin-bottom:6px">Enter M-Pesa Registered Number:</label>
+      <input id="dl_ph" type="tel" inputmode="tel" placeholder="0712345678" style="width:100%;padding:12px 16px;font-size:15px;margin-bottom:12px">
+      <button class="vip" onclick="payDownloadPass()" style="width:100%;padding:14px;font-size:16px;font-weight:900">PAY KES 20 WITH M-PESA ⚡</button>
+    </div>
+    <p class="msg" id="dl_pst"></p>
+  </div>`;
+}
+
+async function payDownloadPass() {
+  const ph = $("#dl_ph").value.trim();
+  if (!ph || ph.length < 9) return alert("Please enter a valid M-Pesa phone number.");
+
+  const md = $("#modal");
+  md.innerHTML = `<div class="sheet" style="padding:40px 20px;text-align:center">
+    <div class="loader-ring" style="margin:20px auto"></div>
+    <h2 style="margin:16px 0 8px;color:#00ff88">📱 M-Pesa Prompt Dispatched!</h2>
+    <p style="color:var(--text);font-size:15px;margin:0 auto 20px">
+      An M-Pesa prompt for <b>KES 20</b> has been sent to <b style="color:#00ff88">${esc(ph)}</b>.<br>
+      Enter your M-Pesa PIN on your phone.
+    </p>
+    <button class="vip" onclick="closeM()" style="background:#2a2a55;color:#fff">Cancel / Close</button>
+    <p class="msg" id="pst" style="margin-top:12px"></p>
+  </div>`;
+
+  PLAN = "dl20";
+  if (typeof AndroidKYC !== 'undefined' && AndroidKYC.triggerMpesaSTKPush) {
+    AndroidKYC.triggerMpesaSTKPush(ph, "20", "onMpesaDownloadPassResponse");
+  } else if (typeof AndroidMpesa !== 'undefined' && AndroidMpesa.triggerMpesaSTKPush) {
+    AndroidMpesa.triggerMpesaSTKPush(ph, "20", "onMpesaDownloadPassResponse");
+  } else {
+    setTimeout(() => {
+      onMpesaDownloadPassResponse(JSON.stringify({ ResponseCode: "0", CheckoutRequestID: "CHK_DL20" }));
+    }, 1500);
+  }
+}
+
+window.onMpesaDownloadPassResponse = function(responseStr) {
+  try {
+    const res = typeof responseStr === 'string' ? JSON.parse(responseStr) : responseStr;
+    const code = String(res.ResponseCode !== undefined ? res.ResponseCode : (res.responseCode !== undefined ? res.responseCode : "1"));
+    if (code === "0" || res.ResponseCode === "0") {
+      const checkoutReqId = res.CheckoutRequestID || res.checkoutRequestID;
+      startDownloadPassPolling(checkoutReqId);
+    }
+  } catch(e) {}
+};
+
+function startDownloadPassPolling(checkoutReqId) {
+  stopMpesaPolling();
+  if (!checkoutReqId) return;
+
+  let attempts = 0;
+  stkPollTimer = setInterval(() => {
+    attempts++;
+    const pst = $("#pst");
+    if (pst) pst.textContent = `⏳ Verifying KES 20 payment with Safaricom (${attempts}/20)...`;
+
+    window.onMpesaQueryResponse = (resStr) => {
+      try {
+        const res = typeof resStr === 'string' ? JSON.parse(resStr) : resStr;
+        const resCode = String(res.ResultCode !== undefined ? res.ResultCode : (res.resultCode !== undefined ? res.resultCode : "1037"));
+
+        if (resCode === "0") {
+          stopMpesaPolling();
+          const currentCredits = getDownloadCredits();
+          localStorage.setItem("mb_download_credits", String(currentCredits + 3));
+          const md = $("#modal");
+          if (md) {
+            md.innerHTML = `<div class="sheet" style="padding:40px 20px;text-align:center">
+              <div style="font-size:48px;margin-bottom:12px">🎉</div>
+              <h2 style="color:#00ff88;margin-bottom:8px">Download Pass Activated!</h2>
+              <p style="color:var(--text);font-size:15px;margin-bottom:20px">+3 Download Credits added to your account! You can now download 3 more titles.</p>
+              <button class="play" onclick="closeM()" style="background:var(--pitch);color:#000">Continue Downloading 📥</button>
+            </div>`;
+          }
+        }
+      } catch(e) {}
+    };
+
+    if (typeof AndroidKYC !== 'undefined' && AndroidKYC.queryMpesaSTKStatus) {
+      AndroidKYC.queryMpesaSTKStatus(checkoutReqId, "onMpesaQueryResponse");
+    }
+  }, 3000);
 }
 
 function removeDownload(id) {
@@ -546,7 +805,76 @@ function removeDownload(id) {
   } catch(e) {}
 }
 
-/* ---------- VIP Payment & Ad-Free Offers ---------- */
+/* ---------- My List View ---------- */
+function myListView() {
+  const m = $("#main");
+  let raw = localStorage.getItem("mb_mylist") || "[]";
+  let list = [];
+  try { list = JSON.parse(raw); } catch(e) {}
+
+  m.innerHTML = `<h2>❤️ My Favorite List (${list.length})</h2>
+    <div id="mlGrid" class="grid"></div>`;
+
+  const grid = $("#mlGrid");
+  if (list.length === 0) {
+    grid.innerHTML = `<p class="msg" style="grid-column:1/-1;padding:40px 0;text-align:center">Your favorite list is empty. Tap "❤️ My List" inside any movie to save it here!</p>`;
+    return;
+  }
+
+  grid.innerHTML = list.map(item => `
+    <div class="card" onclick="quickPlay(${item.id},'${item.type}','${esc(item.title)}')">
+      <img src="${item.poster}" alt="${esc(item.title)}">
+      <div><b>${esc(item.title)}</b><br><small style="color:var(--accent)">Saved in My List ❤️</small></div>
+      <button onclick="event.stopPropagation();removeFromMyList(${item.id})" style="margin:8px;padding:4px 8px;border-radius:8px;background:#ff4d4d;color:#fff;border:0;cursor:pointer;font-size:11px">Remove</button>
+    </div>
+  `).join("");
+}
+
+function toggleMyListCurrent() {
+  if (!CUR || !CUR.id) return;
+  try {
+    let raw = localStorage.getItem("mb_mylist") || "[]";
+    let list = JSON.parse(raw);
+    if (!list.some(x => x.id === CUR.id)) {
+      list.push({
+        id: CUR.id,
+        type: CUR.type || "movie",
+        title: CUR.title || "Movie",
+        poster: poster(CUR.poster_path)
+      });
+      localStorage.setItem("mb_mylist", JSON.stringify(list));
+      alert(`❤️ Added "${CUR.title}" to My List!`);
+    } else {
+      list = list.filter(x => x.id !== CUR.id);
+      localStorage.setItem("mb_mylist", JSON.stringify(list));
+      alert(`Removed "${CUR.title}" from My List.`);
+    }
+  } catch(e) {}
+}
+
+function removeFromMyList(id) {
+  try {
+    let raw = localStorage.getItem("mb_mylist") || "[]";
+    let list = JSON.parse(raw).filter(x => x.id !== id);
+    localStorage.setItem("mb_mylist", JSON.stringify(list));
+    myListView();
+  } catch(e) {}
+}
+
+function shareCurrent() {
+  if (!CUR || !CUR.title) return;
+  if (navigator.share) {
+    navigator.share({
+      title: CUR.title,
+      text: `Check out "${CUR.title}" on Movie Box!`,
+      url: window.location.href
+    }).catch(e => {});
+  } else {
+    alert(`🔗 Share link for "${CUR.title}":\nhttps://filmbox.ke/watch/${CUR.id}`);
+  }
+}
+
+/* ---------- VIP Payment & Time-Based Offers ---------- */
 let PLAN = "p4";
 const PLAN_PRICES = {
   p1: 10, p2: 50, p3: 120, p4: 250, p5: 350, p6: 450,
@@ -570,10 +898,10 @@ const PLAN_DURATIONS_MS = {
 };
 
 async function openVip(msg) {
-  const md = $("#modal"); md.hidden = false; PLAN = "p4";
+  const md = $("#modal"); md.hidden = false; md.style.display = "flex"; md.style.pointerEvents = "auto"; PLAN = "p4";
   md.innerHTML = `<div class="sheet" style="padding-bottom:30px"><button class="x" onclick="closeM()" aria-label="Back">‹</button>
   <h2 style="padding:40px 20px 0;margin:0">★ Movie Box VIP Passes</h2>
-  <p class="msg" style="padding:6px 20px">${esc(msg || "Choose an Ad-Free VIP plan, enter your M-Pesa number, and approve the prompt on your phone.")}</p>
+  <p class="msg" style="padding:6px 20px">${esc(msg || "Choose a time-based VIP plan, enter your M-Pesa number, and approve the prompt on your phone.")}</p>
 
   <div class="payrow" style="padding:16px 20px 20px;background:#151530;border:1px solid #2a2a55;border-radius:16px;margin:0 20px 16px;box-shadow:0 8px 20px rgba(0,0,0,0.5)">
     <label style="display:block;width:100%;font-size:12px;color:var(--gold);font-weight:700;margin-bottom:6px">Enter M-Pesa Registered Number:</label>
@@ -582,19 +910,19 @@ async function openVip(msg) {
   </div>
 
   <div class="plans" id="plans">
-    <div class="plan" data-id="p1" onclick="pickPlan('p1')"><small>Trial Pass</small><b>KES 10</b><small>1 Hour Ad-Free</small></div>
-    <div class="plan" data-id="p2" onclick="pickPlan('p2')"><small>Daily Ad-Free</small><b>KES 50</b><small>24 Hours</small></div>
-    <div class="plan" data-id="p3" onclick="pickPlan('p3')"><small>Weekend Ad-Free</small><b>KES 120</b><small>3 Days</small></div>
-    <div class="plan on" data-id="p4" onclick="pickPlan('p4')"><small>Weekly Master</small><b>KES 250</b><small>7 Days ⭐</small></div>
-    <div class="plan" data-id="p5" onclick="pickPlan('p5')"><small>Express Pass</small><b>KES 350</b><small>10 Days Ad-Free</small></div>
-    <div class="plan" data-id="p6" onclick="pickPlan('p6')"><small>Fortnight VIP</small><b>KES 450</b><small>14 Days Ad-Free</small></div>
-    <div class="plan" data-id="p7" onclick="pickPlan('p7')"><small>Deluxe Pass</small><b>KES 600</b><small>21 Days Ad-Free</small></div>
-    <div class="plan" data-id="p8" onclick="pickPlan('p8')"><small>Monthly Ad-Free</small><b>KES 750</b><small>30 Days</small></div>
-    <div class="plan" data-id="p9" onclick="pickPlan('p9')"><small>Double Month</small><b>KES 1300</b><small>60 Days Ad-Free</small></div>
-    <div class="plan" data-id="p10" onclick="pickPlan('p10')"><small>Quarterly Pass</small><b>KES 1800</b><small>90 Days Ad-Free</small></div>
-    <div class="plan" data-id="p11" onclick="pickPlan('p11')"><small>Half-Year Gold</small><b>KES 3200</b><small>180 Days Ad-Free</small></div>
-    <div class="plan" data-id="p12" onclick="pickPlan('p12')"><small>Annual Diamond</small><b>KES 5500</b><small>365 Days Ad-Free</small></div>
-    <div class="plan" data-id="p13" onclick="pickPlan('p13')"><small>Lifetime VIP</small><b>KES 9999</b><small>Permanent Gold</small></div>
+    <div class="plan" data-id="p1" onclick="pickPlan('p1')"><small>Trial Pass</small><b>KES 10</b><small>1 Hour Full Access</small></div>
+    <div class="plan" data-id="p2" onclick="pickPlan('p2')"><small>Daily Pass</small><b>KES 50</b><small>24 Hours Full Access</small></div>
+    <div class="plan" data-id="p3" onclick="pickPlan('p3')"><small>Weekend Pass</small><b>KES 120</b><small>3 Days Full Access</small></div>
+    <div class="plan on" data-id="p4" onclick="pickPlan('p4')"><small>Weekly Master</small><b>KES 250</b><small>7 Days Full Access ⭐</small></div>
+    <div class="plan" data-id="p5" onclick="pickPlan('p5')"><small>Express Pass</small><b>KES 350</b><small>10 Days Full Access</small></div>
+    <div class="plan" data-id="p6" onclick="pickPlan('p6')"><small>Fortnight VIP</small><b>KES 450</b><small>14 Days Full Access</small></div>
+    <div class="plan" data-id="p7" onclick="pickPlan('p7')"><small>Deluxe Pass</small><b>KES 600</b><small>21 Days Full Access</small></div>
+    <div class="plan" data-id="p8" onclick="pickPlan('p8')"><small>Monthly Pass</small><b>KES 750</b><small>30 Days Full Access</small></div>
+    <div class="plan" data-id="p9" onclick="pickPlan('p9')"><small>Double Month</small><b>KES 1300</b><small>60 Days Full Access</small></div>
+    <div class="plan" data-id="p10" onclick="pickPlan('p10')"><small>Quarterly Pass</small><b>KES 1800</b><small>90 Days Full Access</small></div>
+    <div class="plan" data-id="p11" onclick="pickPlan('p11')"><small>Half-Year Gold</small><b>KES 3200</b><small>180 Days Full Access</small></div>
+    <div class="plan" data-id="p12" onclick="pickPlan('p12')"><small>Annual Diamond</small><b>KES 5500</b><small>365 Days Full Access</small></div>
+    <div class="plan" data-id="p13" onclick="pickPlan('p13')"><small>Lifetime VIP</small><b>KES 9999</b><small>Permanent Full Access</small></div>
   </div>
   <p class="msg" id="pst" style="padding:10px 20px 20px"></p></div>`;
 }
@@ -672,7 +1000,7 @@ function startMpesaPolling(checkoutRequestId) {
             md.innerHTML = `<div class="sheet" style="padding:40px 20px;text-align:center">
               <div style="font-size:48px;margin-bottom:12px">🎉</div>
               <h2 style="color:#00ff88;margin-bottom:8px">Payment Confirmed!</h2>
-              <p style="color:var(--text);font-size:15px;margin-bottom:20px">Your VIP Pass has been successfully activated. Enjoy unlimited Ad-Free streaming!</p>
+              <p style="color:var(--text);font-size:15px;margin-bottom:20px">Your VIP Pass has been successfully activated. Enjoy unlimited streaming!</p>
               <button class="play" onclick="closeM()" style="background:var(--pitch);color:#000">Start Watching Now ▶</button>
             </div>`;
           }

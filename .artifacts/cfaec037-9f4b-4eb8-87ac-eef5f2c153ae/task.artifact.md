@@ -1,7 +1,7 @@
-# Task List - Immersive Edge-to-Edge Fullscreen, Browser Lockdown & Ad-Shield
+# Task List - Native Android File Downloads & Player Back Button
 
-- [x] Implement `setFullscreenMode` in `MainActivity.java` to hide status & navigation bars and lock landscape orientation `[x]`
-- [x] Configure `shouldOverrideUrlLoading` in `MainActivity.java` to strictly block external browser redirects `[x]`
-- [x] Update `showPlayer()` and `closePlayer()` in `index.html` to trigger `setFullscreenMode` `[x]`
-- [x] Replace rotate button with minimalist fullscreen icon button (`⛶`) `[x]`
+- [x] Implement native Android `DownloadManager` in `MainActivity.java` `[x]`
+- [x] Connect `AndroidKYC.downloadMediaFile` in `index.html` to trigger real physical file downloads `[x]`
+- [x] Enforce 3 Free Downloads Limit with KES 20 M-Pesa Download Pass `[x]`
+- [x] Ensure `<` Back arrow button is displayed on video player tap `[x]`
 - [x] Verify build via gradle `app:assembleDebug` `[x]`

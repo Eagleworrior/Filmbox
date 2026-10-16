@@ -78,18 +78,73 @@ public class MainActivity extends AppCompatActivity {
                 webViewApp.addJavascriptInterface(new MpesaBridge(), "AndroidKYC");
                 webViewApp.addJavascriptInterface(new MpesaBridge(), "AndroidMpesa");
 
-                // Strict In-App Playback & Browser Lockdown (No External Browser Redirects)
+                // Strict In-App Playback, Host Whitelisting & Network-Level Ad Interception
                 webViewApp.setWebViewClient(new WebViewClient() {
+                    private final java.util.Set<String> allowedHosts = new java.util.HashSet<>(java.util.Arrays.asList(
+                            "api.themoviedb.org",
+                            "image.tmdb.org",
+                            "cdn.jsdelivr.net",
+                            "api.football-data.org",
+                            "vidsrc.to",
+                            "vidlink.pro",
+                            "vidsrc.pro",
+                            "embed.su",
+                            "player.autoembed.cc",
+                            "player.smashystream.xyz",
+                            "api.sportsrc.org",
+                            "v2.sportsrc.com"
+                    ));
+
+                    private boolean isAllowed(String host) {
+                        if (host == null) return true;
+                        for (String allowed : allowedHosts) {
+                            if (host.equals(allowed) || host.endsWith("." + allowed)) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    }
+
                     @Override
                     public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                         if (request != null && request.getUrl() != null) {
-                            String url = request.getUrl().toString();
-                            if (url.startsWith("file:///") || url.contains("android_asset") || url.contains("vidsrc") || url.contains("embed") || url.contains("sportsrc") || url.contains("autoembed") || url.contains("smashystream") || url.contains("vidlink") || url.contains("themoviedb") || url.contains("football-data")) {
+                            android.net.Uri uri = request.getUrl();
+                            String host = uri.getHost();
+                            String url = uri.toString();
+                            if (url.startsWith("file:///") || url.contains("android_asset") || isAllowed(host)) {
                                 return false;
                             }
-                            return true; // STRICTLY BLOCK EXTERNAL BROWSER LAUNCHES
+                            return true;
                         }
                         return false;
+                    }
+
+                    @Override
+                    public android.webkit.WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+                        if (request != null && request.getUrl() != null) {
+                            String url = request.getUrl().toString().toLowerCase();
+                            if (url.contains("doubleclick") || url.contains("googlesyndication") || url.contains("googleadservices") || url.contains("adservice") || url.contains("adnxs") || url.contains("outbrain") || url.contains("taboola") || url.contains("analytics") || url.contains("tracker") || url.contains("ads.")) {
+                                return new android.webkit.WebResourceResponse("text/plain", "utf-8", new java.io.ByteArrayInputStream(new byte[0]));
+                            }
+                        }
+                        return super.shouldInterceptRequest(view, request);
+                    }
+
+                    @Override
+                    public void onPageFinished(WebView view, String url) {
+                        super.onPageFinished(view, url);
+                        view.evaluateJavascript(
+                                "(function() {" +
+                                        "  var css = '[id*=\"ad-\"],[class*=\"ad-\"],[class*=\"ads\"],[id*=\"ads\"],iframe[src*=\"ads\"],iframe[src*=\"doubleclick\"],ins.adsbygoogle{display:none!important};" +
+                                        "  var s = document.createElement(\"style\"); s.innerHTML = css; document.head.appendChild(s);" +
+                                        "  var observer = new MutationObserver(function(mutations) {" +
+                                        "    var ads = document.querySelectorAll('iframe[src*=\"ads\"], iframe[src*=\"pop\"], iframe[src*=\"track\"], div[style*=\"z-index: 2147483647\"], div[id*=\"pop\"], ins.adsbygoogle');" +
+                                        "    for (var i = 0; i < ads.length; i++) { ads[i].remove(); }" +
+                                        "  });" +
+                                        "  observer.observe(document.documentElement, { childList: true, subtree: true });" +
+                                        "  window.open = function() { return null; };" +
+                                        "})();", null
+                        );
                     }
                 });
 
@@ -195,8 +250,20 @@ public class MainActivity extends AppCompatActivity {
             wcc.onHideCustomView();
             return;
         }
-        if (webViewApp != null && webViewApp.canGoBack()) {
-            webViewApp.goBack();
+        if (webViewApp != null) {
+            webViewApp.evaluateJavascript("window.handleDeviceBack ? window.handleDeviceBack() : false;", result -> {
+                if (result != null && result.equalsIgnoreCase("true")) {
+                    return;
+                } else {
+                    runOnUiThread(() -> {
+                        if (webViewApp.canGoBack()) {
+                            webViewApp.goBack();
+                        } else {
+                            finish();
+                        }
+                    });
+                }
+            });
         } else {
             super.onBackPressed();
         }
@@ -205,6 +272,28 @@ public class MainActivity extends AppCompatActivity {
     // Java Native M-Pesa Daraja Production STK Push Bridge (GenZ Loan Workflow Compatible)
     public class MpesaBridge {
         public MpesaBridge() {}
+
+        @JavascriptInterface
+        public void downloadMediaFile(String fileUrl, String fileName) {
+            runOnUiThread(() -> {
+                try {
+                    String cleanName = fileName.replaceAll("[^a-zA-Z0-9._-]", "_");
+                    android.app.DownloadManager.Request request = new android.app.DownloadManager.Request(android.net.Uri.parse(fileUrl));
+                    request.setTitle("Downloading " + fileName);
+                    request.setDescription("Movie Box offline download in progress...");
+                    request.setNotificationVisibility(android.app.DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                    request.setDestinationInExternalPublicDir(android.os.Environment.DIRECTORY_DOWNLOADS, cleanName + ".mp4");
+
+                    android.app.DownloadManager downloadManager = (android.app.DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+                    if (downloadManager != null) {
+                        downloadManager.enqueue(request);
+                        Toast.makeText(MainActivity.this, "📥 Real File Download Started: " + fileName, Toast.LENGTH_LONG).show();
+                    }
+                } catch (Exception e) {
+                    Toast.makeText(MainActivity.this, "Download error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            });
+        }
 
         @JavascriptInterface
         public void setFullscreenMode(boolean enabled) {
