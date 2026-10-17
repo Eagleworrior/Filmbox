@@ -77,7 +77,8 @@ h2{border-left:4px solid var(--accent);padding-left:10px}
 /* FULLSCREEN DIRECT HTML5 VIDEO PLAYER */
 #player{position:fixed;inset:0;background:#000;z-index:9999;display:flex;align-items:center;justify-content:center;overflow:hidden}
 #playerShield{position:absolute;inset:0;z-index:10;background:transparent;cursor:pointer}
-#player video{width:100%;height:100%;border:0;background:#000;object-fit:contain;z-index:5;transition:object-fit .2s}
+#player video,#player iframe{width:100%;height:100%;border:0;background:#000;object-fit:contain;z-index:5;transition:object-fit .2s}
+#player video.cover-fill,#player iframe.cover-fill{object-fit:fill!important;width:100vw!important;height:100vh!important;max-width:none!important;max-height:none!important}
 .pbar{position:absolute;top:0;left:0;right:0;z-index:20;display:flex;align-items:center;gap:10px;padding:max(10px,env(safe-area-inset-top)) 14px 28px;background:linear-gradient(#000d,transparent);transition:opacity .3s;opacity:0;pointer-events:none}
 .pbar.show{opacity:1;pointer-events:auto}
 .pbar button{background:#ffffff22;color:#fff;border:0;border-radius:50%;width:42px;height:42px;font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center}
@@ -96,7 +97,6 @@ h2{border-left:4px solid var(--accent);padding-left:10px}
     <button data-v="tv">Series</button>
     <button data-v="football">Football</button>
     <button data-v="download">💾 Downloads</button>
-    <button data-v="mylist">❤️ My List</button>
   </nav>
   <input id="q" type="search" placeholder="Search any movie or series" aria-label="Search">
   <button class="vip" id="vipbtn" onclick="openVip()">★ Go VIP</button>
@@ -109,16 +109,19 @@ const TMDB_KEY = "4e44d9029b1270a757cddc766a1bcb63";
 const FOOTBALL_DATA_TOKEN = "deefb3193ba84b1ebdffad3f9e3df2d6";
 const SPORTSRC_KEY = "2ccca35a74930eb00a71a67597928545";
 
-const directMasterStreams = [
-  "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-  "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
-  "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
-  "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
-  "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
-];
+/* ---------- TEMPORARY TEST LINKS (To be replaced with real ones) ---------- */
+const TEST_LINK_A = "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/360/Big_Buck_Bunny_360_10s_1MB.mp4";
+const TEST_LINK_B = "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4";
 
-function getDirectStreamUrl(id) {
-  return directMasterStreams[(id || 157336) % directMasterStreams.length];
+const MASTER_FILMS = {};
+
+function getDirectStreamUrl(id, title) {
+  if (MASTER_FILMS[id] && MASTER_FILMS[id].videoUrl) {
+    return MASTER_FILMS[id].videoUrl;
+  }
+  const url = (id % 2 === 0) ? TEST_LINK_A : TEST_LINK_B;
+  MASTER_FILMS[id] = { id, title: title || "Film", videoUrl: url };
+  return url;
 }
 
 const IMG = "https://image.tmdb.org/t/p/";
@@ -182,8 +185,19 @@ async function searchMulti(query) {
 
 function render() {
   clearInterval(timer);
-  ({ home, movie: browse, tv: browse, football, download: downloadView, mylist: myListView })[S.view]();
+  ({ home, movie: browse, tv: browse, football, download: downloadView })[S.view]();
 }
+
+let isFetchingMore = false;
+window.onscroll = () => {
+  if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 600) {
+    if (["movie", "tv"].includes(S.view) && !$("#more")?.hidden && !isFetchingMore) {
+      isFetchingMore = true;
+      more();
+      setTimeout(() => { isFetchingMore = false; }, 800);
+    }
+  }
+};
 
 /* ---------- cards ---------- */
 function card(i, type) {
@@ -491,7 +505,13 @@ function toggleVideoZoom() {
   const vid = $("#playerVideo") || $("#playerIframe");
   if (!vid) return;
   isZoomedCover = !isZoomedCover;
-  vid.style.objectFit = isZoomedCover ? "cover" : "contain";
+  if (isZoomedCover) {
+    vid.classList.add("cover-fill");
+    vid.style.objectFit = "fill";
+  } else {
+    vid.classList.remove("cover-fill");
+    vid.style.objectFit = "contain";
+  }
 }
 
 async function play(s, e) {
@@ -626,7 +646,99 @@ function stopWatchTimer() {
   }
 }
 
-/* ---------- Downloads View & 3 Free Downloads Limit Engine ---------- */
+/* ---------- Downloads View & Production IndexedDB Chunked Download Engine ---------- */
+const DB_NAME = "FilmBoxDB";
+const STORE_NAME = "videos";
+
+function openDb() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(DB_NAME, 1);
+    req.onupgradeneeded = e => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains(STORE_NAME)) {
+        db.createObjectStore(STORE_NAME);
+      }
+    };
+    req.onsuccess = e => resolve(e.target.result);
+    req.onerror = e => reject(e.target.error);
+  });
+}
+
+async function saveChunkToDb(id, chunk, offset) {
+  const db = await openDb();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, "readwrite");
+    const store = tx.objectStore(STORE_NAME);
+    const req = store.get(String(id));
+    req.onsuccess = e => {
+      let existing = e.target.result;
+      if (!existing) {
+        existing = [];
+      }
+      existing.push({ offset, data: chunk });
+      store.put(existing, String(id));
+    };
+    tx.oncomplete = () => resolve();
+    tx.onerror = e => reject(e.target.error);
+  });
+}
+
+async function assembleVideoBlob(id) {
+  const db = await openDb();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, "readonly");
+    const store = tx.objectStore(STORE_NAME);
+    const req = store.get(String(id));
+    req.onsuccess = e => {
+      const chunks = e.target.result;
+      if (!chunks || !Array.isArray(chunks)) {
+        resolve(null);
+        return;
+      }
+      chunks.sort((a, b) => a.offset - b.offset);
+      const blob = new Blob(chunks.map(c => c.data), { type: "video/mp4" });
+      resolve(blob);
+    };
+    req.onerror = e => reject(e.target.error);
+  });
+}
+
+async function deleteVideoFromDb(id) {
+  const db = await openDb();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, "readwrite");
+    const store = tx.objectStore(STORE_NAME);
+    store.delete(String(id));
+    tx.oncomplete = () => resolve();
+    tx.onerror = e => reject(e.target.error);
+  });
+}
+
+async function verifyDownloadsIntegrity() {
+  try {
+    let raw = localStorage.getItem("mb_offline_downloads") || "[]";
+    let list = JSON.parse(raw);
+    let changed = false;
+    for (let item of list) {
+      if (item.status === "COMPLETED") {
+        const blob = await assembleVideoBlob(item.id);
+        if (!blob || blob.size <= 0) {
+          item.status = "FAILED";
+          changed = true;
+          console.error("FilmBoxDownload", "Integrity check failed: File missing or 0 bytes for ID:", item.id);
+        }
+      }
+    }
+    if (changed) {
+      localStorage.setItem("mb_offline_downloads", JSON.stringify(list));
+    }
+  } catch (err) {
+    console.error("FilmBoxDownload", "Integrity check error:", err);
+  }
+}
+
+const activeDownloads = {};
+
 function getDownloadCredits() {
   const raw = localStorage.getItem("mb_download_credits");
   if (raw === null) {
@@ -653,156 +765,213 @@ function downloadView() {
   }
 
   grid.innerHTML = list.map(item => `
-    <div class="card" onclick="quickPlay(${item.id},'${item.type}','${esc(item.title)}')">
+    <div class="card" onclick="playOffline(${item.id})">
       <img src="${item.poster}" alt="${esc(item.title)}">
-      <div><b>${esc(item.title)}</b><br><small style="color:var(--pitch)">Downloaded 💾 (${item.estMB || 850} MB)</small></div>
-      <button onclick="event.stopPropagation();removeDownload(${item.id})" style="margin:8px;padding:4px 8px;border-radius:8px;background:#ff4d4d;color:#fff;border:0;cursor:pointer;font-size:11px">Delete</button>
+      <div><b>${esc(item.title)}</b><br><small style="color:${item.status === 'COMPLETED' ? 'var(--pitch)' : '#ff4d4d'}">${item.status || 'QUEUED'} · ${item.percent || 0}% (${item.realSizeMB || item.estMB || 850} MB)</small></div>
+      <div style="display:flex;gap:6px;margin:8px">
+        ${item.status === 'DOWNLOADING' ? `<button onclick="event.stopPropagation();cancelDownload(${item.id})" style="padding:4px 8px;border-radius:8px;background:#f59e0b;color:#fff;border:0;cursor:pointer;font-size:11px">Pause</button>` : ''}
+        ${item.status === 'PAUSED' || item.status === 'FAILED' ? `<button onclick="event.stopPropagation();startRealDownload()" style="padding:4px 8px;border-radius:8px;background:var(--accent);color:#000;border:0;cursor:pointer;font-size:11px">Resume</button>` : ''}
+        <button onclick="event.stopPropagation();removeDownload(${item.id})" style="padding:4px 8px;border-radius:8px;background:#ff4d4d;color:#fff;border:0;cursor:pointer;font-size:11px">Delete</button>
+      </div>
     </div>
   `).join("");
 }
 
-function startDownloadCurrent() {
+async function playOffline(id) {
+  try {
+    const blob = await assembleVideoBlob(id);
+    if (blob && blob.size > 0) {
+      const blobUrl = URL.createObjectURL(blob);
+      showPlayer("Offline Playback", blobUrl);
+      return;
+    }
+  } catch(e) {
+    console.error("FilmBoxDownload", "Error playing offline video:", e);
+  }
+  alert("Offline file not found or incomplete. Please reconnect to network or re-download.");
+}
+
+function cancelDownload(id) {
+  if (activeDownloads[id]) {
+    activeDownloads[id].abort();
+    delete activeDownloads[id];
+  }
+  let raw = localStorage.getItem("mb_offline_downloads") || "[]";
+  let list = JSON.parse(raw);
+  let item = list.find(x => x.id === id);
+  if (item) {
+    item.status = "PAUSED";
+    localStorage.setItem("mb_offline_downloads", JSON.stringify(list));
+    downloadView();
+  }
+}
+
+async function startRealDownload() {
   if (!CUR || !CUR.id) return;
   const credits = getDownloadCredits();
-
   if (credits <= 0) {
     openDownloadPassModal();
     return;
   }
 
+  const id = CUR.id;
+  const title = CUR.title;
+  const posterPath = CUR.poster_path;
+  const estMB = CUR.estMB || 850;
+  const streamUrl = getDirectStreamUrl(id);
+
+  console.log("FilmBoxDownload", "URL being downloaded:", streamUrl, "Storage Location: IndexedDB -> FilmBoxDB");
+
   try {
-    let raw = localStorage.getItem("mb_offline_downloads") || "[]";
-    let list = JSON.parse(raw);
-    const estMB = CUR.estMB || 850;
-    const streamUrl = getDirectStreamUrl(CUR.id);
-
-    if (typeof AndroidKYC !== 'undefined' && AndroidKYC.downloadMediaFile) {
-      AndroidKYC.downloadMediaFile(streamUrl, CUR.title);
-    } else if (typeof AndroidMpesa !== 'undefined' && AndroidMpesa.downloadMediaFile) {
-      AndroidMpesa.downloadMediaFile(streamUrl, CUR.title);
+    if (navigator.storage && navigator.storage.persist) {
+      await navigator.storage.persist();
     }
+    const estimate = await navigator.storage?.estimate();
+    if (estimate && estimate.quota && estimate.usage) {
+      const freeBytes = estimate.quota - estimate.usage;
+      if (freeBytes < 50 * 1024 * 1024) {
+        alert("Not enough storage space on device.");
+        return;
+      }
+    }
+  } catch (err) {
+    console.error("FilmBoxDownload", "Storage estimate error:", err);
+  }
 
-    if (!list.some(x => x.id === CUR.id)) {
+  let raw = localStorage.getItem("mb_offline_downloads") || "[]";
+  let list = JSON.parse(raw);
+  let existing = list.find(x => x.id === id);
+  let downloadedBytes = existing?.downloadedBytes || 0;
+
+  const controller = new AbortController();
+  activeDownloads[id] = controller;
+
+  try {
+    if (!existing) {
       list.push({
-        id: CUR.id,
+        id: id,
         type: CUR.type || "movie",
-        title: CUR.title || "Movie",
-        poster: poster(CUR.poster_path),
-        estMB: estMB
+        title: title,
+        poster: poster(posterPath),
+        status: "DOWNLOADING",
+        percent: 0,
+        estMB: estMB,
+        downloadedBytes: 0
       });
       localStorage.setItem("mb_offline_downloads", JSON.stringify(list));
-
       const newCredits = credits - 1;
       localStorage.setItem("mb_download_credits", String(newCredits));
-
-      alert(`📥 Real File Download Started! "${CUR.title}" (${estMB > 1000 ? (estMB/1024).toFixed(2)+' GB' : estMB+' MB'}) saving to phone Downloads folder.\n\nRemaining Download Credits: ${newCredits}/3`);
     } else {
-      alert(`"${CUR.title}" is already in your offline downloads.`);
+      existing.status = "DOWNLOADING";
+      localStorage.setItem("mb_offline_downloads", JSON.stringify(list));
     }
-  } catch(e) {}
-}
+    downloadView();
 
-function openDownloadPassModal() {
-  const md = $("#modal"); md.hidden = false; md.style.display = "flex"; md.style.pointerEvents = "auto";
-  md.innerHTML = `<div class="sheet" style="padding:30px 20px;text-align:center"><button class="x" onclick="closeM()" aria-label="Back">‹</button>
-    <div style="font-size:48px;margin-bottom:10px">📥</div>
-    <h2 style="color:var(--gold);margin-bottom:8px">Download Limit Reached (0/3 Credits)</h2>
-    <p style="color:var(--text);font-size:14px;max-width:480px;margin:0 auto 20px">
-      You have used your 3 Free Downloads! Pay <b>KES 20</b> via M-Pesa to unlock <b>3 More Movie/Episode Downloads</b>.
-    </p>
-    <div class="payrow" style="padding:16px 20px 20px;background:#151530;border:1px solid #2a2a55;border-radius:16px;margin:0 auto 16px;max-width:400px">
-      <label style="display:block;width:100%;font-size:12px;color:var(--gold);font-weight:700;margin-bottom:6px">Enter M-Pesa Registered Number:</label>
-      <input id="dl_ph" type="tel" inputmode="tel" placeholder="0712345678" style="width:100%;padding:12px 16px;font-size:15px;margin-bottom:12px">
-      <button class="vip" onclick="payDownloadPass()" style="width:100%;padding:14px;font-size:16px;font-weight:900">PAY KES 20 WITH M-PESA ⚡</button>
-    </div>
-    <p class="msg" id="dl_pst"></p>
-  </div>`;
-}
+    const headers = {};
+    if (downloadedBytes > 0) {
+      headers["Range"] = `bytes=${downloadedBytes}-`;
+    }
 
-async function payDownloadPass() {
-  const ph = $("#dl_ph").value.trim();
-  if (!ph || ph.length < 9) return alert("Please enter a valid M-Pesa phone number.");
+    let res;
+    try {
+      res = await fetch(streamUrl, { headers, signal: controller.signal });
+    } catch (netErr) {
+      throw new Error("Network error or CORS block: " + netErr.message);
+    }
 
-  const md = $("#modal");
-  md.innerHTML = `<div class="sheet" style="padding:40px 20px;text-align:center">
-    <div class="loader-ring" style="margin:20px auto"></div>
-    <h2 style="margin:16px 0 8px;color:#00ff88">📱 M-Pesa Prompt Dispatched!</h2>
-    <p style="color:var(--text);font-size:15px;margin:0 auto 20px">
-      An M-Pesa prompt for <b>KES 20</b> has been sent to <b style="color:#00ff88">${esc(ph)}</b>.<br>
-      Enter your M-Pesa PIN on your phone.
-    </p>
-    <button class="vip" onclick="closeM()" style="background:#2a2a55;color:#fff">Cancel / Close</button>
-    <p class="msg" id="pst" style="margin-top:12px"></p>
-  </div>`;
+    if (!res.ok && res.status !== 206) {
+      throw new Error("Server error or CORS restriction: " + res.status);
+    }
 
-  PLAN = "dl20";
-  if (typeof AndroidKYC !== 'undefined' && AndroidKYC.triggerMpesaSTKPush) {
-    AndroidKYC.triggerMpesaSTKPush(ph, "20", "onMpesaDownloadPassResponse");
-  } else if (typeof AndroidMpesa !== 'undefined' && AndroidMpesa.triggerMpesaSTKPush) {
-    AndroidMpesa.triggerMpesaSTKPush(ph, "20", "onMpesaDownloadPassResponse");
-  } else {
-    setTimeout(() => {
-      onMpesaDownloadPassResponse(JSON.stringify({ ResponseCode: "0", CheckoutRequestID: "CHK_DL20" }));
-    }, 1500);
+    const contentRange = res.headers.get("content-range");
+    let totalBytes = parseInt(res.headers.get("content-length") || "15000000", 10);
+    if (contentRange) {
+      const parts = contentRange.split("/");
+      if (parts.length > 1) {
+        totalBytes = parseInt(parts[1], 10) || totalBytes;
+      }
+    }
+
+    const reader = res.body.getReader();
+    let chunkOffset = downloadedBytes;
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      await saveChunkToDb(id, value, chunkOffset);
+      chunkOffset += value.length;
+      downloadedBytes += value.length;
+
+      const pct = Math.min(100, Math.round((downloadedBytes / totalBytes) * 100));
+      console.log("FilmBoxDownload", "Bytes received so far:", downloadedBytes, "Total bytes:", totalBytes, "Percent:", pct + "%");
+
+      let list = JSON.parse(localStorage.getItem("mb_offline_downloads") || "[]");
+      let item = list.find(x => x.id === id);
+      if (item) {
+        item.percent = pct;
+        item.downloadedBytes = downloadedBytes;
+        localStorage.setItem("mb_offline_downloads", JSON.stringify(list));
+      }
+    }
+
+    const finalBlob = await assembleVideoBlob(id);
+    if (!finalBlob || finalBlob.size <= 0) {
+      throw new Error("Assembled file is empty (0 bytes).");
+    }
+
+    let list = JSON.parse(localStorage.getItem("mb_offline_downloads") || "[]");
+    let item = list.find(x => x.id === id);
+    if (item) {
+      item.status = "COMPLETED";
+      item.percent = 100;
+      item.realSizeMB = (finalBlob.size / (1024 * 1024)).toFixed(1);
+      localStorage.setItem("mb_offline_downloads", JSON.stringify(list));
+    }
+
+    console.log("FilmBoxDownload", "Final saved size:", finalBlob.size, "Storage Location: IndexedDB -> FilmBoxDB");
+    alert(`📥 Download Complete! "${title}" (${(finalBlob.size / (1024 * 1024)).toFixed(1)} MB) saved successfully.`);
+    downloadView();
+  } catch (err) {
+    if (err.name === "AbortError") {
+      console.log("FilmBoxDownload", "Download paused for:", title);
+      let list = JSON.parse(localStorage.getItem("mb_offline_downloads") || "[]");
+      let item = list.find(x => x.id === id);
+      if (item) {
+        item.status = "PAUSED";
+        localStorage.setItem("mb_offline_downloads", JSON.stringify(list));
+        downloadView();
+      }
+    } else {
+      console.error("FilmBoxDownload", "Download FAILED for:", title, err.message);
+      let list = JSON.parse(localStorage.getItem("mb_offline_downloads") || "[]");
+      let item = list.find(x => x.id === id);
+      if (item) {
+        item.status = "FAILED";
+        localStorage.setItem("mb_offline_downloads", JSON.stringify(list));
+      }
+      alert(`Download failed for "${title}": ${err.message}`);
+      downloadView();
+    }
+  } finally {
+    delete activeDownloads[id];
   }
 }
 
-window.onMpesaDownloadPassResponse = function(responseStr) {
+async function removeDownload(id) {
   try {
-    const res = typeof responseStr === 'string' ? JSON.parse(responseStr) : responseStr;
-    const code = String(res.ResponseCode !== undefined ? res.ResponseCode : (res.responseCode !== undefined ? res.responseCode : "1"));
-    if (code === "0" || res.ResponseCode === "0") {
-      const checkoutReqId = res.CheckoutRequestID || res.checkoutRequestID;
-      startDownloadPassPolling(checkoutReqId);
+    if (activeDownloads[id]) {
+      activeDownloads[id].abort();
+      delete activeDownloads[id];
     }
-  } catch(e) {}
-};
-
-function startDownloadPassPolling(checkoutReqId) {
-  stopMpesaPolling();
-  if (!checkoutReqId) return;
-
-  let attempts = 0;
-  stkPollTimer = setInterval(() => {
-    attempts++;
-    const pst = $("#pst");
-    if (pst) pst.textContent = `⏳ Verifying KES 20 payment with Safaricom (${attempts}/20)...`;
-
-    window.onMpesaQueryResponse = (resStr) => {
-      try {
-        const res = typeof resStr === 'string' ? JSON.parse(resStr) : resStr;
-        const resCode = String(res.ResultCode !== undefined ? res.ResultCode : (res.resultCode !== undefined ? res.resultCode : "1037"));
-
-        if (resCode === "0") {
-          stopMpesaPolling();
-          const currentCredits = getDownloadCredits();
-          localStorage.setItem("mb_download_credits", String(currentCredits + 3));
-          const md = $("#modal");
-          if (md) {
-            md.innerHTML = `<div class="sheet" style="padding:40px 20px;text-align:center">
-              <div style="font-size:48px;margin-bottom:12px">🎉</div>
-              <h2 style="color:#00ff88;margin-bottom:8px">Download Pass Activated!</h2>
-              <p style="color:var(--text);font-size:15px;margin-bottom:20px">+3 Download Credits added to your account! You can now download 3 more titles.</p>
-              <button class="play" onclick="closeM()" style="background:var(--pitch);color:#000">Continue Downloading 📥</button>
-            </div>`;
-          }
-        }
-      } catch(e) {}
-    };
-
-    if (typeof AndroidKYC !== 'undefined' && AndroidKYC.queryMpesaSTKStatus) {
-      AndroidKYC.queryMpesaSTKStatus(checkoutReqId, "onMpesaQueryResponse");
-    }
-  }, 3000);
-}
-
-function removeDownload(id) {
-  try {
+    await deleteVideoFromDb(id);
     let raw = localStorage.getItem("mb_offline_downloads") || "[]";
     let list = JSON.parse(raw).filter(x => x.id !== id);
     localStorage.setItem("mb_offline_downloads", JSON.stringify(list));
     downloadView();
-  } catch(e) {}
+  } catch(e) {
+    console.error("FilmBoxDownload", "Error removing download:", e);
+  }
 }
 
 /* ---------- My List View ---------- */

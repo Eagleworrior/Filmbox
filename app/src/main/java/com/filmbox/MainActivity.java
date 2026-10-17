@@ -123,7 +123,11 @@ public class MainActivity extends AppCompatActivity {
                     public android.webkit.WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
                         if (request != null && request.getUrl() != null) {
                             String url = request.getUrl().toString().toLowerCase();
-                            if (url.contains("doubleclick") || url.contains("googlesyndication") || url.contains("googleadservices") || url.contains("adservice") || url.contains("adnxs") || url.contains("outbrain") || url.contains("taboola") || url.contains("analytics") || url.contains("tracker") || url.contains("ads.")) {
+                            if (url.contains("doubleclick") || url.contains("googlesyndication") || url.contains("googleadservices") || 
+                                url.contains("adservice") || url.contains("adnxs") || url.contains("outbrain") || url.contains("taboola") || 
+                                url.contains("analytics") || url.contains("tracker") || url.contains("popads") || url.contains("popcash") || 
+                                url.contains("propeller") || url.contains("adsterra") || url.contains("exoclick") || url.contains("juicyads") || 
+                                url.contains("ads.")) {
                                 return new android.webkit.WebResourceResponse("text/plain", "utf-8", new java.io.ByteArrayInputStream(new byte[0]));
                             }
                         }

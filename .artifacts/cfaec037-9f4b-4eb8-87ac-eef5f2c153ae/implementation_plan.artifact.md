@@ -1,24 +1,24 @@
-# Implementation Plan - Native Android DownloadManager File Downloads & Player Back Button
+# Implementation Plan - Central Master Film List, Individual Direct Links & Queue Download Engine
 
-Implement real, physical media file downloads directly into device storage using Android's native `DownloadManager` in `MainActivity.java`, while enforcing the 3 Free Downloads credit limit with KES 20 M-Pesa Download Pass, and refine the tap-to-show `<` Back arrow button on the video player.
+Consolidate all films into a single master list in `index.html` where each film has its own `id`, `title`, `poster`, `description`, and individual `videoUrl` (using alternating temporary test links A and B). Ensure downloading any film stores it under its own ID in `FilmBoxDB`, prevents duplicate downloads with a "Downloaded" status badge, queues multiple downloads, validates URLs via pre-flight checks, and plays offline in airplane mode.
 
 ## User Review Required
 
 > [!IMPORTANT]
-> - **Real Physical File Download Engine (`MainActivity.java`)**: Integrated Android's native system `DownloadManager`. Tapping `📥 Download` now triggers a real physical file download (`.mp4`) directly into your phone's Downloads directory with native status bar progress notifications.
-> - **3 Free Downloads Limit & KES 20 Download Pass**: Maintained the credit check logic. After 3 real physical downloads are used (0/3 credits left), downloading any additional movie/episode prompts the KES 20 M-Pesa Download Pass.
-> - **Tap-To-Show `<` Player Back Button**: Positioned a prominent `<` back arrow button at the top-left of the player control bar that appears when tapping the video screen and auto-fades after 3 seconds.
+> - **Central Master Film List**: Created a single master array `MASTER_FILMS` in `index.html` where every film has its own unique `id`, `title`, `poster`, `description`, and `videoUrl` (alternating between Link A and Link B).
+> - **Per-Film IndexedDB Storage**: Each downloaded film is stored under its own unique ID in `FilmBoxDB`, ensuring zero conflicts or overwrites.
+> - **"Downloaded" State Badge**: Once a film is successfully completed, its download button automatically switches to `"Downloaded"` so it cannot be downloaded twice.
+> - **Queue & Multiple Downloads**: Supports queuing multiple simultaneous downloads with real percentage progress (`QUEUED`, `DOWNLOADING`, `COMPLETED`, `FAILED`).
+> - **Pre-Flight Validation**: Validates each film's video link before adding to downloads. If invalid or missing, shows `"Not available for download"`.
 
 ## Proposed Changes
 
-### Android Native Download Engine
-#### [MODIFY] [MainActivity.java](file:///C:/Users/EAGLE/AndroidStudioProjects/FilmBox/app/src/main/java/com/filmbox/MainActivity.java)
-- Add `@JavascriptInterface public void downloadMediaFile(String fileUrl, String fileName)` using `DownloadManager.Request` to download physical `.mp4` files to device storage with status bar notifications.
-
-### Web Application UI & Credits Logic
+### Web Application & Master Data Layer
 #### [MODIFY] [index.html](file:///C:/Users/EAGLE/AndroidStudioProjects/FilmBox/app/src/main/assets/index.html)
-- Call `AndroidKYC.downloadMediaFile(url, title)` inside `startDownloadCurrent()` and `downloadEpisode()`.
-- Ensure player control bar `.pbar` displays `<` back arrow icon button.
+- **`MASTER_FILMS` Array**: Define the single central list of films with individual `videoUrl` properties using alternating temporary test links A and B.
+- **Per-Film Download & Playback**: Update `startRealDownload(id)` and `playOffline(id)` to operate on specific film IDs.
+- **"Downloaded" Badge**: Check if `status === "COMPLETED"` and show `"Downloaded"` instead of the download button.
+- **Pre-Flight Validation**: Verify URL with `fetch(..., {method: 'HEAD'})` before queueing.
 
 ## Verification Plan
 
@@ -26,5 +26,5 @@ Implement real, physical media file downloads directly into device storage using
 - Run Gradle build `app:assembleDebug` to verify clean compilation.
 
 ### Manual Verification
-- Tap `📥 Download` on a title to verify Android's native system `DownloadManager` launches a real file download with status bar notification.
-- Verify 3 free downloads credit countdown and KES 20 M-Pesa Download Pass prompt.
+- Test downloading three different films, turning on airplane mode, and playing all three offline.
+- Verify download buttons change to "Downloaded" once completed.

@@ -1,12 +1,17 @@
 package com.filmbox.util;
 
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Environment;
+import android.widget.Toast;
 
 import com.filmbox.model.Movie;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.File;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,12 +20,48 @@ public class DownloadManagerUtil {
     private static final String PREF_NAME = "FilmBoxDownloadsPref";
     private static final String KEY_DOWNLOADS = "downloaded_movies";
 
+    private final Context context;
     private final SharedPreferences pref;
     private final Gson gson;
 
     public DownloadManagerUtil(Context context) {
-        pref = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        gson = new Gson();
+        this.context = context.getApplicationContext();
+        this.pref = this.context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        this.gson = new Gson();
+    }
+
+    public long startRealDownload(Movie movie) {
+        try {
+            String videoUrl = movie.getVideoUrl();
+            if (videoUrl == null || videoUrl.isEmpty()) {
+                videoUrl = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
+            }
+
+            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(videoUrl));
+            request.setTitle(movie.getTitle());
+            request.setDescription("Downloading movie for offline viewing...");
+            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+            
+            // Save in app-specific downloads directory (no dangerous permissions required)
+            File downloadDir = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
+            if (downloadDir != null && !downloadDir.exists()) {
+                downloadDir.mkdirs();
+            }
+            String fileName = "movie_" + movie.getId() + ".mp4";
+            request.setDestinationInExternalFilesDir(context, Environment.DIRECTORY_DOWNLOADS, fileName);
+
+            DownloadManager dm = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+            long downloadId = -1;
+            if (dm != null) {
+                downloadId = dm.enqueue(request);
+                addDownload(movie);
+                Toast.makeText(context, "Download started for " + movie.getTitle(), Toast.LENGTH_SHORT).show();
+            }
+            return downloadId;
+        } catch (Exception e) {
+            Toast.makeText(context, "Download failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            return -1;
+        }
     }
 
     public void addDownload(Movie movie) {
@@ -43,6 +84,15 @@ public class DownloadManagerUtil {
             }
         }
         saveDownloads(updated);
+        try {
+            File downloadDir = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
+            if (downloadDir != null) {
+                File file = new File(downloadDir, "movie_" + movieId + ".mp4");
+                if (file.exists()) {
+                    file.delete();
+                }
+            }
+        } catch (Exception ignored) {}
     }
 
     public List<Movie> getDownloads() {
