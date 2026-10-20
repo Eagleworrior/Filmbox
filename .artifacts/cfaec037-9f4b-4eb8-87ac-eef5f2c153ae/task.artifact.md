@@ -1,6 +1,7 @@
-# Task List - Social Media Hub, Blogger & 10-Minute Renewal Banner
+# Task List - NewsData.io News Tab Integration
 
-- [ ] Whitelist WhatsApp, PayPal, Facebook Page/Group, and Blogger in `MainActivity.java` `[ ]`
-- [ ] Add 10-minute VIP renewal banner with ✕ dismiss button and `Renew VIP ⚡` button `[ ]`
-- [ ] Add Facebook Page, Facebook Group, and Blogger links to Community Hub in `index.html` `[ ]`
+- [ ] Add News navigation button to `<nav id="nav">` and handler to `render()` `[ ]`
+- [ ] Implement `newsView()` and `fetchNews()` querying NewsData.io API (`pub_fe027c61954549009dade8e36feb77f7`) `[ ]`
+- [ ] Build rich article cards with category badges, images, headlines, and Blogger "Read More" links `[ ]`
+- [ ] Implement endless infinite scroll for news pagination `[ ]`
 - [ ] Verify build via gradle `app:assembleDebug` `[ ]`
