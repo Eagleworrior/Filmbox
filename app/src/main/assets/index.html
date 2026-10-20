@@ -379,14 +379,16 @@ const tmdb = (path, p = {}, retry = 0) => {
 };
 
 function go(v) {
-  if (v === "library") {
+  if (v === "news" || v === "social" || v === "football") {
+    librarySubTab = v;
     S.view = "library";
   } else {
     S.view = v;
   }
   S.page = 1; S.genre = ""; S.sort = "popularity.desc"; S.query = ""; $("#q").value = "";
   document.querySelectorAll(".bottom-nav button").forEach(b => {
-    b.classList.toggle("on", b.dataset.v === v);
+    const isLib = (v === "library" || v === "news" || v === "social" || v === "football");
+    b.classList.toggle("on", b.dataset.v === v || (isLib && b.dataset.v === "library"));
   });
   render();
 }
