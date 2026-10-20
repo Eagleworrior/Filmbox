@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Movie Box - 100% Ad-Free Direct Cinema & Sports</title>
+<title>Film Box - 100% Ad-Free Direct Cinema & Sports</title>
 <style>
 :root{--bg:#14110f;--panel:#201b18;--line:#352e29;--text:#f3ece4;--mute:#a79c91;--accent:#f2b134;--pitch:#2fa36b}
 *{box-sizing:border-box;margin:0}
 body{background:var(--bg);color:var(--text);font:15px/1.5 "Trebuchet MS",Verdana,sans-serif}
-header{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:max(16px, env(safe-area-inset-top)) 20px 12px 20px}
-.logo{font:800 22px Georgia,serif;color:var(--accent);margin-right:8px;cursor:pointer}
+header{position:sticky;top:0;z-index:5;height:64px;background:var(--bg);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:max(12px, env(safe-area-inset-top)) 20px 12px 20px}
+.logo{position:absolute;left:50%;transform:translateX(-50%);font:800 24px Georgia,serif;background:linear-gradient(90deg,#ffc23c,#ff4d8d,#38bdf8);-webkit-background-clip:text;background-clip:text;color:transparent;cursor:pointer;white-space:nowrap}
 nav{display:flex;gap:4px;flex-wrap:wrap}
 nav button,.chip{background:none;border:0;color:var(--mute);padding:7px 14px;border-radius:20px;cursor:pointer;font:inherit;white-space:nowrap}
 nav button.on,.chip.on{background:var(--accent);color:#1a1307;font-weight:700}
@@ -1506,7 +1506,7 @@ function shareCurrent() {
   if (navigator.share) {
     navigator.share({
       title: CUR.title,
-      text: `Check out "${CUR.title}" on Movie Box!`,
+      text: `Check out "${CUR.title}" on Film Box!`,
       url: window.location.href
     }).catch(e => {});
   } else {
