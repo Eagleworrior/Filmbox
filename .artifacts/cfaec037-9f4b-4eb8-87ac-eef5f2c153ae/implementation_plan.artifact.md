@@ -1,29 +1,28 @@
-# Implementation Plan - Bottom Navigation Bar, Library Tab (Movies/Series/Football), Film Box Rebrand & High-Graphic Community Styling
+# Implementation Plan - 4-Tab Bottom Navigation (Home, Movies, Series, Library with News/Community/Football), Full "Film Box" Rebrand
 
-Restructure Film Box UI: Rename brand from "Movie Box" to **"Film Box"** everywhere, move navigation from the top header to a **Fixed Bottom Navigation Bar** with high-graphic box tabs (**🏠 Home**, **📚 Library** with sub-tabs for Movies/Series, **📰 News**, **⚽ Football**, **❤️ Community**), ensure the **★ Go VIP** button stays at the top left of every page, and style all text with vibrant gradients and colors.
+Refactor navigation to feature strictly 4 bottom tabs (**🏠 Home**, **🎬 Movies**, **📺 Series**, **📚 Library**), where Library contains sub-tabs for **📰 News**, **❤️ Community**, and **⚽ Live Sports**, and eliminate any remaining instances of "Movie Box" in favor of **"Film Box"**.
 
 ## User Review Required
 
 > [!IMPORTANT]
-> - **Brand Rebrand to "Film Box"**: All titles, headers, and VIP passes now read **"Film Box"** and **"Film Box VIP Passes"**.
-> - **Fixed Bottom Navigation Bar**: Replaced top navigation with a modern, high-graphic **Fixed Bottom Navigation Bar** containing gorgeous box tabs:
->   1. **🏠 Home**
->   2. **📚 Library** (Contains sub-selectors for Movies, Series, and Football at the top)
->   3. **📰 News**
->   4. **⚽ Football**
->   5. **❤️ Community** (Social media hub)
-> - **Top-Left "★ Go VIP" Button**: Stays fixed at the top left of the screen on every page.
-> - **Richly Colored & Decorated Text**: Applied vibrant multi-color gradients and glowing badges across all cards, news items, and VIP passes.
+> - **Strict 4-Tab Bottom Navigation**:
+>   1. **🏠 Home** (`home`)
+>   2. **🎬 Movies** (`movie`)
+>   3. **📺 Series** (`tv`)
+>   4. **📚 Library** (`library`)
+> - **Library Sub-Tabs**: Tapping **📚 Library** displays top-level sub-tabs for:
+>   - **📰 News**
+>   - **❤️ Community** (Vibrant high-graphic social hub)
+>   - **⚽ Live Sports** (Football matches & live scores)
+> - **100% "Film Box" Rebrand**: Verified and replaced all remaining occurrences of "Movie Box" with "Film Box" in page titles, logo markup, and share texts.
 
 ## Proposed Changes
 
-### Web Application UI & Navigation Redesign
+### Web Application UI & Navigation Restructure
 #### [MODIFY] [index.html](file:///C:/Users/EAGLE/AndroidStudioProjects/FilmBox/app/src/main/assets/index.html)
-- **Rename to Film Box**: Update logo and text.
-- **Fixed Bottom Tab Bar**: Add `.bottom-nav` CSS and HTML structure with 5 high-graphic box tabs.
-- **Library Tab (`library`)**: Implement Library view containing sub-tabs for Movies, Series, and Football.
-- **Top-Left VIP Button**: Position `"★ Go VIP"` at top left of header.
-- **Rich Coloring**: Ensure all text elements are styled with vibrant colors and gradients.
+- **Bottom Nav Bar**: Update to 4 tabs (`Home`, `Movies`, `Series`, `Library`).
+- **Library View Sub-Tabs**: Implement `libraryView()` with sub-buttons for News (`news`), Community (`social`), and Football (`football`).
+- **Rebrand Check**: Replace `<title>Movie Box...</title>`, `<span class="logo">Movie Box</span>`, and share text with "Film Box".
 
 ## Verification Plan
 
@@ -31,6 +30,6 @@ Restructure Film Box UI: Rename brand from "Movie Box" to **"Film Box"** everywh
 - Run Gradle build `app:assembleDebug` to verify clean compilation.
 
 ### Manual Verification
-- Test bottom navigation bar tabs (Home, Library, News, Football, Community) to ensure smooth transitions.
-- Verify "Film Box" branding across header and VIP modal.
-- Test top-left "★ Go VIP" button on all pages.
+- Test 4 bottom tabs (Home, Movies, Series, Library) to ensure smooth transitions.
+- Tap Library to verify sub-tabs (News, Community, Football) load correctly.
+- Verify zero instances of "Movie Box" exist in code.

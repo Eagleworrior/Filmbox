@@ -1,8 +1,6 @@
-# Task List - Bottom Navigation Bar & Film Box Rebrand
+# Task List - 4-Tab Bottom Navigation & Film Box Rebrand
 
-- [ ] Rebrand all headers and VIP modals from "Movie Box" to "Film Box" `[ ]`
-- [ ] Position "★ Go VIP" button at top left of every page header `[ ]`
-- [ ] Build Fixed Bottom Navigation Bar with high-graphic box tabs (Home, Library, News, Football, Community) `[ ]`
-- [ ] Implement Library view containing Movies, Series, and Football sub-tabs `[ ]`
-- [ ] Apply rich vibrant colors and gradients to all text elements `[ ]`
+- [ ] Rebrand remaining "Movie Box" strings to "Film Box" in `index.html` `[ ]`
+- [ ] Update bottom navigation bar to 4 tabs (Home, Movies, Series, Library) `[ ]`
+- [ ] Implement `libraryView()` with sub-tabs for News, Community, and Football `[ ]`
 - [ ] Verify build via gradle `app:assembleDebug` `[ ]`
