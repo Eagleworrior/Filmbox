@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
                 webSettings.setUserAgentString("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
 
                 webViewApp.setSoundEffectsEnabled(true);
+                webViewApp.setBackgroundColor(0xFF0b0b1a);
                 webViewApp.setLayerType(View.LAYER_TYPE_HARDWARE, null);
                 webViewApp.clearCache(true);
                 webViewApp.clearFormData();
