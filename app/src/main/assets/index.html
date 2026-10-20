@@ -276,6 +276,48 @@ h2{border-left:4px solid var(--accent);padding-left:10px}
   font-size: 13px;
   box-shadow: 0 4px 12px rgba(242, 177, 52, 0.3);
 }
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  background: rgba(11, 11, 26, 0.95);
+  backdrop-filter: blur(16px);
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 8px 10px env(safe-area-inset-bottom);
+  box-shadow: 0 -10px 30px rgba(0,0,0,0.8);
+}
+.bottom-nav button {
+  background: #151530;
+  border: 1px solid var(--line);
+  color: var(--mute);
+  padding: 8px 6px;
+  border-radius: 14px;
+  cursor: pointer;
+  font: 700 11px inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  transition: 0.2s;
+  flex: 1;
+  max-width: 75px;
+}
+.bottom-nav button.on {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 4px 14px #7c5cff55;
+  transform: translateY(-2px);
+}
+body {
+  padding-bottom: 75px;
+}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.17/dist/hls.min.js"></script>
 <script src="https://www.paypal.com/web-sdk/v6/core"></script>
@@ -407,19 +449,27 @@ async function fetchNews(append) {
     newsNextPage = d.nextPage || null;
 
     const grid = $("#newsGrid");
+    const categoryColors = {
+      entertainment: { bg: "rgba(244, 114, 182, 0.2)", col: "#f472b6" },
+      technology: { bg: "rgba(56, 189, 248, 0.2)", col: "#38bdf8" },
+      sports: { bg: "rgba(52, 211, 153, 0.2)", col: "#34d399" },
+      world: { bg: "rgba(251, 191, 36, 0.2)", col: "#fbbf24" }
+    };
+
     const html = articles.map(art => {
-      const cat = (art.category && art.category[0]) ? art.category[0] : "News";
+      const cat = (art.category && art.category[0]) ? art.category[0].toLowerCase() : "news";
+      const colObj = categoryColors[cat] || { bg: "rgba(168, 85, 247, 0.2)", col: "#c084fc" };
       const img = art.image_url || "https://via.placeholder.com/600x337?text=Film+Box+News";
       const dateStr = art.pubDate ? new Date(art.pubDate).toLocaleDateString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }) : "";
       return `<div class="news-card">
         <img loading="lazy" src="${img}" alt="" class="news-img">
         <div class="news-body">
-          <span class="news-category">${esc(cat)}</span>
-          <h3 class="news-title">${esc(art.title || "")}</h3>
-          <p class="news-desc">${esc((art.description || art.content || "").slice(0, 160))}…</p>
+          <span class="news-category" style="background:${colObj.bg};color:${colObj.col};border:1px solid ${colObj.col}">${esc(cat.toUpperCase())}</span>
+          <h3 class="news-title" style="color:#f8fafc;font-size:18px;font-weight:800">${esc(art.title || "")}</h3>
+          <p class="news-desc" style="color:#cbd5e1;font-size:13.5px;line-height:1.5">${esc((art.description || art.content || "").slice(0, 160))}…</p>
           <div class="news-footer">
-            <span class="news-date">${esc(dateStr)}</span>
-            <a href="https://filmboxproductions.blogspot.com" target="_blank" rel="noopener noreferrer" class="news-readmore">Read More ↗</a>
+            <span class="news-date" style="color:#a78bfa;font-weight:700">${esc(dateStr)}</span>
+            <a href="https://filmboxproductions.blogspot.com" target="_blank" rel="noopener noreferrer" class="news-readmore" style="background:linear-gradient(135deg,#38bdf8,#25D366);color:#000!important;font-weight:900">Read More ↗</a>
           </div>
         </div>
       </div>`;
@@ -1886,5 +1936,12 @@ initVipRenewTimer();
 checkVipActive();
 render();
 </script>
+<nav class="bottom-nav">
+  <button data-v="home" class="on" onclick="go('home')">🏠 Home</button>
+  <button data-v="library" onclick="go('library')">📚 Library</button>
+  <button data-v="news" onclick="go('news')">📰 News</button>
+  <button data-v="football" onclick="go('football')">⚽ Football</button>
+  <button data-v="social" onclick="go('social')">❤️ Community</button>
+</nav>
 </body>
 </html>

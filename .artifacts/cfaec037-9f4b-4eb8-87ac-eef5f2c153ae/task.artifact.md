@@ -1,7 +1,8 @@
-# Task List - NewsData.io News Tab Integration
+# Task List - Bottom Navigation Bar & Film Box Rebrand
 
-- [ ] Add News navigation button to `<nav id="nav">` and handler to `render()` `[ ]`
-- [ ] Implement `newsView()` and `fetchNews()` querying NewsData.io API (`pub_fe027c61954549009dade8e36feb77f7`) `[ ]`
-- [ ] Build rich article cards with category badges, images, headlines, and Blogger "Read More" links `[ ]`
-- [ ] Implement endless infinite scroll for news pagination `[ ]`
+- [ ] Rebrand all headers and VIP modals from "Movie Box" to "Film Box" `[ ]`
+- [ ] Position "★ Go VIP" button at top left of every page header `[ ]`
+- [ ] Build Fixed Bottom Navigation Bar with high-graphic box tabs (Home, Library, News, Football, Community) `[ ]`
+- [ ] Implement Library view containing Movies, Series, and Football sub-tabs `[ ]`
+- [ ] Apply rich vibrant colors and gradients to all text elements `[ ]`
 - [ ] Verify build via gradle `app:assembleDebug` `[ ]`

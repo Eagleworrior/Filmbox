@@ -1,17 +1,17 @@
-# Walkthrough - PayPal JavaScript SDK v6 & REST API Integration
+# Walkthrough - NewsData.io News Tab Integration
 
-Successfully integrated PayPal JavaScript SDK v6 (`https://www.paypal.com/web-sdk/v6/core`) and PayPal REST APIs using your Live Credentials (`lomalianorman@gmail.com`, Client ID: `BAA1dtlx0lmxerhVWLeU2FXAPXyAoQyFzrGWJIc_djIp8oT3y54X1sLX2GR1XWZnloh7yqTc4j57vB-bKQ`, Secret: `EIhtPvussfV5KhcSTIPj7gs2jcOeoQ6G6KW3uFE8YH9wqfFg8hu-m9YU5lBsS7pRdd2ZTR5lhnF5I-Hj`) into FilmBox, enabling instant USD ($) payments alongside M-Pesa.
+Successfully integrated the NewsData.io API (`pub_fe027c61954549009dade8e36feb77f7`) into Film Box as a new **"News"** tab (`📰 News`) with categorized articles, article images, headlines, summaries, endless infinite scrolling (latest at top), and "Read More" links directing users to the official FilmBox Blogger site (`https://filmboxproductions.blogspot.com`).
 
 ## Key Features Implemented
 
-### 1. Java Native PayPal REST API Bridge (`MainActivity.java`)
-- Implemented `createPayPalOrder(amountUsdStr, callbackName)` and `capturePayPalOrder(orderId, callbackName)` executing OAuth token generation and order creation/capture via PayPal's Live REST API (`https://api-m.paypal.com/v2/checkout/orders`).
+### 1. NewsData.io API Integration
+- Connected API Key `pub_fe027c61954549009dade8e36feb77f7` fetching live categorized news (Entertainment, Technology, World, Sports).
 
-### 2. Dual Payment Selector (M-Pesa ⚡ vs PayPal 💳)
-- Added interactive payment method tabs in `openVip()`. Users can switch between **M-Pesa (KES)** and **PayPal / Credit Card (USD $)**.
+### 2. Rich Article Cards & Blogger Redirect
+- Displays article images, category tags, bold headlines, summary snippets, publication dates, and a **"Read More ↗"** button directing users to `https://filmboxproductions.blogspot.com`.
 
-### 3. Real-Time Order Capture & VIP Pass Activation
-- On order capture completion (`status === "COMPLETED"`), FilmBox calculates the VIP expiration timestamp and activates unlimited streaming access in real-time.
+### 3. Endless Infinite Scroll
+- Automatically loads more news articles as the user scrolls down the page.
 
 ## Verification Results
 

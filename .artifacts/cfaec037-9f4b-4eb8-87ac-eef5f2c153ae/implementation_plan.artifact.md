@@ -1,23 +1,29 @@
-# Implementation Plan - NewsData.io News Tab Integration & Endless Infinite Scroll
+# Implementation Plan - Bottom Navigation Bar, Library Tab (Movies/Series/Football), Film Box Rebrand & High-Graphic Community Styling
 
-Integrate the NewsData.io API (`pub_fe027c61954549009dade8e36feb77f7`) into Film Box as a new **"News"** tab (`📰 News`) with categorized articles, article images, headlines, summaries, endless infinite scrolling (latest at top), and "Read More" links directing users to the official FilmBox Blogger site (`https://filmboxproductions.blogspot.com`).
+Restructure Film Box UI: Rename brand from "Movie Box" to **"Film Box"** everywhere, move navigation from the top header to a **Fixed Bottom Navigation Bar** with high-graphic box tabs (**🏠 Home**, **📚 Library** with sub-tabs for Movies/Series, **📰 News**, **⚽ Football**, **❤️ Community**), ensure the **★ Go VIP** button stays at the top left of every page, and style all text with vibrant gradients and colors.
 
 ## User Review Required
 
 > [!IMPORTANT]
-> - **NewsData.io API Integration**: Uses API key `pub_fe027c61954549009dade8e36feb77f7` to fetch real-time categorized news (Entertainment, Technology, Sports, World).
-> - **New Navigation Tab**: Added `<button data-v="news">📰 News</button>` to the top header navbar.
-> - **Rich Article Layout**: Displays article images, category badges, bold headlines, and content previews, sorted with the latest news at the top.
-> - **Endless Infinite Scroll**: Automatically loads more news articles as the user scrolls down.
-> - **"Read More" Blogger Redirect**: Directs users to `https://filmboxproductions.blogspot.com` for full articles.
+> - **Brand Rebrand to "Film Box"**: All titles, headers, and VIP passes now read **"Film Box"** and **"Film Box VIP Passes"**.
+> - **Fixed Bottom Navigation Bar**: Replaced top navigation with a modern, high-graphic **Fixed Bottom Navigation Bar** containing gorgeous box tabs:
+>   1. **🏠 Home**
+>   2. **📚 Library** (Contains sub-selectors for Movies, Series, and Football at the top)
+>   3. **📰 News**
+>   4. **⚽ Football**
+>   5. **❤️ Community** (Social media hub)
+> - **Top-Left "★ Go VIP" Button**: Stays fixed at the top left of the screen on every page.
+> - **Richly Colored & Decorated Text**: Applied vibrant multi-color gradients and glowing badges across all cards, news items, and VIP passes.
 
 ## Proposed Changes
 
-### Web Application & News Dashboard
-#### [MODIFY] [index.html](file:///C:/Users/EAGLE/AndroidStudioProjects/FilmBox/app/src/main/assets/index.html)`
-- **Add News Tab**: Add News button in `<nav id="nav">` and `news: newsView` in `render()`.
-- **Fetch NewsData.io**: Implement `newsView()` and `fetchNews(append)` querying `https://newsdata.io/api/1/news?apikey=pub_fe027c61954549009dade8e36feb77f7&category=entertainment,technology,world,sports&language=en`.
-- **Endless Scroll**: Integrate news pagination with `window.onscroll`.
+### Web Application UI & Navigation Redesign
+#### [MODIFY] [index.html](file:///C:/Users/EAGLE/AndroidStudioProjects/FilmBox/app/src/main/assets/index.html)
+- **Rename to Film Box**: Update logo and text.
+- **Fixed Bottom Tab Bar**: Add `.bottom-nav` CSS and HTML structure with 5 high-graphic box tabs.
+- **Library Tab (`library`)**: Implement Library view containing sub-tabs for Movies, Series, and Football.
+- **Top-Left VIP Button**: Position `"★ Go VIP"` at top left of header.
+- **Rich Coloring**: Ensure all text elements are styled with vibrant colors and gradients.
 
 ## Verification Plan
 
@@ -25,6 +31,6 @@ Integrate the NewsData.io API (`pub_fe027c61954549009dade8e36feb77f7`) into Film
 - Run Gradle build `app:assembleDebug` to verify clean compilation.
 
 ### Manual Verification
-- Tap the **News** tab to verify categorized news articles load with images and headlines.
-- Test endless scroll by scrolling down to load older news.
-- Tap "Read More" to confirm redirection to the official Blogger site.
+- Test bottom navigation bar tabs (Home, Library, News, Football, Community) to ensure smooth transitions.
+- Verify "Film Box" branding across header and VIP modal.
+- Test top-left "★ Go VIP" button on all pages.
