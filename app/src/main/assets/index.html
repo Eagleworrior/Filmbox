@@ -1283,14 +1283,11 @@ async function openVip(msg) {
           </svg>
         </div>
 
-        <form action="https://www.paypal.com/donate" method="post" target="_blank" style="width: 100%; display: flex; justify-content: center;">
-          <input type="hidden" name="business" value="lomalianorman@gmail.com" />
-          <input type="hidden" name="item_name" value="FILM BOX Support & Movie Updates" />
-          <input type="hidden" name="currency_code" value="USD" />
-          <button type="submit" class="hub-btn paypal-btn">
-            ☕ SUPPORT VIA PAYPAL
+        <div style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 8px;">
+          <button type="button" class="hub-btn paypal-btn" onclick="payWithPayPal()">
+            💳 UNLOCK VIP PASS WITH PAYPAL
           </button>
-        </form>
+        </div>
       </div>
     </div>
   </div>
