@@ -85,6 +85,120 @@ h2{border-left:4px solid var(--accent);padding-left:10px}
 
 .loader-ring{width:48px;height:48px;border:4px solid #00ff88;border-color:#00ff88 transparent transparent transparent;border-radius:50%;animation:l-spin 1.2s cubic-bezier(0.5,0,0.5,1) infinite;margin:0 auto}
 @keyframes l-spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+
+.filmbox-hub-container {
+  max-width: 480px;
+  margin: 15px auto;
+  background: linear-gradient(135deg, #090d16 0%, #1e1b4b 50%, #0f172a 100%);
+  border: 2px solid rgba(56, 189, 248, 0.4);
+  border-radius: 24px;
+  padding: 25px 20px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(37, 211, 102, 0.15);
+  text-align: center;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color: #ffffff;
+}
+.coffee-money-gif {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #38bdf8;
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+  margin-bottom: 12px;
+  animation: floatAnimation 3s ease-in-out infinite;
+}
+@keyframes floatAnimation {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.hub-header h2 {
+  font-size: 20px;
+  font-weight: 800;
+  background: linear-gradient(90deg, #38bdf8, #25D366, #fbbf24);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+}
+.hub-header p {
+  font-size: 13px;
+  color: #cbd5e1;
+  margin-bottom: 20px;
+  line-height: 1.4;
+}
+.hub-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 14px 0;
+  width: 100%;
+}
+.hub-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  transition: transform 0.3s ease;
+}
+.hub-icon:hover {
+  transform: scale(1.1);
+}
+.wa-glow {
+  background: rgba(37, 211, 102, 0.2);
+  box-shadow: 0 0 15px rgba(37, 211, 102, 0.4);
+}
+.paypal-glow {
+  background: rgba(0, 112, 186, 0.2);
+  box-shadow: 0 0 15px rgba(0, 112, 186, 0.4);
+}
+.svg-icon {
+  width: 24px;
+  height: 24px;
+}
+.hub-btn {
+  display: inline-block;
+  width: 90%;
+  max-width: 280px;
+  padding: 12px 20px;
+  border-radius: 35px;
+  font-size: 14px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  text-decoration: none !important;
+  transition: all 0.3s ease;
+  letter-spacing: 0.5px;
+}
+.wa-btn {
+  background: linear-gradient(45deg, #25D366, #128C7E);
+  color: #ffffff !important;
+  box-shadow: 0 5px 20px rgba(37, 211, 102, 0.4);
+}
+.wa-btn:hover {
+  background: linear-gradient(45deg, #128C7E, #25D366);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(37, 211, 102, 0.7);
+}
+.paypal-btn {
+  background: linear-gradient(45deg, #0070ba, #003087);
+  color: #ffffff !important;
+  box-shadow: 0 5px 20px rgba(0, 112, 186, 0.4);
+}
+.paypal-btn:hover {
+  background: linear-gradient(45deg, #003087, #0070ba);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 112, 186, 0.7);
+}
+.hub-divider {
+  width: 85%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.3), transparent);
+  margin: 18px auto;
+}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.17/dist/hls.min.js"></script>
 <script src="https://www.paypal.com/web-sdk/v6/core"></script>
@@ -1139,9 +1253,46 @@ async function openVip(msg) {
     <button class="vip" onclick="pay()" style="width:100%;padding:14px;font-size:16px;font-weight:900;letter-spacing:0.05em">PAY WITH M-PESA ⚡</button>
   </div>
 
-  <div id="paypalPayRow" class="payrow" style="display:none;padding:16px 20px 20px;background:#151530;border:1px solid #2563eb;border-radius:16px;margin:0 20px 12px;box-shadow:0 8px 20px rgba(0,0,0,0.5);text-align:center">
-    <label style="display:block;width:100%;font-size:12px;color:#60a5fa;font-weight:700;margin-bottom:6px">Instant PayPal / Credit / Debit Card Checkout ($USD):</label>
-    <button class="vip" onclick="payWithPayPal()" style="width:100%;padding:14px;font-size:16px;font-weight:900;background:#2563eb;color:#fff;letter-spacing:0.05em">PAY WITH PAYPAL / CARD 💳</button>
+  <div id="paypalPayRow" style="display:none;padding:0 20px 12px">
+    <div class="filmbox-hub-container">
+      <div class="hub-header">
+        <div class="animated-icon-wrapper">
+          <img src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif" alt="Coffee and Cash" class="coffee-money-gif" />
+        </div>
+        <h2>🎬 FILM BOX Community & Support</h2>
+        <p>Join our vibrant WhatsApp movie community & help fuel our daily updates!</p>
+      </div>
+
+      <div class="hub-section">
+        <div class="hub-icon wa-glow">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="svg-icon">
+            <path fill="#25D366" d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3 18.6-68.1-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.7z"/>
+          </svg>
+        </div>
+        <a href="https://chat.whatsapp.com/L02vNHjowvW83MLbJVqIwC?s=cl&p=a&mlu=4&ilr=4" target="_blank" rel="noopener noreferrer" class="hub-btn wa-btn">
+          💬 JOIN WHATSAPP GROUP
+        </a>
+      </div>
+
+      <div class="hub-divider"></div>
+
+      <div class="hub-section">
+        <div class="hub-icon paypal-glow">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" class="svg-icon">
+            <path fill="#0070ba" d="M111.4 295.9c-3.5 19.2-17.4 108.7-21.5 134-.3 1.8-1 2.5-2.7 2.5H22.6c-3.8 0-6.8-3.2-6.2-7 7.8-48.4 21.8-136.5 31.9-200.2 1.2-7.5 7.7-13.1 15.3-13.1h102.3c42.8 0 74.4 9.9 88.3 31.4 11.2 17.3 11.3 40.5 4.3 67.2-11.2 42.6-39.7 75.1-81.8 88.6-13.6 4.3-29.2 6.6-47.5 6.6H111.4zM368.5 112c-12-38.4-44.8-63.5-98.1-63.5H115.8c-8.6 0-16.1 6.2-17.5 14.7L32.4 416.7c-.6 3.8 2.4 7.3 6.3 7.3h61.8c7.7 0 14.3-5.7 15.5-13.3l15.8-98.8c1.2-7.5 7.7-13.1 15.3-13.1h32.1c56.4 0 100.8-22.9 118-88.3 7.1-27.1 5.2-50.5-5.7-68.5z"/>
+          </svg>
+        </div>
+
+        <form action="https://www.paypal.com/donate" method="post" target="_blank" style="width: 100%; display: flex; justify-content: center;">
+          <input type="hidden" name="business" value="lomalianorman@gmail.com" />
+          <input type="hidden" name="item_name" value="FILM BOX Support & Movie Updates" />
+          <input type="hidden" name="currency_code" value="USD" />
+          <button type="submit" class="hub-btn paypal-btn">
+            ☕ SUPPORT VIA PAYPAL
+          </button>
+        </form>
+      </div>
+    </div>
   </div>
 
   <p class="msg" id="pst" style="padding:4px 20px 12px;margin:0;text-align:center"></p>
