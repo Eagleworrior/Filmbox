@@ -22,6 +22,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.OutputStream;
@@ -74,9 +75,10 @@ public class MainActivity extends AppCompatActivity {
                 webViewApp.clearFormData();
                 webViewApp.clearHistory();
 
-                // Add Javascript Interface for M-Pesa Daraja STK Push Trigger
+                // Add Javascript Interface for M-Pesa Daraja STK Push & PayPal
                 webViewApp.addJavascriptInterface(new MpesaBridge(), "AndroidKYC");
                 webViewApp.addJavascriptInterface(new MpesaBridge(), "AndroidMpesa");
+                webViewApp.addJavascriptInterface(new PayPalBridge(), "AndroidPayPal");
 
                 // Strict In-App Playback, Host Whitelisting & Network-Level Ad Interception
                 webViewApp.setWebViewClient(new WebViewClient() {
@@ -537,6 +539,154 @@ public class MainActivity extends AppCompatActivity {
                 }
             } catch (Exception ignored) {}
             return "";
+        }
+    }
+
+    // Java Native PayPal REST API Bridge
+    public class PayPalBridge {
+        public PayPalBridge() {}
+
+        private final String clientId = "BAA1dtlx0lmxerhVWLeU2FXAPXyAoQyFzrGWJIc_djIp8oT3y54X1sLX2GR1XWZnloh7yqTc4j57vB-bKQ";
+        private final String clientSecret = "EIhtPvussfV5KhcSTIPj7gs2jcOeoQ6G6KW3uFE8YH9wqfFg8hu-m9YU5lBsS7pRdd2ZTR5lhnF5I-Hj";
+
+        @JavascriptInterface
+        public void createPayPalOrder(String amountUsdStr, String callbackName) {
+            new Thread(() -> {
+                try {
+                    String auth = clientId + ":" + clientSecret;
+                    String encodedAuth = android.util.Base64.encodeToString(auth.getBytes(StandardCharsets.UTF_8), android.util.Base64.NO_WRAP);
+
+                    // 1. Get Access Token
+                    URL tokenUrl = new URL("https://api-m.paypal.com/v1/oauth2/token");
+                    HttpURLConnection tokenConn = (HttpURLConnection) tokenUrl.openConnection();
+                    tokenConn.setRequestMethod("POST");
+                    tokenConn.setRequestProperty("Authorization", "Basic " + encodedAuth);
+                    tokenConn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                    tokenConn.setDoOutput(true);
+
+                    try (OutputStream os = tokenConn.getOutputStream()) {
+                        byte[] input = "grant_type=client_credentials".getBytes(StandardCharsets.UTF_8);
+                        os.write(input, 0, input.length);
+                    }
+
+                    Scanner scanner = new Scanner(tokenConn.getInputStream());
+                    StringBuilder tokenRes = new StringBuilder();
+                    while (scanner.hasNext()) tokenRes.append(scanner.nextLine());
+                    scanner.close();
+
+                    JSONObject tokenJson = new JSONObject(tokenRes.toString());
+                    String accessToken = tokenJson.getString("access_token");
+
+                    // 2. Create Order
+                    JSONObject orderPayload = new JSONObject();
+                    orderPayload.put("intent", "CAPTURE");
+
+                    JSONArray purchaseUnits = new JSONArray();
+                    JSONObject unit = new JSONObject();
+                    JSONObject amount = new JSONObject();
+                    amount.put("currency_code", "USD");
+                    amount.put("value", amountUsdStr);
+                    unit.put("amount", amount);
+                    purchaseUnits.put(unit);
+
+                    orderPayload.put("purchase_units", purchaseUnits);
+
+                    URL orderUrl = new URL("https://api-m.paypal.com/v2/checkout/orders");
+                    HttpURLConnection orderConn = (HttpURLConnection) orderUrl.openConnection();
+                    orderConn.setRequestMethod("POST");
+                    orderConn.setRequestProperty("Authorization", "Bearer " + accessToken);
+                    orderConn.setRequestProperty("Content-Type", "application/json");
+                    orderConn.setDoOutput(true);
+
+                    try (OutputStream os = orderConn.getOutputStream()) {
+                        byte[] input = orderPayload.toString().getBytes(StandardCharsets.UTF_8);
+                        os.write(input, 0, input.length);
+                    }
+
+                    Scanner orderScanner = new Scanner(orderConn.getInputStream());
+                    StringBuilder orderRes = new StringBuilder();
+                    while (orderScanner.hasNext()) orderRes.append(orderScanner.nextLine());
+                    orderScanner.close();
+
+                    final String finalResStr = orderRes.toString();
+                    runOnUiThread(() -> {
+                        if (webViewApp != null) {
+                            webViewApp.evaluateJavascript(callbackName + "(" + finalResStr + ");", null);
+                        }
+                    });
+                } catch (Exception e) {
+                    runOnUiThread(() -> {
+                        try {
+                            JSONObject err = new JSONObject();
+                            err.put("error", e.getMessage());
+                            if (webViewApp != null) {
+                                webViewApp.evaluateJavascript(callbackName + "(" + err.toString() + ");", null);
+                            }
+                        } catch (Exception ignored) {}
+                    });
+                }
+            }).start();
+        }
+
+        @JavascriptInterface
+        public void capturePayPalOrder(String orderId, String callbackName) {
+            new Thread(() -> {
+                try {
+                    String auth = clientId + ":" + clientSecret;
+                    String encodedAuth = android.util.Base64.encodeToString(auth.getBytes(StandardCharsets.UTF_8), android.util.Base64.NO_WRAP);
+
+                    // 1. Token
+                    URL tokenUrl = new URL("https://api-m.paypal.com/v1/oauth2/token");
+                    HttpURLConnection tokenConn = (HttpURLConnection) tokenUrl.openConnection();
+                    tokenConn.setRequestMethod("POST");
+                    tokenConn.setRequestProperty("Authorization", "Basic " + encodedAuth);
+                    tokenConn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                    tokenConn.setDoOutput(true);
+
+                    try (OutputStream os = tokenConn.getOutputStream()) {
+                        byte[] input = "grant_type=client_credentials".getBytes(StandardCharsets.UTF_8);
+                        os.write(input, 0, input.length);
+                    }
+
+                    Scanner scanner = new Scanner(tokenConn.getInputStream());
+                    StringBuilder tokenRes = new StringBuilder();
+                    while (scanner.hasNext()) tokenRes.append(scanner.nextLine());
+                    scanner.close();
+
+                    JSONObject tokenJson = new JSONObject(tokenRes.toString());
+                    String accessToken = tokenJson.getString("access_token");
+
+                    // 2. Capture Order
+                    URL captureUrl = new URL("https://api-m.paypal.com/v2/checkout/orders/" + orderId + "/capture");
+                    HttpURLConnection captureConn = (HttpURLConnection) captureUrl.openConnection();
+                    captureConn.setRequestMethod("POST");
+                    captureConn.setRequestProperty("Authorization", "Bearer " + accessToken);
+                    captureConn.setRequestProperty("Content-Type", "application/json");
+                    captureConn.setDoOutput(true);
+
+                    Scanner captureScanner = new Scanner(captureConn.getInputStream());
+                    StringBuilder captureRes = new StringBuilder();
+                    while (captureScanner.hasNext()) captureRes.append(captureScanner.nextLine());
+                    captureScanner.close();
+
+                    final String finalResStr = captureRes.toString();
+                    runOnUiThread(() -> {
+                        if (webViewApp != null) {
+                            webViewApp.evaluateJavascript(callbackName + "(" + finalResStr + ");", null);
+                        }
+                    });
+                } catch (Exception e) {
+                    runOnUiThread(() -> {
+                        try {
+                            JSONObject err = new JSONObject();
+                            err.put("error", e.getMessage());
+                            if (webViewApp != null) {
+                                webViewApp.evaluateJavascript(callbackName + "(" + err.toString() + ");", null);
+                            }
+                        } catch (Exception ignored) {}
+                    });
+                }
+            }).start();
         }
     }
 }
