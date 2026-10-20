@@ -137,6 +137,16 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             }
 
+                            if (url.contains("facebook.com") || url.contains("fb.me") || url.contains("blogspot.com")) {
+                                try {
+                                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                                    view.getContext().startActivity(intent);
+                                    return true;
+                                } catch (Exception e) {
+                                    return false;
+                                }
+                            }
+
                             if (url.startsWith("file:///") || url.contains("android_asset") || isAllowed(host)) {
                                 return false;
                             }

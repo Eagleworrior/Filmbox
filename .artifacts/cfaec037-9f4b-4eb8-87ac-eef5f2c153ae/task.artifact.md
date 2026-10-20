@@ -1,7 +1,6 @@
-# Task List - PayPal JavaScript SDK v6 & REST API Integration
+# Task List - Social Media Hub, Blogger & 10-Minute Renewal Banner
 
-- [x] Add `PayPalBridge` REST API methods in `MainActivity.java` `[x]`
-- [x] Add PayPal JavaScript SDK v6 script to `index.html` `[x]`
-- [x] Add dual payment method tabs (M-Pesa KES vs PayPal USD) in `openVip()` `[x]`
-- [x] Connect `createInstance`, `createOrder`, and `captureOrder` for instant USD payment capture and VIP activation `[x]`
-- [x] Verify build via gradle `app:assembleDebug` `[x]`
+- [ ] Whitelist WhatsApp, PayPal, Facebook Page/Group, and Blogger in `MainActivity.java` `[ ]`
+- [ ] Add 10-minute VIP renewal banner with ✕ dismiss button and `Renew VIP ⚡` button `[ ]`
+- [ ] Add Facebook Page, Facebook Group, and Blogger links to Community Hub in `index.html` `[ ]`
+- [ ] Verify build via gradle `app:assembleDebug` `[ ]`
