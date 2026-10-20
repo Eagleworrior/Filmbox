@@ -221,16 +221,26 @@ async function home() {
   const m = $("#main");
   m.innerHTML = `<div class="hero" id="hero"></div><h2>Trending movies</h2><div class="row" id="h1"></div>
     <h2>Trending series</h2><div class="row" id="h2"></div>
-    <div class="hd"><h2>Football today</h2><a onclick="go('football')">All matches</a></div><div id="h3"><p class="msg">Loading…</p></div>
+    <div class="hd"><h2>Football today</h2><a onclick="go('football')">All matches</a></div><div id="h3"><p class="msg">Loading matches…</p></div>
     <div class="hd"><h2>Top rated movies</h2><a onclick="go('movie')">Browse all movies</a></div><div class="row" id="h4"></div>
     <div class="hd"><h2>Top rated series</h2><a onclick="go('tv')">Browse all series</a></div><div class="row" id="h5"></div>`;
-  const fill = (id, p, type) => p.then(d => $(id).innerHTML = d.results.map(i => card(i, type)).join("")).catch(e => $(id).innerHTML = `<p class="msg">${esc(e.message)}</p>`);
+  const fill = (id, p, type) => p.then(d => {
+    if (d && d.results && d.results.length > 0) {
+      $(id).innerHTML = d.results.map(i => card(i, type)).join("");
+    }
+  }).catch(e => {
+    $(id).innerHTML = `<p class="msg">Loading latest titles…</p>`;
+  });
   tmdb("/trending/movie/week").then(d => {
-    $("#h1").innerHTML = d.results.map(i => card(i, "movie")).join("");
-    const t = d.results[0];
-    if (t.backdrop_path) $("#hero").style.backgroundImage = `linear-gradient(90deg,#0b0b1af0 25%,transparent),url(${IMG}w780${t.backdrop_path})`;
-    $("#hero").innerHTML = `<h1>${esc(t.title)}</h1><p>${esc((t.overview || "").slice(0, 170))}…</p><button class="play" onclick="quickPlay(${t.id},'movie','${esc(t.title)}')">▶ Watch now</button>`;
-  }).catch(e => $("#h1").innerHTML = `<p class="msg">${esc(e.message)}</p>`);
+    if (d && d.results && d.results.length > 0) {
+      $("#h1").innerHTML = d.results.map(i => card(i, "movie")).join("");
+      const t = d.results[0];
+      if (t.backdrop_path) $("#hero").style.backgroundImage = `linear-gradient(90deg,#0b0b1af0 25%,transparent),url(${IMG}w780${t.backdrop_path})`;
+      $("#hero").innerHTML = `<h1>${esc(t.title)}</h1><p>${esc((t.overview || "").slice(0, 170))}…</p><button class="play" onclick="quickPlay(${t.id},'movie','${esc(t.title)}')">▶ Watch now</button>`;
+    }
+  }).catch(e => {
+    $("#h1").innerHTML = `<p class="msg">Discovering blockbusters…</p>`;
+  });
   fill("#h2", tmdb("/trending/tv/week"), "tv");
   fill("#h4", tmdb("/movie/top_rated"), "movie");
   fill("#h5", tmdb("/tv/top_rated"), "tv");
@@ -1159,6 +1169,15 @@ function pickPlan(id) {
   switchPayTab(currentPayMethod);
 }
 
+let paypalPollTimer = null;
+
+function stopPayPalPolling() {
+  if (paypalPollTimer) {
+    clearInterval(paypalPollTimer);
+    paypalPollTimer = null;
+  }
+}
+
 async function payWithPayPal() {
   const usdAmount = PLAN_PRICES_USD[PLAN] || "1.90";
   const st = $("#pst");
@@ -1181,11 +1200,26 @@ async function payWithPayPal() {
 
       st.innerHTML = `<div style="background:#151530;border:1px solid #2563eb;padding:16px;border-radius:14px;margin:10px auto;max-width:400px;text-align:center">
         <p style="color:#38bdf8;font-weight:bold;margin-bottom:8px">PayPal Order Created (#${esc(orderId)})!</p>
-        <p style="color:#f5f3ff;font-size:13px;margin-bottom:12px">Click below to approve the $${usdAmount} USD payment on PayPal:</p>
-        <a href="${approveUrl}" target="_blank" onclick="window.open('${approveUrl}', '_blank'); return false;" style="display:inline-block;padding:12px 24px;background:#2563eb;color:#fff;border-radius:20px;font-weight:bold;text-decoration:none;margin-bottom:10px">1. Approve Payment on PayPal ↗</a>
+        <p style="color:#f5f3ff;font-size:13px;margin-bottom:12px">Approve the $${usdAmount} USD payment on PayPal:</p>
+        <a href="${approveUrl}" target="_blank" onclick="window.open('${approveUrl}', '_blank'); return false;" style="display:inline-block;padding:12px 24px;background:#2563eb;color:#fff;border-radius:20px;font-weight:bold;text-decoration:none;margin-bottom:10px">Approve Payment on PayPal ↗</a>
         <br>
-        <button class="vip" onclick="capturePayPalOrder('${orderId}')" style="background:#10b981;color:#000;margin-top:6px;font-weight:bold">2. Complete & Activate VIP ⚡</button>
+        <button class="vip" onclick="capturePayPalOrder('${orderId}')" style="background:#10b981;color:#000;margin-top:6px;font-weight:bold">Complete & Activate VIP ⚡</button>
       </div>`;
+
+      // Auto-open PayPal Checkout window
+      try {
+        window.open(approveUrl, '_blank');
+      } catch(e) {}
+
+      // Auto-poll PayPal Order status every 3 seconds
+      stopPayPalPolling();
+      let attempts = 0;
+      paypalPollTimer = setInterval(() => {
+        attempts++;
+        capturePayPalOrder(orderId, true);
+        if (attempts >= 40) stopPayPalPolling();
+      }, 3000);
+
     } catch(e) {
       st.innerHTML = `<p style="color:#ff4d4d">PayPal processing error.</p>`;
     }
@@ -1202,14 +1236,17 @@ async function payWithPayPal() {
   }
 }
 
-function capturePayPalOrder(orderId) {
+function capturePayPalOrder(orderId, isSilent) {
   const st = $("#pst");
-  st.innerHTML = `<div class="loader-ring" style="width:30px;height:30px;margin:10px auto"></div><p style="color:#00ff88;font-weight:bold">Verifying payment with PayPal...</p>`;
+  if (!isSilent && st) {
+    st.innerHTML = `<div class="loader-ring" style="width:30px;height:30px;margin:10px auto"></div><p style="color:#00ff88;font-weight:bold">Verifying payment with PayPal...</p>`;
+  }
 
   const handleOrderCaptured = (resStr) => {
     try {
       const res = typeof resStr === 'string' ? JSON.parse(resStr) : resStr;
       if (res.status === "COMPLETED" || res.id) {
+        stopPayPalPolling();
         const dur = PLAN_DURATIONS_MS[PLAN] || (7 * 24 * 3600 * 1000);
         const expiry = Date.now() + dur;
         localStorage.setItem("mb_vip_expiry", String(expiry));
@@ -1223,7 +1260,7 @@ function capturePayPalOrder(orderId) {
             <button class="play" onclick="closeM()" style="background:var(--pitch);color:#000">Start Watching Now ▶</button>
           </div>`;
         }
-      } else {
+      } else if (!isSilent && st) {
         const errMsg = res.error || res.errorMessage || (res.details && res.details[0] ? res.details[0].description : "Payment approval pending.");
         st.innerHTML = `<div style="background:#151530;border:1px solid #ff4d4d;padding:12px;border-radius:12px;margin:10px auto;max-width:400px">
           <p style="color:#ff4d4d;font-weight:bold;margin-bottom:6px">PayPal Capture Notice:</p>
@@ -1232,7 +1269,7 @@ function capturePayPalOrder(orderId) {
         </div>`;
       }
     } catch(e) {
-      st.innerHTML = `<p style="color:#ff4d4d">PayPal capture error.</p>`;
+      if (!isSilent && st) st.innerHTML = `<p style="color:#ff4d4d">PayPal capture error.</p>`;
     }
   };
 
