@@ -1,7 +1,9 @@
 package com.filmbox;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.net.Uri;
 import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
@@ -113,6 +115,28 @@ public class MainActivity extends AppCompatActivity {
                             android.net.Uri uri = request.getUrl();
                             String host = uri.getHost();
                             String url = uri.toString();
+
+                            if (url.contains("whatsapp.com") || url.startsWith("whatsapp://")) {
+                                try {
+                                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                                    view.getContext().startActivity(intent);
+                                    return true;
+                                } catch (Exception e) {
+                                    Toast.makeText(view.getContext(), "WhatsApp app not found", Toast.LENGTH_SHORT).show();
+                                    return true;
+                                }
+                            }
+
+                            if (url.contains("paypal.com") || url.contains("paypal.me")) {
+                                try {
+                                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                                    view.getContext().startActivity(intent);
+                                    return true;
+                                } catch (Exception e) {
+                                    return false;
+                                }
+                            }
+
                             if (url.startsWith("file:///") || url.contains("android_asset") || isAllowed(host)) {
                                 return false;
                             }
