@@ -1095,6 +1095,22 @@ function switchPayTab(method) {
   });
 }
 
+function getSavedPhone() {
+  try {
+    return localStorage.getItem("mb_user_phone") || localStorage.getItem("user_phone") || "";
+  } catch(e) {
+    return "";
+  }
+}
+
+function saveUserPhone(ph) {
+  try {
+    if (ph && ph.length >= 9) {
+      localStorage.setItem("mb_user_phone", ph);
+    }
+  } catch(e) {}
+}
+
 async function openVip(msg) {
   const md = $("#modal"); md.hidden = false; md.style.display = "flex"; md.style.pointerEvents = "auto"; PLAN = "p4";
   const savedPhone = getSavedPhone();
