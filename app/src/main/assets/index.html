@@ -1115,65 +1115,79 @@ async function openVip(msg) {
   const md = $("#modal"); md.hidden = false; md.style.display = "flex"; md.style.pointerEvents = "auto"; PLAN = "p4";
   const savedPhone = getSavedPhone();
   md.innerHTML = `<div class="sheet" style="padding-bottom:30px"><button class="x" onclick="closeM()" aria-label="Back">‹</button>
-  <h2 style="padding:40px 20px 0;margin:0">★ Movie Box VIP Passes</h2>
-  <p class="msg" style="padding:6px 20px">${esc(msg || "Choose a VIP plan and payment method to unlock unlimited streaming.")}</p>
+  <h2 style="padding:36px 20px 0;margin:0;background:linear-gradient(90deg,#ffc23c,#ff4d8d,#38bdf8);-webkit-background-clip:text;color:transparent;font-size:24px;font-weight:900">★ Movie Box VIP Passes</h2>
+  <p class="msg" style="padding:6px 20px 12px;color:#a78bfa;font-weight:700">${esc(msg || "Choose a VIP plan and payment method to unlock unlimited streaming.")}</p>
 
   <div style="display:flex;gap:10px;padding:0 20px;margin-bottom:14px">
     <button id="tabMpesa" onclick="switchPayTab('mpesa')" style="flex:1;padding:12px;border-radius:12px;border:1px solid var(--accent);background:var(--accent);color:#000;font-weight:bold;cursor:pointer">M-Pesa ⚡ (KES)</button>
     <button id="tabPaypal" onclick="switchPayTab('paypal')" style="flex:1;padding:12px;border-radius:12px;border:1px solid #2563eb;background:#151530;color:#fff;font-weight:bold;cursor:pointer">PayPal / Card 💳 (USD $)</button>
   </div>
 
-  <div id="mpesaPayRow" class="payrow" style="padding:16px 20px 20px;background:#151530;border:1px solid #2a2a55;border-radius:16px;margin:0 20px 16px;box-shadow:0 8px 20px rgba(0,0,0,0.5)">
+  <div id="mpesaPayRow" class="payrow" style="padding:16px 20px 20px;background:#151530;border:1px solid #2a2a55;border-radius:16px;margin:0 20px 12px;box-shadow:0 8px 20px rgba(0,0,0,0.5)">
     <label style="display:block;width:100%;font-size:12px;color:var(--gold);font-weight:700;margin-bottom:6px">Enter M-Pesa Registered Number:</label>
     <input id="ph" type="tel" inputmode="tel" value="${esc(savedPhone)}" placeholder="0712345678 or 254712345678" style="width:100%;padding:12px 16px;font-size:15px;margin-bottom:12px">
     <button class="vip" onclick="pay()" style="width:100%;padding:14px;font-size:16px;font-weight:900;letter-spacing:0.05em">PAY WITH M-PESA ⚡</button>
   </div>
 
-  <div id="paypalPayRow" class="payrow" style="display:none;padding:16px 20px 20px;background:#151530;border:1px solid #2563eb;border-radius:16px;margin:0 20px 16px;box-shadow:0 8px 20px rgba(0,0,0,0.5);text-align:center">
+  <div id="paypalPayRow" class="payrow" style="display:none;padding:16px 20px 20px;background:#151530;border:1px solid #2563eb;border-radius:16px;margin:0 20px 12px;box-shadow:0 8px 20px rgba(0,0,0,0.5);text-align:center">
     <label style="display:block;width:100%;font-size:12px;color:#60a5fa;font-weight:700;margin-bottom:6px">Instant PayPal / Credit / Debit Card Checkout ($USD):</label>
     <button class="vip" onclick="payWithPayPal()" style="width:100%;padding:14px;font-size:16px;font-weight:900;background:#2563eb;color:#fff;letter-spacing:0.05em">PAY WITH PAYPAL / CARD 💳</button>
   </div>
 
+  <p class="msg" id="pst" style="padding:4px 20px 12px;margin:0;text-align:center"></p>
+
   <div class="plans" id="plans">
-    <div class="plan" data-id="p1" onclick="pickPlan('p1')"><small>Trial Pass</small><b>KES 10</b><small>1 Hour Full Access</small></div>
-    <div class="plan" data-id="p2" onclick="pickPlan('p2')"><small>Daily Pass</small><b>KES 50</b><small>24 Hours Full Access</small></div>
-    <div class="plan" data-id="p3" onclick="pickPlan('p3')"><small>Weekend Pass</small><b>KES 120</b><small>3 Days Full Access</small></div>
-    <div class="plan on" data-id="p4" onclick="pickPlan('p4')"><small>Weekly Master</small><b>KES 250</b><small>7 Days Full Access ⭐</small></div>
-    <div class="plan" data-id="p5" onclick="pickPlan('p5')"><small>Express Pass</small><b>KES 350</b><small>10 Days Full Access</small></div>
-    <div class="plan" data-id="p6" onclick="pickPlan('p6')"><small>Fortnight VIP</small><b>KES 450</b><small>14 Days Full Access</small></div>
-    <div class="plan" data-id="p7" onclick="pickPlan('p7')"><small>Deluxe Pass</small><b>KES 600</b><small>21 Days Full Access</small></div>
-    <div class="plan" data-id="p8" onclick="pickPlan('p8')"><small>Monthly Pass</small><b>KES 750</b><small>30 Days Full Access</small></div>
-    <div class="plan" data-id="p9" onclick="pickPlan('p9')"><small>Double Month</small><b>KES 1300</b><small>60 Days Full Access</small></div>
-    <div class="plan" data-id="p10" onclick="pickPlan('p10')"><small>Quarterly Pass</small><b>KES 1800</b><small>90 Days Full Access</small></div>
-    <div class="plan" data-id="p11" onclick="pickPlan('p11')"><small>Half-Year Gold</small><b>KES 3200</b><small>180 Days Full Access</small></div>
-    <div class="plan" data-id="p12" onclick="pickPlan('p12')"><small>Annual Diamond</small><b>KES 5500</b><small>365 Days Full Access</small></div>
-    <div class="plan" data-id="p13" onclick="pickPlan('p13')"><small>Lifetime VIP</small><b>KES 9999</b><small>Permanent Full Access</small></div>
-  </div>
-  <p class="msg" id="pst" style="padding:10px 20px 20px"></p></div>`;
+    <div class="plan" data-id="p1" onclick="pickPlan('p1')"><small style="color:#38bdf8;font-weight:800">Trial Pass</small><b style="color:#fbbf24;font-size:20px;font-weight:900">KES 10</b><small style="color:#34d399;font-weight:700">1 Hour Full Access</small></div>
+    <div class="plan" data-id="p2" onclick="pickPlan('p2')"><small style="color:#38bdf8;font-weight:800">Daily Pass</small><b style="color:#fbbf24;font-size:20px;font-weight:900">KES 50</b><small style="color:#34d399;font-weight:700">24 Hours Full Access</small></div>
+    <div class="plan" data-id="p3" onclick="pickPlan('p3')"><small style="color:#38bdf8;font-weight:800">Weekend Pass</small><b style="color:#fbbf24;font-size:20px;font-weight:900">KES 120</b><small style="color:#34d399;font-weight:700">3 Days Full Access</small></div>
+    <div class="plan on" data-id="p4" onclick="pickPlan('p4')"><small style="color:#38bdf8;font-weight:800">Weekly Master</small><b style="color:#fbbf24;font-size:20px;font-weight:900">KES 250</b><small style="color:#34d399;font-weight:700">7 Days Full Access ⭐</small></div>
+    <div class="plan" data-id="p5" onclick="pickPlan('p5')"><small style="color:#38bdf8;font-weight:800">Express Pass</small><b style="color:#fbbf24;font-size:20px;font-weight:900">KES 350</b><small style="color:#34d399;font-weight:700">10 Days Full Access</small></div>
+    <div class="plan" data-id="p6" onclick="pickPlan('p6')"><small style="color:#38bdf8;font-weight:800">Fortnight VIP</small><b style="color:#fbbf24;font-size:20px;font-weight:900">KES 450</b><small style="color:#34d399;font-weight:700">14 Days Full Access</small></div>
+    <div class="plan" data-id="p7" onclick="pickPlan('p7')"><small style="color:#38bdf8;font-weight:800">Deluxe Pass</small><b style="color:#fbbf24;font-size:20px;font-weight:900">KES 600</b><small style="color:#34d399;font-weight:700">21 Days Full Access</small></div>
+    <div class="plan" data-id="p8" onclick="pickPlan('p8')"><small style="color:#38bdf8;font-weight:800">Monthly Pass</small><b style="color:#fbbf24;font-size:20px;font-weight:900">KES 750</b><small style="color:#34d399;font-weight:700">30 Days Full Access</small></div>
+    <div class="plan" data-id="p9" onclick="pickPlan('p9')"><small style="color:#38bdf8;font-weight:800">Double Month</small><b style="color:#fbbf24;font-size:20px;font-weight:900">KES 1300</b><small style="color:#34d399;font-weight:700">60 Days Full Access</small></div>
+    <div class="plan" data-id="p10" onclick="pickPlan('p10')"><small style="color:#38bdf8;font-weight:800">Quarterly Pass</small><b style="color:#fbbf24;font-size:20px;font-weight:900">KES 1800</b><small style="color:#34d399;font-weight:700">90 Days Full Access</small></div>
+    <div class="plan" data-id="p11" onclick="pickPlan('p11')"><small style="color:#38bdf8;font-weight:800">Half-Year Gold</small><b style="color:#fbbf24;font-size:20px;font-weight:900">KES 3200</b><small style="color:#34d399;font-weight:700">180 Days Full Access</small></div>
+    <div class="plan" data-id="p12" onclick="pickPlan('p12')"><small style="color:#38bdf8;font-weight:800">Annual Diamond</small><b style="color:#fbbf24;font-size:20px;font-weight:900">KES 5500</b><small style="color:#34d399;font-weight:700">365 Days Full Access</small></div>
+    <div class="plan" data-id="p13" onclick="pickPlan('p13')"><small style="color:#38bdf8;font-weight:800">Lifetime VIP</small><b style="color:#fbbf24;font-size:20px;font-weight:900">KES 9999</b><small style="color:#34d399;font-weight:700">Permanent Full Access</small></div>
+  </div></div>`;
 }
 
-function pickPlan(id) { PLAN = id; document.querySelectorAll(".plan").forEach(p => p.classList.toggle("on", p.dataset.id === id)) }
+function pickPlan(id) {
+  PLAN = id;
+  document.querySelectorAll(".plan").forEach(p => p.classList.toggle("on", p.dataset.id === id));
+  switchPayTab(currentPayMethod);
+}
 
 async function payWithPayPal() {
-  const usdAmount = PLAN_PRICES_USD[PLAN] || "10.00";
+  const usdAmount = PLAN_PRICES_USD[PLAN] || "1.90";
   const st = $("#pst");
-  st.innerHTML = `<div class="loader-ring" style="width:30px;height:30px;margin:10px auto"></div><p>Connecting to PayPal REST API ($${usdAmount})...</p>`;
+  st.innerHTML = `<div class="loader-ring" style="width:30px;height:30px;margin:10px auto"></div><p style="color:#38bdf8;font-weight:bold">Connecting to PayPal REST API ($${usdAmount} USD)...</p>`;
 
   const handleOrderCreated = (resStr) => {
     try {
       const res = typeof resStr === 'string' ? JSON.parse(resStr) : resStr;
       const orderId = res.id;
       if (!orderId) {
-        st.textContent = "PayPal Order Error: " + (res.error || "Could not initialize PayPal Order");
+        st.innerHTML = `<p style="color:#ff4d4d;font-weight:bold">PayPal Error: ${esc(res.error || "Could not initialize Order")}</p>`;
         return;
       }
-      st.innerHTML = `<p style="color:#00ff88;font-weight:bold">PayPal Order Created (#${orderId})!</p><p>Capturing USD Payment ($${usdAmount})...</p>`;
 
-      setTimeout(() => {
-        capturePayPalOrder(orderId);
-      }, 1000);
+      let approveUrl = `https://www.paypal.com/checkoutnow?token=${orderId}`;
+      if (res.links && Array.isArray(res.links)) {
+        const linkObj = res.links.find(l => l.rel === "approve" || l.rel === "payer-action");
+        if (linkObj && linkObj.href) approveUrl = linkObj.href;
+      }
+
+      st.innerHTML = `<div style="background:#151530;border:1px solid #2563eb;padding:16px;border-radius:14px;margin:10px auto;max-width:400px;text-align:center">
+        <p style="color:#38bdf8;font-weight:bold;margin-bottom:8px">PayPal Order Created (#${esc(orderId)})!</p>
+        <p style="color:#f5f3ff;font-size:13px;margin-bottom:12px">Click below to approve the $${usdAmount} USD payment on PayPal:</p>
+        <a href="${approveUrl}" target="_blank" onclick="window.open('${approveUrl}', '_blank'); return false;" style="display:inline-block;padding:12px 24px;background:#2563eb;color:#fff;border-radius:20px;font-weight:bold;text-decoration:none;margin-bottom:10px">1. Approve Payment on PayPal ↗</a>
+        <br>
+        <button class="vip" onclick="capturePayPalOrder('${orderId}')" style="background:#10b981;color:#000;margin-top:6px;font-weight:bold">2. Complete & Activate VIP ⚡</button>
+      </div>`;
     } catch(e) {
-      st.textContent = "PayPal processing error.";
+      st.innerHTML = `<p style="color:#ff4d4d">PayPal processing error.</p>`;
     }
   };
 
@@ -1184,13 +1198,13 @@ async function payWithPayPal() {
   } else {
     setTimeout(() => {
       onPayPalOrderCreated(JSON.stringify({ id: "PAYID_MOCK_" + Date.now(), status: "CREATED" }));
-    }, 1200);
+    }, 1000);
   }
 }
 
 function capturePayPalOrder(orderId) {
   const st = $("#pst");
-  st.innerHTML = `<div class="loader-ring" style="width:30px;height:30px;margin:10px auto"></div><p>Capturing PayPal Payment ($${PLAN_PRICES_USD[PLAN]})...</p>`;
+  st.innerHTML = `<div class="loader-ring" style="width:30px;height:30px;margin:10px auto"></div><p style="color:#00ff88;font-weight:bold">Verifying payment with PayPal...</p>`;
 
   const handleOrderCaptured = (resStr) => {
     try {
@@ -1205,15 +1219,20 @@ function capturePayPalOrder(orderId) {
           md.innerHTML = `<div class="sheet" style="padding:40px 20px;text-align:center">
             <div style="font-size:48px;margin-bottom:12px">🎉</div>
             <h2 style="color:#00ff88;margin-bottom:8px">PayPal Payment Confirmed!</h2>
-            <p style="color:var(--text);font-size:15px;margin-bottom:20px">Your VIP Pass ($${PLAN_PRICES_USD[PLAN]}) has been successfully activated. Enjoy unlimited streaming!</p>
+            <p style="color:var(--text);font-size:15px;margin-bottom:20px">Your VIP Pass ($${PLAN_PRICES_USD[PLAN]} USD) has been successfully activated. Enjoy unlimited streaming!</p>
             <button class="play" onclick="closeM()" style="background:var(--pitch);color:#000">Start Watching Now ▶</button>
           </div>`;
         }
       } else {
-        st.textContent = "PayPal capture failed: " + (res.error || "Payment not completed.");
+        const errMsg = res.error || res.errorMessage || (res.details && res.details[0] ? res.details[0].description : "Payment approval pending.");
+        st.innerHTML = `<div style="background:#151530;border:1px solid #ff4d4d;padding:12px;border-radius:12px;margin:10px auto;max-width:400px">
+          <p style="color:#ff4d4d;font-weight:bold;margin-bottom:6px">PayPal Capture Notice:</p>
+          <p style="color:#f5f3ff;font-size:13px;margin-bottom:8px">${esc(errMsg)}</p>
+          <button class="vip" onclick="payWithPayPal()" style="background:var(--accent);color:#000;font-size:12px">Retry PayPal Checkout 🔄</button>
+        </div>`;
       }
     } catch(e) {
-      st.textContent = "PayPal capture processing error.";
+      st.innerHTML = `<p style="color:#ff4d4d">PayPal capture error.</p>`;
     }
   };
 
@@ -1224,7 +1243,7 @@ function capturePayPalOrder(orderId) {
   } else {
     setTimeout(() => {
       onPayPalOrderCaptured(JSON.stringify({ id: orderId, status: "COMPLETED" }));
-    }, 1500);
+    }, 1200);
   }
 }
 

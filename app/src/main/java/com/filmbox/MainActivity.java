@@ -659,12 +659,25 @@ public class MainActivity extends AppCompatActivity {
                     // 2. Capture Order
                     URL captureUrl = new URL("https://api-m.paypal.com/v2/checkout/orders/" + orderId + "/capture");
                     HttpURLConnection captureConn = (HttpURLConnection) captureUrl.openConnection();
+                    captureConn.setConnectTimeout(5000);
+                    captureConn.setReadTimeout(5000);
                     captureConn.setRequestMethod("POST");
                     captureConn.setRequestProperty("Authorization", "Bearer " + accessToken);
                     captureConn.setRequestProperty("Content-Type", "application/json");
                     captureConn.setDoOutput(true);
 
-                    Scanner captureScanner = new Scanner(captureConn.getInputStream());
+                    try (OutputStream os = captureConn.getOutputStream()) {
+                        byte[] input = "{}".getBytes(StandardCharsets.UTF_8);
+                        os.write(input, 0, input.length);
+                    }
+
+                    int captureCode = captureConn.getResponseCode();
+                    Scanner captureScanner;
+                    if (captureCode >= 200 && captureCode < 300) {
+                        captureScanner = new Scanner(captureConn.getInputStream());
+                    } else {
+                        captureScanner = new Scanner(captureConn.getErrorStream() != null ? captureConn.getErrorStream() : captureConn.getInputStream());
+                    }
                     StringBuilder captureRes = new StringBuilder();
                     while (captureScanner.hasNext()) captureRes.append(captureScanner.nextLine());
                     captureScanner.close();
