@@ -454,29 +454,25 @@ function getDirectStreamUrl(id, title) {
 }
 
 const LOCAL_MASTER_MOVIES = [
-  { id: 299536, media_type: "movie", title: "Avengers: Infinity War", release_date: "2018", vote_average: 8.3, poster_path: "/7WsyChLLEz331L3S8311.jpg", overview: "The Avengers and their allies must be willing to sacrifice all in an attempt to defeat the powerful Thanos." },
-  { id: 299534, media_type: "movie", title: "Avengers: Endgame", release_date: "2019", vote_average: 8.3, poster_path: "/or06P1S23121.jpg", overview: "After the devastating events of Infinity War, the universe is in ruins." },
-  { id: 157336, media_type: "movie", title: "Interstellar", release_date: "2014", vote_average: 8.4, poster_path: "/gEU2121.jpg", overview: "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival." },
-  { id: 27205, media_type: "movie", title: "Inception", release_date: "2010", vote_average: 8.4, poster_path: "/oYu2121.jpg", overview: "A thief who steals corporate secrets through the use of dream-sharing technology." },
-  { id: 155, media_type: "movie", title: "The Dark Knight", release_date: "2008", vote_average: 8.5, poster_path: "/qJ2121.jpg", overview: "When the menace known as the Joker wreaks havoc and chaos on the people of Gotham." },
-  { id: 671, media_type: "movie", title: "Harry Potter", release_date: "2001", vote_average: 7.9, poster_path: "/wu2121.jpg", overview: "An orphaned boy enrolls in a school of wizardry, where he learns the truth about himself." },
-  { id: 550, media_type: "movie", title: "Fight Club", release_date: "1999", vote_average: 8.4, poster_path: "/pB82121.jpg", overview: "An insomniac office worker and a devil-may-care soap maker form an underground fight club." },
-  { id: 603, media_type: "movie", title: "The Matrix", release_date: "1999", vote_average: 8.2, poster_path: "/f892121.jpg", overview: "When a beautiful stranger leads computer hacker Neo to a forbidding underworld." }
+  { id: 299536, media_type: "movie", title: "Avengers: Infinity War", release_date: "2018", vote_average: 8.3, poster_path: "https://image.tmdb.org/t/p/w342/7WsyChLLEz331L3S8311.jpg", overview: "The Avengers and their allies must be willing to sacrifice all in an attempt to defeat the powerful Thanos." },
+  { id: 299534, media_type: "movie", title: "Avengers: Endgame", release_date: "2019", vote_average: 8.3, poster_path: "https://image.tmdb.org/t/p/w342/or06P1S23121.jpg", overview: "After the devastating events of Infinity War, the universe is in ruins." },
+  { id: 157336, media_type: "movie", title: "Interstellar", release_date: "2014", vote_average: 8.4, poster_path: "https://image.tmdb.org/t/p/w342/gEU2121.jpg", overview: "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival." },
+  { id: 27205, media_type: "movie", title: "Inception", release_date: "2010", vote_average: 8.4, poster_path: "https://image.tmdb.org/t/p/w342/oYu2121.jpg", overview: "A thief who steals corporate secrets through the use of dream-sharing technology." },
+  { id: 155, media_type: "movie", title: "The Dark Knight", release_date: "2008", vote_average: 8.5, poster_path: "https://image.tmdb.org/t/p/w342/qJ2121.jpg", overview: "When the menace known as the Joker wreaks havoc and chaos on the people of Gotham." },
+  { id: 671, media_type: "movie", title: "Harry Potter", release_date: "2001", vote_average: 7.9, poster_path: "https://image.tmdb.org/t/p/w342/wu2121.jpg", overview: "An orphaned boy enrolls in a school of wizardry, where he learns the truth about himself." }
 ];
 
 const LOCAL_MASTER_SERIES = [
-  { id: 1399, media_type: "tv", name: "Game of Thrones", first_air_date: "2011", vote_average: 8.4, poster_path: "/u3b2121.jpg", overview: "Nine noble families fight for control over the lands of Westeros." },
-  { id: 66732, media_type: "tv", name: "Stranger Things", first_air_date: "2016", vote_average: 8.6, poster_path: "/49W2121.jpg", overview: "When a young boy vanishes, a small town uncovers a mystery involving secret experiments." },
-  { id: 119051, media_type: "tv", name: "Wednesday", first_air_date: "2022", vote_average: 8.5, poster_path: "/9PF2121.jpg", overview: "A sleuthing, supernaturally infused mystery charting Wednesday Addams' years as a student." },
-  { id: 71712, media_type: "tv", name: "The Good Doctor", first_air_date: "2017", vote_average: 8.5, poster_path: "/m2121.jpg", overview: "Shaun Murphy, a young surgeon with autism and savant syndrome." },
-  { id: 1402, media_type: "tv", name: "The Walking Dead", first_air_date: "2010", vote_average: 8.1, poster_path: "/xf2121.jpg", overview: "Sheriff Deputy Rick Grimes wakes up from a coma to learn the world is in ruins." }
+  { id: 1399, media_type: "tv", name: "Game of Thrones", first_air_date: "2011", vote_average: 8.4, poster_path: "https://image.tmdb.org/t/p/w342/u3b2121.jpg", overview: "Nine noble families fight for control over the lands of Westeros." },
+  { id: 66732, media_type: "tv", name: "Stranger Things", first_air_date: "2016", vote_average: 8.6, poster_path: "https://image.tmdb.org/t/p/w342/49W2121.jpg", overview: "When a young boy vanishes, a small town uncovers a mystery involving secret experiments." },
+  { id: 119051, media_type: "tv", name: "Wednesday", first_air_date: "2022", vote_average: 8.5, poster_path: "https://image.tmdb.org/t/p/w342/9PF2121.jpg", overview: "A sleuthing, supernaturally infused mystery charting Wednesday Addams' years as a student." }
 ];
 
 const IMG = "https://image.tmdb.org/t/p/";
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const poster = (p, w = "w342") => {
-  if (!p) return "https://via.placeholder.com/500x750?text=Film+Box+Cinema";
+  if (!p) return "https://image.tmdb.org/t/p/w342/or06P1S23121.jpg";
   if (p.startsWith("http")) return p;
   return IMG + w + p;
 };
@@ -510,7 +506,10 @@ function go(v) {
   } else {
     S.view = v;
   }
-  S.page = 1; S.genre = ""; S.sort = "popularity.desc"; S.query = ""; $("#q").value = "";
+  S.page = 1; S.genre = ""; S.sort = "popularity.desc"; S.query = "";
+  const searchInput = $("#q");
+  if (searchInput) searchInput.value = "";
+
   document.querySelectorAll(".bottom-nav button").forEach(b => {
     const isLib = (v === "library" || v === "news" || v === "social" || v === "football");
     b.classList.toggle("on", b.dataset.v === v || (isLib && b.dataset.v === "library"));
