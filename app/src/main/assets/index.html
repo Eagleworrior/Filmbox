@@ -517,27 +517,27 @@ function go(v) {
   render();
 }
 
-let librarySubTab = "news";
+let librarySubTab = "football";
 
 function libraryView() {
   const m = $("#main");
   m.innerHTML = `<div class="bar" style="justify-content:center;margin-bottom:20px;gap:12px">
+    <button class="chip ${librarySubTab === 'football' ? 'on' : ''}" onclick="librarySubTab='football';libraryView()">⚽ Live Sports</button>
     <button class="chip ${librarySubTab === 'news' ? 'on' : ''}" onclick="librarySubTab='news';libraryView()">📰 News</button>
     <button class="chip ${librarySubTab === 'social' ? 'on' : ''}" onclick="librarySubTab='social';libraryView()">❤️ Community</button>
-    <button class="chip ${librarySubTab === 'football' ? 'on' : ''}" onclick="librarySubTab='football';libraryView()">⚽ Live Sports</button>
   </div><div id="libContent"></div>`;
 
   const sub = $("#libContent");
   if (!sub) return;
-  if (librarySubTab === "news") {
+  if (librarySubTab === "football") {
+    sub.innerHTML = `<div id="fb"></div><div id="sr"></div>`;
+    loadMatches("#fb", S); loadSrc();
+  } else if (librarySubTab === "news") {
     sub.innerHTML = `<div id="newsGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;margin-top:16px"></div><p class="msg" id="newsInfo">Loading latest news…</p>`;
     newsNextPage = null;
     fetchNews(false);
   } else if (librarySubTab === "social") {
     sub.innerHTML = socialCommunityHtml();
-  } else if (librarySubTab === "football") {
-    sub.innerHTML = `<div id="fb"></div><div id="sr"></div>`;
-    loadMatches("#fb", S); loadSrc();
   }
 }
 
@@ -566,6 +566,21 @@ function socialCommunityHtml() {
       <p class="desc-blue">Hourly movie drops, HD posters, trailers, and instant download links on your feed!</p>
       <a href="https://www.facebook.com/profile.php?id=61595278122419" target="_blank" rel="noopener noreferrer" class="action-btn btn-fb-page">👍 FOLLOW OUR PAGE</a>
     </div>
+
+    <div class="card-item fb-group-card">
+      <div class="card-header">
+        <div class="icon-circle fb-group-icon-bg" style="background:linear-gradient(135deg,#0084ff,#004499)">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" class="brand-svg"><path fill="#ffffff" d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 480c0-61.9 50.1-112 112-112h224c61.9 0 112 50.1 112 112c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM464 96a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm-8 272c21.2 0 41 4.2 59 11.7c28.7 12 53.6 30.8 70.8 54.8c9 12.6 14.2 28.1 14.2 43.5c0 17.7-14.3 32-32 32H513.3c3-10.1 4.7-20.9 4.7-32c0-37.1-12.7-71.3-34-98c8-1.3 16.2-2 24.5-2z"/></svg>
+        </div>
+        <div class="card-title-group">
+          <h3 class="title-group" style="color:#38bdf8">Movie Fan Community</h3>
+          <span class="card-tag tag-cyan">Discussion</span>
+        </div>
+      </div>
+      <p class="desc-cyan">Request favorite movies, share reviews, discuss plot twists, and vote in polls!</p>
+      <a href="https://www.facebook.com/share/g/19zsQAbGu7/" target="_blank" rel="noopener noreferrer" class="action-btn btn-fb-group">👥 JOIN FACEBOOK GROUP</a>
+    </div>
+
     <div class="card-item wa-card">
       <div class="card-header">
         <div class="icon-circle wa-icon-bg">
@@ -578,6 +593,20 @@ function socialCommunityHtml() {
       </div>
       <p class="desc-green">Get instant release alerts, direct APK download links, and live chat support!</p>
       <a href="https://chat.whatsapp.com/L02vNHjowvW83MLbJVqIwC?s=cl&p=a&mlu=4&ilr=4" target="_blank" rel="noopener noreferrer" class="action-btn btn-wa">💬 JOIN WHATSAPP GROUP</a>
+    </div>
+
+    <div class="card-item blog-card">
+      <div class="card-header">
+        <div class="icon-circle blog-icon-bg" style="background:linear-gradient(135deg,#f57c00,#e65100)">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="brand-svg"><path fill="#ffffff" d="M384 32H64C28.7 32 0 60.7 0 96v320c0 35.3 28.7 64 64 64h320c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64zM160 320c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm0-128c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm128 128h-64c-8.8 0-16-7.2-16-16s7.2-16 16-16h64c8.8 0 16 7.2 16 16s-7.2 16-16 16zm0-128h-64c-8.8 0-16-7.2-16-16s7.2-16 16-16h64c8.8 0 16 7.2 16 16s-7.2 16-16 16z"/></svg>
+        </div>
+        <div class="card-title-group">
+          <h3 class="title-blog" style="color:#fb923c">Official FilmBox Blog</h3>
+          <span class="card-tag" style="background:rgba(245,124,0,0.25);color:#fb923c;border:1px solid #f57c00">Updates</span>
+        </div>
+      </div>
+      <p class="desc-blog" style="color:#fed7aa">Read our official articles, patch notes, release updates, and community news!</p>
+      <a href="https://filmboxproductions.blogspot.com" target="_blank" rel="noopener noreferrer" class="action-btn" style="background:linear-gradient(90deg,#f57c00,#e65100);color:#fff!important;box-shadow:0 6px 18px rgba(245,124,0,0.4)">🌐 VISIT FILMBOX BLOG</a>
     </div>
   </div>
   <div class="hub-footer"><p class="footer-text">⚡ Powered by FILM BOX Network &bull; Updated Daily</p></div>

@@ -1,28 +1,22 @@
-# Implementation Plan - 4-Tab Bottom Navigation (Home, Movies, Series, Library with News/Community/Football), Full "Film Box" Rebrand
+# Implementation Plan - Touch Click Responsiveness Fix, Full Genre Categories for Movies/Series & Default Library Sports Tab
 
-Refactor navigation to feature strictly 4 bottom tabs (**🏠 Home**, **🎬 Movies**, **📺 Series**, **📚 Library**), where Library contains sub-tabs for **📰 News**, **❤️ Community**, and **⚽ Live Sports**, and eliminate any remaining instances of "Movie Box" in favor of **"Film Box"**.
+Resolve touch input blocking (making sure all dashboard buttons respond instantly), ensure movie and series catalogue views load all TMDb genres and endless scroll, set **⚽ Live Sports (Football)** as the default sub-tab in Library, and guarantee zero blank/black screens across all views.
 
 ## User Review Required
 
 > [!IMPORTANT]
-> - **Strict 4-Tab Bottom Navigation**:
->   1. **🏠 Home** (`home`)
->   2. **🎬 Movies** (`movie`)
->   3. **📺 Series** (`tv`)
->   4. **📚 Library** (`library`)
-> - **Library Sub-Tabs**: Tapping **📚 Library** displays top-level sub-tabs for:
->   - **📰 News**
->   - **❤️ Community** (Vibrant high-graphic social hub)
->   - **⚽ Live Sports** (Football matches & live scores)
-> - **100% "Film Box" Rebrand**: Verified and replaced all remaining occurrences of "Movie Box" with "Film Box" in page titles, logo markup, and share texts.
+> - **Touch Click Responsiveness**: Guaranteed zero touch blocking by enforcing strict `pointer-events: none !important` and `z-index: -99999` on hidden modals (`#modal[hidden]`), ensuring all bottom nav buttons, movie cards, and VIP buttons respond instantly on every tap.
+> - **Movies & Series Categories & Endless Scroll**: `browse()` fetches and displays comprehensive TMDb genre category chips (`Action`, `Comedy`, `Horror`, `Romance`, `Sci-Fi`, `Drama`, `Animation`, `Thriller`, `Adventure`, `Documentary`) with endless infinite scrolling and instant local master catalog fallbacks.
+> - **Library Default Sub-Tab (Live Sports / Football)**: Library view defaults to **⚽ Live Sports (Football)** at the top, alongside News and Community, giving instant access to live scores, fixtures, and standings.
 
 ## Proposed Changes
 
-### Web Application UI & Navigation Restructure
+### Web Application UI & Navigation Engine
 #### [MODIFY] [index.html](file:///C:/Users/EAGLE/AndroidStudioProjects/FilmBox/app/src/main/assets/index.html)
-- **Bottom Nav Bar**: Update to 4 tabs (`Home`, `Movies`, `Series`, `Library`).
-- **Library View Sub-Tabs**: Implement `libraryView()` with sub-buttons for News (`news`), Community (`social`), and Football (`football`).
-- **Rebrand Check**: Replace `<title>Movie Box...</title>`, `<span class="logo">Movie Box</span>`, and share text with "Film Box".
+- **Modal Pointer Events Fix**: Ensure `#modal` when hidden has zero touch interception.
+- **Movies & Series Categories**: Ensure `browse()` correctly maps and renders all TMDb genres and endless pagination.
+- **Library Default to Football**: Set `let librarySubTab = "football";` so Library opens Live Sports by default.
+- **Robust Event Listeners**: Explicitly attach click listeners to bottom nav buttons, VIP button, and cards.
 
 ## Verification Plan
 
@@ -30,6 +24,6 @@ Refactor navigation to feature strictly 4 bottom tabs (**🏠 Home**, **🎬 Mov
 - Run Gradle build `app:assembleDebug` to verify clean compilation.
 
 ### Manual Verification
-- Test 4 bottom tabs (Home, Movies, Series, Library) to ensure smooth transitions.
-- Tap Library to verify sub-tabs (News, Community, Football) load correctly.
-- Verify zero instances of "Movie Box" exist in code.
+- Test tapping all bottom nav buttons (Home, Movies, Series, Library) to confirm instant responsiveness.
+- Tap Movies & Series to verify genre categories and endless scroll.
+- Tap Library to confirm Football / Live Sports is the default view.

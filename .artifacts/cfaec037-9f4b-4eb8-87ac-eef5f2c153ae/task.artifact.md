@@ -1,6 +1,6 @@
-# Task List - 4-Tab Bottom Navigation & Film Box Rebrand
+# Task List - Touch Responsiveness, Categories & Library Football Tab
 
-- [ ] Rebrand remaining "Movie Box" strings to "Film Box" in `index.html` `[ ]`
-- [ ] Update bottom navigation bar to 4 tabs (Home, Movies, Series, Library) `[ ]`
-- [ ] Implement `libraryView()` with sub-tabs for News, Community, and Football `[ ]`
+- [ ] Fix `#modal` pointer events when hidden to restore button click responsiveness `[ ]`
+- [ ] Ensure `browse()` renders full TMDb genre categories and endless scroll for Movies and Series `[ ]`
+- [ ] Set `librarySubTab = "football"` as the default Library view `[ ]`
 - [ ] Verify build via gradle `app:assembleDebug` `[ ]`
