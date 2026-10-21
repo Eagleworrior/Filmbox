@@ -1,6 +1,6 @@
-# Task List - Touch Responsiveness, Categories & Library Football Tab
+# Task List - News Whitelist, Live Search, Strict PayPal Verification
 
-- [ ] Fix `#modal` pointer events when hidden to restore button click responsiveness `[ ]`
-- [ ] Ensure `browse()` renders full TMDb genre categories and endless scroll for Movies and Series `[ ]`
-- [ ] Set `librarySubTab = "football"` as the default Library view `[ ]`
+- [ ] Add `newsdata.io` and `blogspot.com` to `allowedHosts` in `MainActivity.java` `[ ]`
+- [ ] Implement live search auto-suggestions dropdown as user types in `#q` `[ ]`
+- [ ] Enforce strict real-time PayPal `COMPLETED` verification before VIP activation `[ ]`
 - [ ] Verify build via gradle `app:assembleDebug` `[ ]`

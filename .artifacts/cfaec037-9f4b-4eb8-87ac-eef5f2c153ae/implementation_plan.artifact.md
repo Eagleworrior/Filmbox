@@ -1,22 +1,27 @@
-# Implementation Plan - Touch Click Responsiveness Fix, Full Genre Categories for Movies/Series & Default Library Sports Tab
+# Implementation Plan - NewsData.io Whitelisting, Live Search Auto-Suggestions, Strict PayPal Verification & UI Coloring
 
-Resolve touch input blocking (making sure all dashboard buttons respond instantly), ensure movie and series catalogue views load all TMDb genres and endless scroll, set **⚽ Live Sports (Football)** as the default sub-tab in Library, and guarantee zero blank/black screens across all views.
+Whitelist `newsdata.io` and `blogspot.com` in `MainActivity.java`, implement live search auto-suggestions as users type in `#q`, enforce strict real-time PayPal payment completion verification before activating VIP, ensure M-Pesa STK push delivery, and style all text with gorgeous vibrant colors.
 
 ## User Review Required
 
 > [!IMPORTANT]
-> - **Touch Click Responsiveness**: Guaranteed zero touch blocking by enforcing strict `pointer-events: none !important` and `z-index: -99999` on hidden modals (`#modal[hidden]`), ensuring all bottom nav buttons, movie cards, and VIP buttons respond instantly on every tap.
-> - **Movies & Series Categories & Endless Scroll**: `browse()` fetches and displays comprehensive TMDb genre category chips (`Action`, `Comedy`, `Horror`, `Romance`, `Sci-Fi`, `Drama`, `Animation`, `Thriller`, `Adventure`, `Documentary`) with endless infinite scrolling and instant local master catalog fallbacks.
-> - **Library Default Sub-Tab (Live Sports / Football)**: Library view defaults to **⚽ Live Sports (Football)** at the top, alongside News and Community, giving instant access to live scores, fixtures, and standings.
+> - **Native Host Whitelisting (`MainActivity.java`)**: Added `"newsdata.io"`, `"filmboxproductions.blogspot.com"`, and `"blogspot.com"` to `allowedHosts` so news feeds load correctly.
+> - **Live Search Auto-Suggestions**: As the user types in the search bar (`#q`), matching movies and series appear instantly in a dropdown list for quick selection.
+> - **Strict Real-Time PayPal Verification**: VIP pass activates ONLY when PayPal's API returns `status === "COMPLETED"`. If uncompleted or cancelled, VIP is strictly blocked.
+> - **Robust M-Pesa STK Push**: Ensures 12-digit international format (`2547XXXXXXXX`) for M-Pesa registered numbers with automatic transaction type fallback.
+> - **Richly Colored Typography**: Every header, card, and tab is styled with rich multi-color gradients and high-graphic aesthetics.
 
 ## Proposed Changes
 
-### Web Application UI & Navigation Engine
+### Android Native WebView Whitelist
+#### [MODIFY] [MainActivity.java](file:///C:/Users/EAGLE/AndroidStudioProjects/FilmBox/app/src/main/java/com/filmbox/MainActivity.java)
+- Add `"newsdata.io"`, `"filmboxproductions.blogspot.com"`, and `"blogspot.com"` to `allowedHosts`.
+
+### Web Application UI, Search & Payment Engine
 #### [MODIFY] [index.html](file:///C:/Users/EAGLE/AndroidStudioProjects/FilmBox/app/src/main/assets/index.html)
-- **Modal Pointer Events Fix**: Ensure `#modal` when hidden has zero touch interception.
-- **Movies & Series Categories**: Ensure `browse()` correctly maps and renders all TMDb genres and endless pagination.
-- **Library Default to Football**: Set `let librarySubTab = "football";` so Library opens Live Sports by default.
-- **Robust Event Listeners**: Explicitly attach click listeners to bottom nav buttons, VIP button, and cards.
+- **Live Search Dropdown**: Implement real-time search auto-suggestions as user types.
+- **Strict PayPal Verification**: Require `status === "COMPLETED"` before granting VIP.
+- **Rich Colors**: Ensure all text elements are styled with vibrant colors and gradients.
 
 ## Verification Plan
 
@@ -24,6 +29,6 @@ Resolve touch input blocking (making sure all dashboard buttons respond instantl
 - Run Gradle build `app:assembleDebug` to verify clean compilation.
 
 ### Manual Verification
-- Test tapping all bottom nav buttons (Home, Movies, Series, Library) to confirm instant responsiveness.
-- Tap Movies & Series to verify genre categories and endless scroll.
-- Tap Library to confirm Football / Live Sports is the default view.
+- Test typing in the search bar to confirm live auto-suggestions appear.
+- Test News tab to confirm articles load from NewsData.io.
+- Test PayPal checkout to ensure VIP is only activated upon successful completion.

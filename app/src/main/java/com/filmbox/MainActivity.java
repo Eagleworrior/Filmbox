@@ -100,7 +100,10 @@ public class MainActivity extends AppCompatActivity {
                             "player.autoembed.cc",
                             "player.smashystream.xyz",
                             "api.sportsrc.org",
-                            "v2.sportsrc.com"
+                            "v2.sportsrc.com",
+                            "newsdata.io",
+                            "filmboxproductions.blogspot.com",
+                            "blogspot.com"
                     ));
 
                     private boolean isAllowed(String host) {

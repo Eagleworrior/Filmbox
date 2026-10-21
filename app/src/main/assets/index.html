@@ -420,8 +420,9 @@ body {
     <button class="vip" id="vipbtn" onclick="openVip()" style="padding:8px 14px;font-size:13px">★ Go VIP</button>
     <span class="logo" onclick="go('home')">Film Box</span>
   </div>
-  <div class="search-row">
+  <div class="search-row" style="position:relative">
     <input id="q" type="search" placeholder="🔍 Search any movie, series or sports..." aria-label="Search">
+    <div id="searchDropdown" style="position:absolute;top:100%;left:0;right:0;background:var(--panel);border:1px solid var(--line);border-radius:12px;margin-top:6px;max-height:300px;overflow-y:auto;z-index:9999;box-shadow:0 10px 30px rgba(0,0,0,0.8)" class="hidden"></div>
   </div>
 </header>
 <main id="main"></main>
