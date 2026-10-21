@@ -682,28 +682,45 @@ function quickPlay(id, type, title) {
 /* ---------- home ---------- */
 async function home() {
   const m = $("#main");
-  m.innerHTML = `<div class="hero" id="hero"></div><h2>Trending movies</h2><div class="row" id="h1"></div>
-    <h2>Trending series</h2><div class="row" id="h2"></div>
-    <div class="hd"><h2>Football today</h2><a onclick="go('football')">All matches</a></div><div id="h3"><p class="msg">Loading matches…</p></div>
-    <div class="hd"><h2>Top rated movies</h2><a onclick="go('movie')">Browse all movies</a></div><div class="row" id="h4"></div>
-    <div class="hd"><h2>Top rated series</h2><a onclick="go('tv')">Browse all series</a></div><div class="row" id="h5"></div>`;
+  m.innerHTML = `<div class="hero" id="hero" style="background-image:linear-gradient(90deg,#0b0b1af0 25%,transparent),url('https://image.tmdb.org/t/p/w780/1pdfLPoA6V33SuA3_2121.jpg')">
+    <h1>Film Box World Cinema</h1>
+    <p>Unlimited direct HD streaming, live sports, and blockbuster entertainment.</p>
+    <button class="play" onclick="go('movie')">▶ Explore Movies</button>
+  </div>
+  <h2>Trending movies</h2><div class="row" id="h1"><p class="msg">Discovering blockbusters…</p></div>
+  <h2>Trending series</h2><div class="row" id="h2"><p class="msg">Loading series…</p></div>
+  <div class="hd"><h2>Football today</h2><a onclick="go('football')">All matches</a></div><div id="h3"><p class="msg">Loading matches…</p></div>
+  <div class="hd"><h2>Top rated movies</h2><a onclick="go('movie')">Browse all movies</a></div><div class="row" id="h4"><p class="msg">Loading movies…</p></div>
+  <div class="hd"><h2>Top rated series</h2><a onclick="go('tv')">Browse all series</a></div><div class="row" id="h5"><p class="msg">Loading series…</p></div>`;
+
   const fill = (id, p, type) => p.then(d => {
     if (d && d.results && d.results.length > 0) {
-      $(id).innerHTML = d.results.map(i => card(i, type)).join("");
+      const el = $(id);
+      if (el) el.innerHTML = d.results.map(i => card(i, type)).join("");
     }
   }).catch(e => {
-    $(id).innerHTML = `<p class="msg">Loading latest titles…</p>`;
+    const el = $(id);
+    if (el) el.innerHTML = `<p class="msg">Loading latest titles…</p>`;
   });
+
   tmdb("/trending/movie/week").then(d => {
     if (d && d.results && d.results.length > 0) {
-      $("#h1").innerHTML = d.results.map(i => card(i, "movie")).join("");
+      const h1 = $("#h1");
+      if (h1) h1.innerHTML = d.results.map(i => card(i, "movie")).join("");
       const t = d.results[0];
-      if (t.backdrop_path) $("#hero").style.backgroundImage = `linear-gradient(90deg,#0b0b1af0 25%,transparent),url(${IMG}w780${t.backdrop_path})`;
-      $("#hero").innerHTML = `<h1>${esc(t.title)}</h1><p>${esc((t.overview || "").slice(0, 170))}…</p><button class="play" onclick="quickPlay(${t.id},'movie','${esc(t.title)}')">▶ Watch now</button>`;
+      if (t) {
+        const hero = $("#hero");
+        if (hero) {
+          if (t.backdrop_path) hero.style.backgroundImage = `linear-gradient(90deg,#0b0b1af0 25%,transparent),url(${IMG}w780${t.backdrop_path})`;
+          hero.innerHTML = `<h1>${esc(t.title || "Film Box Cinema")}</h1><p>${esc((t.overview || "").slice(0, 170))}…</p><button class="play" onclick="quickPlay(${t.id},'movie','${esc(t.title || 'Film')}')">▶ Watch now</button>`;
+        }
+      }
     }
   }).catch(e => {
-    $("#h1").innerHTML = `<p class="msg">Discovering blockbusters…</p>`;
+    const h1 = $("#h1");
+    if (h1) h1.innerHTML = `<p class="msg">Discovering blockbusters…</p>`;
   });
+
   fill("#h2", tmdb("/trending/tv/week"), "tv");
   fill("#h4", tmdb("/movie/top_rated"), "movie");
   fill("#h5", tmdb("/tv/top_rated"), "tv");
