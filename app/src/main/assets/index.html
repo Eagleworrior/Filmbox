@@ -783,10 +783,19 @@ async function fetchPage(append) {
       d = await tmdb("/discover/" + type, p);
     }
     const html = d.results.map(i => card(i, type)).join("");
-    $("#grid").insertAdjacentHTML(append ? "beforeend" : "afterbegin", html);
+    const gridEl = $("#grid");
+    if (gridEl) {
+      if (append) {
+        gridEl.insertAdjacentHTML("beforeend", html);
+      } else {
+        gridEl.innerHTML = html;
+      }
+    }
     const pages = Math.min(d.total_pages, 500);
-    $("#info").textContent = `${d.total_results.toLocaleString()} titles found · page ${S.page} of ${pages.toLocaleString()}`;
-    $("#more").hidden = S.page >= pages;
+    const infoEl = $("#info");
+    if (infoEl) infoEl.textContent = `${d.total_results.toLocaleString()} titles found · page ${S.page} of ${pages.toLocaleString()}`;
+    const moreEl = $("#more");
+    if (moreEl) moreEl.hidden = S.page >= pages;
   } catch (e) { $("#info").textContent = "Could not load titles (" + e.message + "). Check internet connection." }
 }
 function more() { S.page++; fetchPage(true) }
@@ -2019,13 +2028,18 @@ function initVipRenewTimer() {
 
 initVipRenewTimer();
 
-document.addEventListener("DOMContentLoaded", () => {
+let appInitialized = false;
+function initApp() {
+  if (appInitialized) return;
+  appInitialized = true;
   checkVipActive();
   render();
-});
+}
+
 if (document.readyState === "complete" || document.readyState === "interactive") {
-  checkVipActive();
-  render();
+  initApp();
+} else {
+  document.addEventListener("DOMContentLoaded", initApp);
 }
 </script>
 </body>
