@@ -72,6 +72,10 @@ public class MainActivity extends AppCompatActivity {
 
                 webViewApp.setSoundEffectsEnabled(true);
                 webViewApp.setBackgroundColor(0xFF0b0b1a);
+                webViewApp.setClickable(true);
+                webViewApp.setFocusable(true);
+                webViewApp.setFocusableInTouchMode(true);
+                webViewApp.requestFocus();
                 webViewApp.setLayerType(View.LAYER_TYPE_HARDWARE, null);
                 webViewApp.clearCache(true);
                 webViewApp.clearFormData();
