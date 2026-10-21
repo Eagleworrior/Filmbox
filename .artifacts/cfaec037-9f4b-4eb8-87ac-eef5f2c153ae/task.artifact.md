@@ -1,6 +1,6 @@
-# Task List - News Whitelist, Live Search, Strict PayPal Verification
+# Task List - File Clean Up and Replacement
 
-- [ ] Add `newsdata.io` and `blogspot.com` to `allowedHosts` in `MainActivity.java` `[ ]`
-- [ ] Implement live search auto-suggestions dropdown as user types in `#q` `[ ]`
-- [ ] Enforce strict real-time PayPal `COMPLETED` verification before VIP activation `[ ]`
+- [ ] Copy clean `index.html` from Downloads to `app/src/main/assets/index.html` `[ ]`
+- [ ] Copy `server.js`, `package.json`, `env.example`, `colorful-hub.html` to project root `[ ]`
+- [ ] Clean up redundant/obsolete files `[ ]`
 - [ ] Verify build via gradle `app:assembleDebug` `[ ]`
