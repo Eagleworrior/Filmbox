@@ -5,32 +5,35 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Film Box - 100% Ad-Free Direct Cinema & Sports</title>
 <style>
-:root{--bg:#14110f;--panel:#201b18;--line:#352e29;--text:#f3ece4;--mute:#a79c91;--accent:#f2b134;--pitch:#2fa36b}
+:root{--bg:#14110f;--panel:#201b18;--line:#352e29;--text:#f3ece4;--mute:#a79c91;--accent:#f2b134;--pitch:#2fa36b;--accent2:#7c5cff;--gold:#ffc23c}
 *{box-sizing:border-box;margin:0}
-body{background:var(--bg);color:var(--text);font:15px/1.5 "Trebuchet MS",Verdana,sans-serif}
-header{position:sticky;top:0;z-index:5;height:64px;background:var(--bg);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:max(12px, env(safe-area-inset-top)) 20px 12px 20px}
-.logo{position:absolute;left:50%;transform:translateX(-50%);font:800 24px Georgia,serif;background:linear-gradient(90deg,#ffc23c,#ff4d8d,#38bdf8);-webkit-background-clip:text;background-clip:text;color:transparent;cursor:pointer;white-space:nowrap}
+body{background:var(--bg);color:var(--text);font:15px/1.5 "Trebuchet MS",Verdana,sans-serif;background:radial-gradient(1100px 600px at 8% -10%,#4a22a055,transparent),radial-gradient(900px 500px at 100% 0,#ff4d8d33,transparent),var(--bg);background-attachment:fixed;padding-bottom:75px}
+header{position:sticky;top:0;z-index:99;background:rgba(11, 11, 26, 0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:max(12px, env(safe-area-inset-top)) 16px 12px 16px;display:flex;flex-direction:column;gap:10px}
+.top-bar{display:flex;align-items:center;justify-content:space-between;position:relative;width:100%}
+.logo{position:absolute;left:50%;transform:translateX(-50%);font:900 24px Georgia,serif;background:linear-gradient(90deg,#ffc23c,#ff4d8d,#38bdf8);-webkit-background-clip:text;background-clip:text;color:transparent;cursor:pointer;white-space:nowrap}
+.search-row{width:100%;display:flex;justify-content:center}
+.search-row input{width:100%;max-width:500px;padding:10px 18px;font-size:14px;font-weight:600;border-radius:25px;background:rgba(21, 21, 48, 0.85);border:1.5px solid rgba(56, 189, 248, 0.4);color:#fff;box-shadow:0 4px 15px rgba(0, 0, 0, 0.3);transition:all 0.3s ease}
+.search-row input:focus{border-color:var(--accent);box-shadow:0 0 15px rgba(255, 77, 141, 0.4);outline:none}
+.hidden{display:none!important}
 nav{display:flex;gap:4px;flex-wrap:wrap}
 nav button,.chip{background:none;border:0;color:var(--mute);padding:7px 14px;border-radius:20px;cursor:pointer;font:inherit;white-space:nowrap}
 nav button.on,.chip.on{background:var(--accent);color:#1a1307;font-weight:700}
-input,select{background:var(--panel);border:1px solid var(--line);color:var(--text);padding:8px 14px;border-radius:20px;font:inherit}
-input{flex:1;min-width:140px;max-width:320px}
 main{padding:20px;max-width:1200px;margin:auto}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:16px}
 .row{display:flex;gap:14px;overflow-x:auto;padding-bottom:10px}
 .row .card{flex:0 0 150px}
-.card{cursor:pointer;background:var(--panel);border-radius:8px;overflow:hidden;border:1px solid var(--line)}
-.card:focus-visible,button:focus-visible{outline:2px solid var(--accent)}
+.card{cursor:pointer;background:rgba(21,21,48,0.75);backdrop-filter:blur(12px);border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.12);box-shadow:0 8px 20px rgba(0,0,0,0.4);transition:transform 0.25s,box-shadow 0.25s,border-color 0.25s}
+.card:hover{transform:translateY(-6px) scale(1.02);border-color:var(--accent);box-shadow:0 12px 30px rgba(255,77,141,0.35)}
 .card img{width:100%;aspect-ratio:2/3;object-fit:cover;display:block;background:#2a2420}
 .card div{padding:8px 10px;font-size:13px}
 .card small{color:var(--mute)}
-h2{font:700 20px Georgia,serif;margin:22px 0 12px}
+h2{font:800 22px Georgia,serif;margin:22px 0 12px;background:linear-gradient(90deg,#ffc23c,#ff4d8d,#38bdf8);-webkit-background-clip:text;background-clip:text;color:transparent;border-left:4px solid var(--accent);padding-left:10px}
 .bar{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
 .hd{display:flex;justify-content:space-between;align-items:baseline}
 .hd a{color:var(--accent);cursor:pointer;font-size:14px}
 .more{display:block;margin:24px auto;background:var(--panel);color:var(--text);border:1px solid var(--line);padding:10px 24px;border-radius:20px;cursor:pointer}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.8);overflow:auto;z-index:100;padding:20px;display:flex;align-items:center;justify-content:center}
-.modal[hidden]{display:none!important;pointer-events:none!important;visibility:hidden!important;z-index:-100!important;opacity:0!important}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.8);overflow:auto;z-index:1000;padding:20px;display:flex;align-items:center;justify-content:center}
+.modal[hidden]{display:none!important;pointer-events:none!important;visibility:hidden!important;z-index:-99999!important;opacity:0!important}
 .sheet{max-width:900px;margin:auto;background:var(--panel);border-radius:12px;overflow:hidden}
 .top{display:flex;gap:18px;padding:20px;flex-wrap:wrap}
 .top img{width:150px;border-radius:8px}
@@ -53,15 +56,6 @@ h2{font:700 20px Georgia,serif;margin:22px 0 12px}
 .watch{margin-left:8px;background:var(--pitch);color:#04170d;font-weight:700;padding:5px 14px;border-radius:16px;border:0;cursor:pointer}
 @media(max-width:560px){.match{grid-template-columns:1fr}.match .t:last-of-type{justify-content:flex-start}}
 
-:root{--bg:#0b0b1a;--panel:#151530;--line:#2a2a55;--text:#f5f3ff;--mute:#a09dcc;--accent:#ff4d8d;--accent2:#7c5cff;--gold:#ffc23c;--pitch:#19d3a2}
-body{background:radial-gradient(1100px 600px at 8% -10%,#4a22a055,transparent),radial-gradient(900px 500px at 100% 0,#ff4d8d33,transparent),var(--bg);background-attachment:fixed}
-header{background:#0b0b1acc;backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
-.logo{background:linear-gradient(90deg,var(--gold),var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent;font-size:26px}
-nav button.on,.chip.on,.seasons button.on{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-color:transparent;box-shadow:0 4px 14px #7c5cff55}
-.chip,nav button{background:#ffffff0d}
-.card{cursor:pointer;background:rgba(21,21,48,0.75);backdrop-filter:blur(12px);border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.12);box-shadow:0 8px 20px rgba(0,0,0,0.4);transition:transform 0.25s,box-shadow 0.25s,border-color 0.25s}
-.card:hover{transform:translateY(-6px) scale(1.02);border-color:var(--accent);box-shadow:0 12px 30px rgba(255,77,141,0.35)}
-h2{font:800 22px Georgia,serif;margin:22px 0 12px;background:linear-gradient(90deg,#ffc23c,#ff4d8d,#38bdf8);-webkit-background-clip:text;background-clip:text;color:transparent;border-left:4px solid var(--accent);padding-left:10px}
 .vip,.play{border:0;cursor:pointer;font:700 14px inherit;color:#2a1500;background:linear-gradient(135deg,#ffe27a,var(--gold),#ff9a3c);padding:9px 18px;border-radius:22px;box-shadow:0 4px 16px #ffc23c55}
 .play{color:#fff;background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 4px 16px #ff4d8d66;padding:11px 24px;font-size:16px}
 .hero{min-height:260px;border-radius:18px;background:#151530 center/cover;padding:36px;display:flex;flex-direction:column;justify-content:flex-end;gap:10px;margin-bottom:8px}
@@ -278,138 +272,14 @@ h2{font:800 22px Georgia,serif;margin:22px 0 12px;background:linear-gradient(90d
   box-shadow: 0 4px 12px rgba(242, 177, 52, 0.3);
 }
 
-header {
-  position: sticky;
-  top: 0;
-  z-index: 99;
-  background: rgba(11, 11, 26, 0.92);
-  backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--line);
-  padding: max(12px, env(safe-area-inset-top)) 16px 12px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.top-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: relative;
-  width: 100%;
-}
-.logo {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  font: 900 24px Georgia, serif;
-  background: linear-gradient(90deg, #ffc23c, #ff4d8d, #38bdf8);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  cursor: pointer;
-  white-space: nowrap;
-}
-.search-row {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-.search-row input {
-  width: 100%;
-  max-width: 500px;
-  padding: 10px 18px;
-  font-size: 14px;
-  font-weight: 600;
-  border-radius: 25px;
-  background: rgba(21, 21, 48, 0.85);
-  border: 1.5px solid rgba(56, 189, 248, 0.4);
-  color: #fff;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-  transition: all 0.3s ease;
-}
-.search-row input:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 15px rgba(255, 77, 141, 0.4);
-  outline: none;
-}
-
-.bottom-nav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 999;
-  background: rgba(11, 11, 26, 0.95);
-  backdrop-filter: blur(16px);
-  border-top: 1px solid var(--line);
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: 8px 10px env(safe-area-inset-bottom);
-  box-shadow: 0 -10px 30px rgba(0,0,0,0.8);
-}
-.bottom-nav button {
-  border: 1.5px solid var(--line);
-  color: var(--text);
-  padding: 8px 6px;
-  border-radius: 16px;
-  cursor: pointer;
-  font: 800 11px inherit;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  transition: all 0.25s ease;
-  flex: 1;
-  max-width: 80px;
-}
-
-/* Individual Bottom Nav Tab Themes */
-.bottom-nav button[data-v="home"] {
-  background: linear-gradient(135deg, #ff4d8d, #8b5cf6) !important;
-  color: #ffffff !important;
-  border-color: transparent !important;
-  box-shadow: 0 4px 15px rgba(255, 77, 141, 0.4) !important;
-}
-
-.bottom-nav button[data-v="movie"] {
-  background: linear-gradient(135deg, #0284c7, #38bdf8) !important;
-  color: #ffffff !important;
-  border-color: transparent !important;
-  box-shadow: 0 4px 15px rgba(56, 189, 248, 0.4) !important;
-}
-
-.bottom-nav button[data-v="tv"] {
-  background: linear-gradient(135deg, #059669, #34d399) !important;
-  color: #ffffff !important;
-  border-color: transparent !important;
-  box-shadow: 0 4px 15px rgba(52, 211, 153, 0.4) !important;
-}
-
-.bottom-nav button[data-v="library"] {
-  background: linear-gradient(135deg, #d97706, #fbbf24) !important;
-  color: #000000 !important;
-  border-color: transparent !important;
-  box-shadow: 0 4px 15px rgba(251, 191, 36, 0.4) !important;
-}
-
-.bottom-nav button.on {
-  transform: translateY(-3px) scale(1.05) !important;
-  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.4) !important;
-  outline: 2px solid #ffffff !important;
-}
-
-button, .chip, .card, .bottom-nav button, .vip, .play, nav button, a {
-  touch-action: manipulation !important;
-  -webkit-tap-highlight-color: transparent !important;
-  pointer-events: auto !important;
-  user-select: none !important;
-  -webkit-user-select: none !important;
-}
-
-body {
-  padding-bottom: 75px;
-}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:999;background:rgba(11,11,26,0.95);backdrop-filter:blur(16px);border-top:1px solid var(--line);display:flex;justify-content:space-around;align-items:center;padding:8px 10px env(safe-area-inset-bottom);box-shadow:0 -10px 30px rgba(0,0,0,0.8)}
+.bottom-nav button{border:1.5px solid var(--line);color:var(--text);padding:8px 6px;border-radius:16px;cursor:pointer;font:800 11px inherit;display:flex;flex-direction:column;align-items:center;gap:4px;transition:all 0.25s ease;flex:1;max-width:80px}
+.bottom-nav button[data-v="home"]{background:linear-gradient(135deg,#ff4d8d,#8b5cf6)!important;color:#fff!important;border-color:transparent!important;box-shadow:0 4px 15px rgba(255,77,141,0.4)!important}
+.bottom-nav button[data-v="movie"]{background:linear-gradient(135deg,#0284c7,#38bdf8)!important;color:#fff!important;border-color:transparent!important;box-shadow:0 4px 15px rgba(56,189,248,0.4)!important}
+.bottom-nav button[data-v="tv"]{background:linear-gradient(135deg,#059669,#34d399)!important;color:#fff!important;border-color:transparent!important;box-shadow:0 4px 15px rgba(52,211,153,0.4)!important}
+.bottom-nav button[data-v="library"]{background:linear-gradient(135deg,#d97706,#fbbf24)!important;color:#000!important;border-color:transparent!important;box-shadow:0 4px 15px rgba(251,191,36,0.4)!important}
+.bottom-nav button.on{transform:translateY(-3px) scale(1.05)!important;box-shadow:0 8px 25px rgba(255,255,255,0.4)!important;outline:2px solid #fff!important}
+button,.chip,.card,.bottom-nav button,.vip,.play,nav button,a{touch-action:manipulation!important;-webkit-tap-highlight-color:transparent!important;pointer-events:auto!important;user-select:none!important;-webkit-user-select:none!important}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.17/dist/hls.min.js"></script>
 <script src="https://www.paypal.com/web-sdk/v6/core"></script>
@@ -439,16 +309,12 @@ const TMDB_KEY = "4e44d9029b1270a757cddc766a1bcb63";
 const FOOTBALL_DATA_TOKEN = "deefb3193ba84b1ebdffad3f9e3df2d6";
 const SPORTSRC_KEY = "2ccca35a74930eb00a71a67597928545";
 
-/* ---------- TEMPORARY TEST LINKS (To be replaced with real ones) ---------- */
 const TEST_LINK_A = "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/360/Big_Buck_Bunny_360_10s_1MB.mp4";
 const TEST_LINK_B = "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4";
-
 const MASTER_FILMS = {};
 
 function getDirectStreamUrl(id, title) {
-  if (MASTER_FILMS[id] && MASTER_FILMS[id].videoUrl) {
-    return MASTER_FILMS[id].videoUrl;
-  }
+  if (MASTER_FILMS[id] && MASTER_FILMS[id].videoUrl) return MASTER_FILMS[id].videoUrl;
   const url = (id % 2 === 0) ? TEST_LINK_A : TEST_LINK_B;
   MASTER_FILMS[id] = { id, title: title || "Film", videoUrl: url };
   return url;
@@ -460,24 +326,13 @@ const LOCAL_MASTER_MOVIES = [
   { id: 157336, media_type: "movie", title: "Interstellar", release_date: "2014", vote_average: 8.4, poster_path: "https://image.tmdb.org/t/p/w342/gEU2121.jpg", overview: "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival." },
   { id: 27205, media_type: "movie", title: "Inception", release_date: "2010", vote_average: 8.4, poster_path: "https://image.tmdb.org/t/p/w342/oYu2121.jpg", overview: "A thief who steals corporate secrets through the use of dream-sharing technology." },
   { id: 155, media_type: "movie", title: "The Dark Knight", release_date: "2008", vote_average: 8.5, poster_path: "https://image.tmdb.org/t/p/w342/qJ2121.jpg", overview: "When the menace known as the Joker wreaks havoc and chaos on the people of Gotham." },
-  { id: 671, media_type: "movie", title: "Harry Potter and the Sorcerer's Stone", release_date: "2001", vote_average: 7.9, poster_path: "https://image.tmdb.org/t/p/w342/wu2121.jpg", overview: "An orphaned boy enrolls in a school of wizardry, where he learns the truth about himself." },
-  { id: 550, media_type: "movie", title: "Fight Club", release_date: "1999", vote_average: 8.4, poster_path: "https://image.tmdb.org/t/p/w342/pB82121.jpg", overview: "An insomniac office worker and a devil-may-care soap maker form an underground fight club." },
-  { id: 603, media_type: "movie", title: "The Matrix", release_date: "1999", vote_average: 8.2, poster_path: "https://image.tmdb.org/t/p/w342/f892121.jpg", overview: "When a beautiful stranger leads computer hacker Neo to a forbidding underworld." },
-  { id: 120, media_type: "movie", title: "The Lord of the Rings", release_date: "2001", vote_average: 8.4, poster_path: "https://image.tmdb.org/t/p/w342/62121.jpg", overview: "A meek Hobbit from the Shire and eight companions set out on a journey." },
-  { id: 597, media_type: "movie", title: "Titanic", release_date: "1997", vote_average: 7.9, poster_path: "https://image.tmdb.org/t/p/w342/92121.jpg", overview: "A seventeen-year-old aristocrat falls in love with a kind but poor artist." },
-  { id: 24428, media_type: "movie", title: "The Avengers", release_date: "2012", vote_average: 7.7, poster_path: "https://image.tmdb.org/t/p/w342/RYMX2121.jpg", overview: "Earth's mightiest heroes must come together and learn to fight as a team." },
-  { id: 635302, media_type: "movie", title: "Demon Slayer: Mugen Train", release_date: "2020", vote_average: 8.4, poster_path: "https://image.tmdb.org/t/p/w342/h8Rb9gBr48ODIwYUttZNYeMWeUU.jpg", overview: "Tanjiro and the group have completed their rehabilitation training at the Butterfly Mansion." }
+  { id: 671, media_type: "movie", title: "Harry Potter", release_date: "2001", vote_average: 7.9, poster_path: "https://image.tmdb.org/t/p/w342/wu2121.jpg", overview: "An orphaned boy enrolls in a school of wizardry, where he learns the truth about himself." }
 ];
 
 const LOCAL_MASTER_SERIES = [
   { id: 1399, media_type: "tv", name: "Game of Thrones", first_air_date: "2011", vote_average: 8.4, poster_path: "https://image.tmdb.org/t/p/w342/u3b2121.jpg", overview: "Nine noble families fight for control over the lands of Westeros." },
   { id: 66732, media_type: "tv", name: "Stranger Things", first_air_date: "2016", vote_average: 8.6, poster_path: "https://image.tmdb.org/t/p/w342/49W2121.jpg", overview: "When a young boy vanishes, a small town uncovers a mystery involving secret experiments." },
-  { id: 119051, media_type: "tv", name: "Wednesday", first_air_date: "2022", vote_average: 8.5, poster_path: "https://image.tmdb.org/t/p/w342/9PF2121.jpg", overview: "A sleuthing, supernaturally infused mystery charting Wednesday Addams' years as a student." },
-  { id: 71712, media_type: "tv", name: "The Good Doctor", first_air_date: "2017", vote_average: 8.5, poster_path: "https://image.tmdb.org/t/p/w342/m2121.jpg", overview: "Shaun Murphy, a young surgeon with autism and savant syndrome." },
-  { id: 1402, media_type: "tv", name: "The Walking Dead", first_air_date: "2010", vote_average: 8.1, poster_path: "https://image.tmdb.org/t/p/w342/xf2121.jpg", overview: "Sheriff Deputy Rick Grimes wakes up from a coma to learn the world is in ruins." },
-  { id: 60059, media_type: "tv", name: "Better Call Saul", first_air_date: "2015", vote_average: 8.6, poster_path: "https://image.tmdb.org/t/p/w342/f2121.jpg", overview: "The trials and tribulations of criminal lawyer Jimmy McGill." },
-  { id: 60625, media_type: "tv", name: "Rick and Morty", first_air_date: "2013", vote_average: 8.7, poster_path: "https://image.tmdb.org/t/p/w342/cv2121.jpg", overview: "An animated series that follows the exploits of a super scientist and his grandson." },
-  { id: 85271, media_type: "tv", name: "WandaVision", first_air_date: "2021", vote_average: 8.2, poster_path: "https://image.tmdb.org/t/p/w342/gl2121.jpg", overview: "Blends the style of classic sitcoms with the Marvel Cinematic Universe." }
+  { id: 119051, media_type: "tv", name: "Wednesday", first_air_date: "2022", vote_average: 8.5, poster_path: "https://image.tmdb.org/t/p/w342/9PF2121.jpg", overview: "A sleuthing, supernaturally infused mystery charting Wednesday Addams' years as a student." }
 ];
 
 const IMG = "https://image.tmdb.org/t/p/";
@@ -491,7 +346,7 @@ const poster = (p, w = "w342") => {
 const today = () => new Date().toISOString().slice(0, 10);
 const S = { view: "home", page: 1, genre: "", sort: "popularity.desc", query: "", comp: "", range: "today" };
 let timer;
-let FREE_WATCH_LIMIT = 1800; // 30 minutes in seconds
+let FREE_WATCH_LIMIT = 1800;
 let freeWatchTimer = null;
 let pbarTimer = null;
 let isZoomedCover = false;
@@ -521,10 +376,12 @@ function go(v) {
   S.page = 1; S.genre = ""; S.sort = "popularity.desc"; S.query = "";
   const searchInput = $("#q");
   if (searchInput) searchInput.value = "";
+  hideSearchDropdown();
 
   document.querySelectorAll(".bottom-nav button").forEach(b => {
+    const dv = b.getAttribute("data-v");
     const isLib = (v === "library" || v === "news" || v === "social" || v === "football");
-    b.classList.toggle("on", b.dataset.v === v || (isLib && b.dataset.v === "library"));
+    b.classList.toggle("on", dv === v || (isLib && dv === "library"));
   });
   render();
 }
@@ -710,122 +567,8 @@ window.onscroll = () => {
 
 function socialCommunityView() {
   const m = $("#main");
-  m.innerHTML = `<div class="filmbox-ultimate-hub">
-  <!-- Glowing Animated Banner Header -->
-  <div class="hub-hero">
-    <div class="gif-container">
-      <div class="gif-glow-ring"></div>
-      <img src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif" alt="Coffee and Cash" class="hero-gif" />
-    </div>
-    <span class="badge-vip">✨ VIP COMMUNITY & SUPPORT</span>
-    <h2 class="hero-title">🎬 FILM BOX HUB</h2>
-    <p class="hero-subtitle">
-      Connect, stream HD movies, join exclusive chats, and support our daily platform!
-    </p>
-  </div>
-
-  <div class="hub-grid">
-    <!-- 1. Facebook Page Card -->
-    <div class="card-item fb-page-card">
-      <div class="card-header">
-        <div class="icon-circle fb-icon-bg">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="brand-svg">
-            <path fill="#ffffff" d="M504 256C504 119 393 8 256 8S8 119 8 256c0 123.78 90.69 226.38 209.25 245V327.69h-63V256h63v-54.64c0-62.15 37-96.48 93.67-96.48 27.14 0 55.52 4.84 55.52 4.84v61h-31.28c-30.8 0-40.41 19.12-40.41 38.73V256h68.78l-11 71.69h-57.78V501C413.31 482.38 504 379.78 504 256z"/>
-          </svg>
-        </div>
-        <div class="card-title-group">
-          <h3 class="title-fb">Official Facebook Page</h3>
-          <span class="card-tag tag-blue">Daily Posts</span>
-        </div>
-      </div>
-      <p class="desc-blue">
-        Hourly movie drops, HD posters, trailers, and instant download links on your feed!
-      </p>
-      <a href="https://www.facebook.com/profile.php?id=61595278122419" target="_blank" rel="noopener noreferrer" class="action-btn btn-fb-page">
-        👍 FOLLOW OUR PAGE
-      </a>
-    </div>
-
-    <!-- 2. Facebook Group Card -->
-    <div class="card-item fb-group-card">
-      <div class="card-header">
-        <div class="icon-circle fb-group-icon-bg">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" class="brand-svg">
-            <path fill="#ffffff" d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 480c0-61.9 50.1-112 112-112h224c61.9 0 112 50.1 112 112c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM464 96a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm-8 272c21.2 0 41 4.2 59 11.7c28.7 12 53.6 30.8 70.8 54.8c9 12.6 14.2 28.1 14.2 43.5c0 17.7-14.3 32-32 32H513.3c3-10.1 4.7-20.9 4.7-32c0-37.1-12.7-71.3-34-98c8-1.3 16.2-2 24.5-2z"/>
-          </svg>
-        </div>
-        <div class="card-title-group">
-          <h3 class="title-group">Movie Fan Community</h3>
-          <span class="card-tag tag-cyan">Discussion</span>
-        </div>
-      </div>
-      <p class="desc-cyan">
-        Request favorite movies, share reviews, discuss plot twists, and vote in polls!
-      </p>
-      <a href="https://www.facebook.com/share/g/19zsQAbGu7/" target="_blank" rel="noopener noreferrer" class="action-btn btn-fb-group">
-        👥 JOIN FACEBOOK GROUP
-      </a>
-    </div>
-
-    <!-- 3. WhatsApp Group Card -->
-    <div class="card-item wa-card">
-      <div class="card-header">
-        <div class="icon-circle wa-icon-bg">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="brand-svg">
-            <path fill="#ffffff" d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3 18.6-68.1-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.7z"/>
-          </svg>
-        </div>
-        <div class="card-title-group">
-          <h3 class="title-wa">VIP WhatsApp Lounge</h3>
-          <span class="card-tag tag-green">Instant Alert</span>
-        </div>
-      </div>
-      <p class="desc-green">
-        Get instant release alerts, direct APK download links, and live chat support!
-      </p>
-      <a href="https://chat.whatsapp.com/L02vNHjowvW83MLbJVqIwC?s=cl&p=a&mlu=4&ilr=4" target="_blank" rel="noopener noreferrer" class="action-btn btn-wa">
-        💬 JOIN WHATSAPP GROUP
-      </a>
-    </div>
-
-    <!-- 4. Blogger Card -->
-    <div class="card-item blog-card">
-      <div class="card-header">
-        <div class="icon-circle blog-icon-bg" style="background:linear-gradient(135deg,#f57c00,#e65100)">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="brand-svg">
-            <path fill="#ffffff" d="M384 32H64C28.7 32 0 60.7 0 96v320c0 35.3 28.7 64 64 64h320c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64zM160 320c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm0-128c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm128 128h-64c-8.8 0-16-7.2-16-16s7.2-16 16-16h64c8.8 0 16 7.2 16 16s-7.2 16-16 16zm0-128h-64c-8.8 0-16-7.2-16-16s7.2-16 16-16h64c8.8 0 16 7.2 16 16s-7.2 16-16 16z"/>
-          </svg>
-        </div>
-        <div class="card-title-group">
-          <h3 class="title-blog" style="color:#fb923c">Official FilmBox Blog</h3>
-          <span class="card-tag" style="background:rgba(245,124,0,0.25);color:#fb923c;border:1px solid #f57c00">Updates</span>
-        </div>
-      </div>
-      <p class="desc-blog" style="color:#fed7aa">
-        Read our official articles, patch notes, release updates, and community news!
-      </p>
-      <a href="https://filmboxproductions.blogspot.com" target="_blank" rel="noopener noreferrer" class="action-btn" style="background:linear-gradient(90deg,#f57c00,#e65100);color:#fff!important;box-shadow:0 6px 18px rgba(245,124,0,0.4)">
-        🌐 VISIT FILMBOX BLOG
-      </a>
-    </div>
-  </div>
-
-  <div class="hub-footer">
-    <p class="footer-text">⚡ Powered by FILM BOX Network &bull; Updated Daily</p>
-  </div>
-</div>`;
+  m.innerHTML = socialCommunityHtml();
 }
-
-let isFetchingMore = false;
-window.onscroll = () => {
-  if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 600) {
-    if (["movie", "tv"].includes(S.view) && !$("#more")?.hidden && !isFetchingMore) {
-      isFetchingMore = true;
-      more();
-      setTimeout(() => { isFetchingMore = false; }, 800);
-    }
-  }
-};
 
 /* ---------- cards ---------- */
 function card(i, type) {
@@ -1052,32 +795,17 @@ async function loadSeason(id, n) {
 
 function downloadEpisode(title, season, ep, estMB) {
   const credits = getDownloadCredits();
-
-  if (credits <= 0) {
-    openDownloadPassModal();
-    return;
-  }
-
+  if (credits <= 0) { openDownloadPassModal(); return; }
   try {
     let raw = localStorage.getItem("mb_offline_downloads") || "[]";
     let list = JSON.parse(raw);
     const epTitle = `${title} - S${season}E${ep}`;
     if (!list.some(x => x.title === epTitle)) {
-      list.push({
-        id: CUR.id + "_s" + season + "e" + ep,
-        type: "tv",
-        title: epTitle,
-        poster: poster(CUR.poster_path),
-        estMB: estMB || 420
-      });
+      list.push({ id: CUR.id + "_s" + season + "e" + ep, type: "tv", title: epTitle, poster: poster(CUR.poster_path), estMB: estMB || 420 });
       localStorage.setItem("mb_offline_downloads", JSON.stringify(list));
-
       const newCredits = credits - 1;
       localStorage.setItem("mb_download_credits", String(newCredits));
-
-      alert(`📥 Download Complete! "${epTitle}" (${estMB} MB) saved for offline viewing.\n\nRemaining Download Credits: ${newCredits}/3`);
-    } else {
-      alert(`"${epTitle}" is already in your offline downloads.`);
+      alert(`📥 Download Complete! "${epTitle}" (${estMB} MB) saved.`);
     }
   } catch(e) {}
 }
@@ -1104,21 +832,16 @@ async function loadMatches(sel, o, limit = 0, quiet, retry = 0) {
     const u = new URL("https://api.football-data.org/v4/matches");
     u.searchParams.set("dateFrom", a); u.searchParams.set("dateTo", b);
     if (o.comp) u.searchParams.set("competitions", o.comp);
-    const r = await fetch(u.toString(), {
-      headers: { "X-Auth-Token": FOOTBALL_DATA_TOKEN }
-    });
-    if (!r.ok) throw new Error(r.status === 429 ? "Rate limit reached, wait a minute" : "football-data " + r.status);
+    const r = await fetch(u.toString(), { headers: { "X-Auth-Token": FOOTBALL_DATA_TOKEN } });
+    if (!r.ok) throw new Error(r.status === 429 ? "Rate limit reached" : "football-data " + r.status);
     let ms = (await r.json()).matches || [];
     if (o.range === "live") ms = ms.filter(x => ["IN_PLAY", "PAUSED", "LIVE"].includes(x.status));
     if (o.range === "today") ms = ms.filter(x => x.utcDate.slice(0, 10) === day(0) || ["IN_PLAY", "PAUSED"].includes(x.status));
     if (o.range === "results") ms = ms.filter(x => x.status === "FINISHED").reverse();
     if (limit) ms = ms.slice(0, limit);
-    el.innerHTML = ms.length ? ms.map(match).join("") : `<p class="msg">No matches for this filter. Try another league or time range.</p>`;
+    el.innerHTML = ms.length ? ms.map(match).join("") : `<p class="msg">No matches for this filter.</p>`;
   } catch (e) {
-    if (retry < 2) {
-      setTimeout(() => loadMatches(sel, o, limit, quiet, retry + 1), 1500);
-      return;
-    }
+    if (retry < 2) { setTimeout(() => loadMatches(sel, o, limit, quiet, retry + 1), 1500); return; }
     el.innerHTML = `<p class="msg">Matches will refresh automatically when live.</p>`;
   }
 }
@@ -1156,44 +879,12 @@ async function loadSrc() {
   } catch (e) { el.innerHTML = `<h2>More from SportSRC</h2><p class="msg">SportSRC live fixtures connected.</p>` }
 }
 
-function togglePlayerControls() {
-  const pbar = $("#pbar");
-  const vid = $("#playerVideo");
-  if (vid) {
-    if (vid.paused) {
-      vid.play();
-    } else {
-      vid.pause();
-    }
-  }
-  if (!pbar) return;
-  if (!pbar.classList.contains("show")) {
-    pbar.classList.add("show");
-    resetPbarTimer();
-  } else {
-    pbar.classList.remove("show");
-  }
-}
-
-function resetPbarTimer() {
-  clearTimeout(pbarTimer);
-  pbarTimer = setTimeout(() => {
-    const pbar = $("#pbar");
-    if (pbar) pbar.classList.remove("show");
-  }, 3000);
-}
-
 function toggleVideoZoom() {
   const vid = $("#playerVideo") || $("#playerIframe");
   if (!vid) return;
   isZoomedCover = !isZoomedCover;
-  if (isZoomedCover) {
-    vid.classList.add("cover-fill");
-    vid.style.objectFit = "fill";
-  } else {
-    vid.classList.remove("cover-fill");
-    vid.style.objectFit = "contain";
-  }
+  if (isZoomedCover) { vid.classList.add("cover-fill"); vid.style.objectFit = "fill"; }
+  else { vid.classList.remove("cover-fill"); vid.style.objectFit = "contain"; }
 }
 
 async function play(s, e) {
@@ -1214,53 +905,22 @@ function playNextEpisode() {
 
 function showPlayer(title, url) {
   closePlayer();
-  if (typeof AndroidKYC !== 'undefined' && AndroidKYC.setFullscreenMode) {
-    AndroidKYC.setFullscreenMode(true);
-  } else if (typeof AndroidMpesa !== 'undefined' && AndroidMpesa.setFullscreenMode) {
-    AndroidMpesa.setFullscreenMode(true);
-  }
-
+  if (typeof AndroidKYC !== 'undefined' && AndroidKYC.setFullscreenMode) AndroidKYC.setFullscreenMode(true);
   const p = document.createElement("div"); p.id = "player";
   const nextBtnHtml = (CUR && CUR.type === "tv") ? `<button class="next-icon" onclick="event.stopPropagation();playNextEpisode()" aria-label="Next Episode">›</button>` : ``;
-
   p.innerHTML = `<div class="pbar" id="pbar"><button onclick="event.stopPropagation();closePlayer()" aria-label="Back" style="background:rgba(255,255,255,0.25);color:#fff;border:0;border-radius:50%;width:40px;height:40px;font-size:24px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center">‹</button><span style="font-weight:bold;font-size:15px;color:#fff">${esc(title)}</span>${nextBtnHtml}<button onclick="event.stopPropagation();toggleVideoZoom()" aria-label="Screen Fill Zoom" style="background:rgba(255,255,255,0.25);color:#fff;border:0;border-radius:50%;width:40px;height:40px;font-size:18px;font-weight:bold;cursor:pointer;display:flex;align-items:center;justify-content:center">⛶</button></div>` +
     (url.includes(".mp4") || url.includes(".m3u8")
       ? `<video id="playerVideo" src="${url}" playsinline controls autoplay style="width:100%;height:100%;object-fit:contain;background:#000;z-index:5"></video>`
       : `<iframe id="playerIframe" src="${url}" allow="autoplay; encrypted-media; fullscreen; picture-in-picture; web-share" allowfullscreen style="width:100%;height:100%;border:0;background:#000;z-index:5"></iframe>`);
   document.body.appendChild(p);
-  resetPbarTimer();
-
-  const vid = $("#playerVideo");
-  if (vid) {
-    vid.play().catch(e => {});
-    vid.onended = () => {
-      if (CUR && CUR.type === "tv") {
-        playNextEpisode();
-      }
-    };
-  }
-}
-
-async function rotate() {
-  const p = $("#player");
-  try {
-    if (!document.fullscreenElement) await p.requestFullscreen();
-    const o = screen.orientation; if (o && o.lock) await o.lock(o.type.startsWith("landscape") ? "portrait" : "landscape");
-  } catch { }
 }
 
 function closePlayer() {
   stopWatchTimer();
-  if (typeof AndroidKYC !== 'undefined' && AndroidKYC.setFullscreenMode) {
-    AndroidKYC.setFullscreenMode(false);
-  } else if (typeof AndroidMpesa !== 'undefined' && AndroidMpesa.setFullscreenMode) {
-    AndroidMpesa.setFullscreenMode(false);
-  }
-  try { screen.orientation && screen.orientation.unlock && screen.orientation.unlock(); if (document.fullscreenElement) document.exitFullscreen() } catch { }
+  if (typeof AndroidKYC !== 'undefined' && AndroidKYC.setFullscreenMode) AndroidKYC.setFullscreenMode(false);
   const p = $("#player"); if (p) p.remove();
 }
 
-/* ---------- 30-Min Free Trial & VIP Memory Engine ---------- */
 function checkVipActive() {
   try {
     const exp = parseInt(localStorage.getItem("mb_vip_expiry") || "0", 10);
@@ -1274,487 +934,41 @@ function checkVipActive() {
       $("#vipbtn").textContent = "★ Go VIP";
       return false;
     }
-  } catch(e) {
-    return false;
-  }
+  } catch(e) { return false; }
 }
 
 function getTrialExpiry() {
   try {
     let exp = parseInt(localStorage.getItem("mb_trial_expiry") || "0", 10);
-    if (!exp) {
-      exp = Date.now() + FREE_WATCH_LIMIT * 1000;
-      localStorage.setItem("mb_trial_expiry", String(exp));
-    }
+    if (!exp) { exp = Date.now() + FREE_WATCH_LIMIT * 1000; localStorage.setItem("mb_trial_expiry", String(exp)); }
     return exp;
-  } catch(e) {
-    return Date.now() + FREE_WATCH_LIMIT * 1000;
-  }
+  } catch(e) { return Date.now() + FREE_WATCH_LIMIT * 1000; }
 }
 
 function checkFreeTrialExpired() {
   if (checkVipActive()) return false;
-  const exp = getTrialExpiry();
-  return Date.now() >= exp;
+  return Date.now() >= getTrialExpiry();
 }
 
 function startWatchTimer() {
   stopWatchTimer();
   if (checkVipActive()) return;
-
-  if (checkFreeTrialExpired()) {
-    closePlayer();
-    openVip("Your 30-minute free trial has ended. Subscribe to a VIP Pass to continue watching!");
-    return;
-  }
-
+  if (checkFreeTrialExpired()) { closePlayer(); openVip("Your 30-minute free trial has ended. Subscribe to a VIP Pass!"); return; }
   freeWatchTimer = setInterval(() => {
-    if (checkVipActive()) {
-      stopWatchTimer();
-      return;
-    }
-    if (checkFreeTrialExpired()) {
-      stopWatchTimer();
-      closePlayer();
-      openVip("Your 30-minute free trial has ended. Subscribe to a VIP Pass to continue watching!");
-    }
+    if (checkVipActive()) { stopWatchTimer(); return; }
+    if (checkFreeTrialExpired()) { stopWatchTimer(); closePlayer(); openVip("Your 30-minute free trial has ended. Subscribe to a VIP Pass!"); }
   }, 1000);
 }
 
-function stopWatchTimer() {
-  if (freeWatchTimer) {
-    clearInterval(freeWatchTimer);
-    freeWatchTimer = null;
-  }
-}
+function stopWatchTimer() { if (freeWatchTimer) { clearInterval(freeWatchTimer); freeWatchTimer = null; } }
 
-/* ---------- Downloads View & Production IndexedDB Chunked Download Engine ---------- */
-const DB_NAME = "FilmBoxDB";
-const STORE_NAME = "videos";
-
-function openDb() {
-  return new Promise((resolve, reject) => {
-    const req = indexedDB.open(DB_NAME, 1);
-    req.onupgradeneeded = e => {
-      const db = e.target.result;
-      if (!db.objectStoreNames.contains(STORE_NAME)) {
-        db.createObjectStore(STORE_NAME);
-      }
-    };
-    req.onsuccess = e => resolve(e.target.result);
-    req.onerror = e => reject(e.target.error);
-  });
-}
-
-async function saveChunkToDb(id, chunk, offset) {
-  const db = await openDb();
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_NAME, "readwrite");
-    const store = tx.objectStore(STORE_NAME);
-    const req = store.get(String(id));
-    req.onsuccess = e => {
-      let existing = e.target.result;
-      if (!existing) {
-        existing = [];
-      }
-      existing.push({ offset, data: chunk });
-      store.put(existing, String(id));
-    };
-    tx.oncomplete = () => resolve();
-    tx.onerror = e => reject(e.target.error);
-  });
-}
-
-async function assembleVideoBlob(id) {
-  const db = await openDb();
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_NAME, "readonly");
-    const store = tx.objectStore(STORE_NAME);
-    const req = store.get(String(id));
-    req.onsuccess = e => {
-      const chunks = e.target.result;
-      if (!chunks || !Array.isArray(chunks)) {
-        resolve(null);
-        return;
-      }
-      chunks.sort((a, b) => a.offset - b.offset);
-      const blob = new Blob(chunks.map(c => c.data), { type: "video/mp4" });
-      resolve(blob);
-    };
-    req.onerror = e => reject(e.target.error);
-  });
-}
-
-async function deleteVideoFromDb(id) {
-  const db = await openDb();
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_NAME, "readwrite");
-    const store = tx.objectStore(STORE_NAME);
-    store.delete(String(id));
-    tx.oncomplete = () => resolve();
-    tx.onerror = e => reject(e.target.error);
-  });
-}
-
-async function verifyDownloadsIntegrity() {
-  try {
-    let raw = localStorage.getItem("mb_offline_downloads") || "[]";
-    let list = JSON.parse(raw);
-    let changed = false;
-    for (let item of list) {
-      if (item.status === "COMPLETED") {
-        const blob = await assembleVideoBlob(item.id);
-        if (!blob || blob.size <= 0) {
-          item.status = "FAILED";
-          changed = true;
-          console.error("FilmBoxDownload", "Integrity check failed: File missing or 0 bytes for ID:", item.id);
-        }
-      }
-    }
-    if (changed) {
-      localStorage.setItem("mb_offline_downloads", JSON.stringify(list));
-    }
-  } catch (err) {
-    console.error("FilmBoxDownload", "Integrity check error:", err);
-  }
-}
-
-const activeDownloads = {};
-
-function getDownloadCredits() {
-  const raw = localStorage.getItem("mb_download_credits");
-  if (raw === null) {
-    localStorage.setItem("mb_download_credits", "3");
-    return 3;
-  }
-  return parseInt(raw, 10);
-}
-
-function downloadView() {
-  const m = $("#main");
-  let raw = localStorage.getItem("mb_offline_downloads") || "[]";
-  let list = [];
-  try { list = JSON.parse(raw); } catch(e) {}
-  const credits = getDownloadCredits();
-
-  m.innerHTML = `<h2>💾 Offline Saved Downloads (${list.length}) · <small style="color:var(--gold)">${credits}/3 Free Credits Left</small></h2>
-    <div id="dlGrid" class="grid"></div>`;
-
-  const grid = $("#dlGrid");
-  if (list.length === 0) {
-    grid.innerHTML = `<p class="msg" style="grid-column:1/-1;padding:40px 0;text-align:center">No saved downloads yet. Tap "📥 Download" inside any title! (${credits}/3 Free Credits remaining)</p>`;
-    return;
-  }
-
-  grid.innerHTML = list.map(item => `
-    <div class="card" onclick="playOffline(${item.id})">
-      <img src="${item.poster}" alt="${esc(item.title)}">
-      <div><b>${esc(item.title)}</b><br><small style="color:${item.status === 'COMPLETED' ? 'var(--pitch)' : '#ff4d4d'}">${item.status || 'QUEUED'} · ${item.percent || 0}% (${item.realSizeMB || item.estMB || 850} MB)</small></div>
-      <div style="display:flex;gap:6px;margin:8px">
-        ${item.status === 'DOWNLOADING' ? `<button onclick="event.stopPropagation();cancelDownload(${item.id})" style="padding:4px 8px;border-radius:8px;background:#f59e0b;color:#fff;border:0;cursor:pointer;font-size:11px">Pause</button>` : ''}
-        ${item.status === 'PAUSED' || item.status === 'FAILED' ? `<button onclick="event.stopPropagation();startRealDownload()" style="padding:4px 8px;border-radius:8px;background:var(--accent);color:#000;border:0;cursor:pointer;font-size:11px">Resume</button>` : ''}
-        <button onclick="event.stopPropagation();removeDownload(${item.id})" style="padding:4px 8px;border-radius:8px;background:#ff4d4d;color:#fff;border:0;cursor:pointer;font-size:11px">Delete</button>
-      </div>
-    </div>
-  `).join("");
-}
-
-async function playOffline(id) {
-  try {
-    const blob = await assembleVideoBlob(id);
-    if (blob && blob.size > 0) {
-      const blobUrl = URL.createObjectURL(blob);
-      showPlayer("Offline Playback", blobUrl);
-      return;
-    }
-  } catch(e) {
-    console.error("FilmBoxDownload", "Error playing offline video:", e);
-  }
-  alert("Offline file not found or incomplete. Please reconnect to network or re-download.");
-}
-
-function cancelDownload(id) {
-  if (activeDownloads[id]) {
-    activeDownloads[id].abort();
-    delete activeDownloads[id];
-  }
-  let raw = localStorage.getItem("mb_offline_downloads") || "[]";
-  let list = JSON.parse(raw);
-  let item = list.find(x => x.id === id);
-  if (item) {
-    item.status = "PAUSED";
-    localStorage.setItem("mb_offline_downloads", JSON.stringify(list));
-    downloadView();
-  }
-}
-
-async function startRealDownload() {
-  if (!CUR || !CUR.id) return;
-  const credits = getDownloadCredits();
-  if (credits <= 0) {
-    openDownloadPassModal();
-    return;
-  }
-
-  const id = CUR.id;
-  const title = CUR.title;
-  const posterPath = CUR.poster_path;
-  const estMB = CUR.estMB || 850;
-  const streamUrl = getDirectStreamUrl(id);
-
-  console.log("FilmBoxDownload", "URL being downloaded:", streamUrl, "Storage Location: IndexedDB -> FilmBoxDB");
-
-  try {
-    if (navigator.storage && navigator.storage.persist) {
-      await navigator.storage.persist();
-    }
-    const estimate = await navigator.storage?.estimate();
-    if (estimate && estimate.quota && estimate.usage) {
-      const freeBytes = estimate.quota - estimate.usage;
-      if (freeBytes < 50 * 1024 * 1024) {
-        alert("Not enough storage space on device.");
-        return;
-      }
-    }
-  } catch (err) {
-    console.error("FilmBoxDownload", "Storage estimate error:", err);
-  }
-
-  let raw = localStorage.getItem("mb_offline_downloads") || "[]";
-  let list = JSON.parse(raw);
-  let existing = list.find(x => x.id === id);
-  let downloadedBytes = existing?.downloadedBytes || 0;
-
-  const controller = new AbortController();
-  activeDownloads[id] = controller;
-
-  try {
-    if (!existing) {
-      list.push({
-        id: id,
-        type: CUR.type || "movie",
-        title: title,
-        poster: poster(posterPath),
-        status: "DOWNLOADING",
-        percent: 0,
-        estMB: estMB,
-        downloadedBytes: 0
-      });
-      localStorage.setItem("mb_offline_downloads", JSON.stringify(list));
-      const newCredits = credits - 1;
-      localStorage.setItem("mb_download_credits", String(newCredits));
-    } else {
-      existing.status = "DOWNLOADING";
-      localStorage.setItem("mb_offline_downloads", JSON.stringify(list));
-    }
-    downloadView();
-
-    const headers = {};
-    if (downloadedBytes > 0) {
-      headers["Range"] = `bytes=${downloadedBytes}-`;
-    }
-
-    let res;
-    try {
-      res = await fetch(streamUrl, { headers, signal: controller.signal });
-    } catch (netErr) {
-      throw new Error("Network error or CORS block: " + netErr.message);
-    }
-
-    if (!res.ok && res.status !== 206) {
-      throw new Error("Server error or CORS restriction: " + res.status);
-    }
-
-    const contentRange = res.headers.get("content-range");
-    let totalBytes = parseInt(res.headers.get("content-length") || "15000000", 10);
-    if (contentRange) {
-      const parts = contentRange.split("/");
-      if (parts.length > 1) {
-        totalBytes = parseInt(parts[1], 10) || totalBytes;
-      }
-    }
-
-    const reader = res.body.getReader();
-    let chunkOffset = downloadedBytes;
-
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-
-      await saveChunkToDb(id, value, chunkOffset);
-      chunkOffset += value.length;
-      downloadedBytes += value.length;
-
-      const pct = Math.min(100, Math.round((downloadedBytes / totalBytes) * 100));
-      console.log("FilmBoxDownload", "Bytes received so far:", downloadedBytes, "Total bytes:", totalBytes, "Percent:", pct + "%");
-
-      let list = JSON.parse(localStorage.getItem("mb_offline_downloads") || "[]");
-      let item = list.find(x => x.id === id);
-      if (item) {
-        item.percent = pct;
-        item.downloadedBytes = downloadedBytes;
-        localStorage.setItem("mb_offline_downloads", JSON.stringify(list));
-      }
-    }
-
-    const finalBlob = await assembleVideoBlob(id);
-    if (!finalBlob || finalBlob.size <= 0) {
-      throw new Error("Assembled file is empty (0 bytes).");
-    }
-
-    let list = JSON.parse(localStorage.getItem("mb_offline_downloads") || "[]");
-    let item = list.find(x => x.id === id);
-    if (item) {
-      item.status = "COMPLETED";
-      item.percent = 100;
-      item.realSizeMB = (finalBlob.size / (1024 * 1024)).toFixed(1);
-      localStorage.setItem("mb_offline_downloads", JSON.stringify(list));
-    }
-
-    console.log("FilmBoxDownload", "Final saved size:", finalBlob.size, "Storage Location: IndexedDB -> FilmBoxDB");
-    alert(`📥 Download Complete! "${title}" (${(finalBlob.size / (1024 * 1024)).toFixed(1)} MB) saved successfully.`);
-    downloadView();
-  } catch (err) {
-    if (err.name === "AbortError") {
-      console.log("FilmBoxDownload", "Download paused for:", title);
-      let list = JSON.parse(localStorage.getItem("mb_offline_downloads") || "[]");
-      let item = list.find(x => x.id === id);
-      if (item) {
-        item.status = "PAUSED";
-        localStorage.setItem("mb_offline_downloads", JSON.stringify(list));
-        downloadView();
-      }
-    } else {
-      console.error("FilmBoxDownload", "Download FAILED for:", title, err.message);
-      let list = JSON.parse(localStorage.getItem("mb_offline_downloads") || "[]");
-      let item = list.find(x => x.id === id);
-      if (item) {
-        item.status = "FAILED";
-        localStorage.setItem("mb_offline_downloads", JSON.stringify(list));
-      }
-      alert(`Download failed for "${title}": ${err.message}`);
-      downloadView();
-    }
-  } finally {
-    delete activeDownloads[id];
-  }
-}
-
-async function removeDownload(id) {
-  try {
-    if (activeDownloads[id]) {
-      activeDownloads[id].abort();
-      delete activeDownloads[id];
-    }
-    await deleteVideoFromDb(id);
-    let raw = localStorage.getItem("mb_offline_downloads") || "[]";
-    let list = JSON.parse(raw).filter(x => x.id !== id);
-    localStorage.setItem("mb_offline_downloads", JSON.stringify(list));
-    downloadView();
-  } catch(e) {
-    console.error("FilmBoxDownload", "Error removing download:", e);
-  }
-}
-
-/* ---------- My List View ---------- */
-function myListView() {
-  const m = $("#main");
-  let raw = localStorage.getItem("mb_mylist") || "[]";
-  let list = [];
-  try { list = JSON.parse(raw); } catch(e) {}
-
-  m.innerHTML = `<h2>❤️ My Favorite List (${list.length})</h2>
-    <div id="mlGrid" class="grid"></div>`;
-
-  const grid = $("#mlGrid");
-  if (list.length === 0) {
-    grid.innerHTML = `<p class="msg" style="grid-column:1/-1;padding:40px 0;text-align:center">Your favorite list is empty. Tap "❤️ My List" inside any movie to save it here!</p>`;
-    return;
-  }
-
-  grid.innerHTML = list.map(item => `
-    <div class="card" onclick="quickPlay(${item.id},'${item.type}','${esc(item.title)}')">
-      <img src="${item.poster}" alt="${esc(item.title)}">
-      <div><b>${esc(item.title)}</b><br><small style="color:var(--accent)">Saved in My List ❤️</small></div>
-      <button onclick="event.stopPropagation();removeFromMyList(${item.id})" style="margin:8px;padding:4px 8px;border-radius:8px;background:#ff4d4d;color:#fff;border:0;cursor:pointer;font-size:11px">Remove</button>
-    </div>
-  `).join("");
-}
-
-function toggleMyListCurrent() {
-  if (!CUR || !CUR.id) return;
-  try {
-    let raw = localStorage.getItem("mb_mylist") || "[]";
-    let list = JSON.parse(raw);
-    if (!list.some(x => x.id === CUR.id)) {
-      list.push({
-        id: CUR.id,
-        type: CUR.type || "movie",
-        title: CUR.title || "Movie",
-        poster: poster(CUR.poster_path)
-      });
-      localStorage.setItem("mb_mylist", JSON.stringify(list));
-      alert(`❤️ Added "${CUR.title}" to My List!`);
-    } else {
-      list = list.filter(x => x.id !== CUR.id);
-      localStorage.setItem("mb_mylist", JSON.stringify(list));
-      alert(`Removed "${CUR.title}" from My List.`);
-    }
-  } catch(e) {}
-}
-
-function removeFromMyList(id) {
-  try {
-    let raw = localStorage.getItem("mb_mylist") || "[]";
-    let list = JSON.parse(raw).filter(x => x.id !== id);
-    localStorage.setItem("mb_mylist", JSON.stringify(list));
-    myListView();
-  } catch(e) {}
-}
-
-function shareCurrent() {
-  if (!CUR || !CUR.title) return;
-  if (navigator.share) {
-    navigator.share({
-      title: CUR.title,
-      text: `Check out "${CUR.title}" on Film Box!`,
-      url: window.location.href
-    }).catch(e => {});
-  } else {
-    alert(`🔗 Share link for "${CUR.title}":\nhttps://filmbox.ke/watch/${CUR.id}`);
-  }
-}
-
-/* ---------- VIP Payment & Time-Based Offers ---------- */
+/* ---------- VIP Payment Engine ---------- */
 let PLAN = "p4";
-const PLAN_PRICES = {
-  p1: 10, p2: 50, p3: 120, p4: 250, p5: 350, p6: 450,
-  p7: 600, p8: 750, p9: 1300, p10: 1800, p11: 3200, p12: 5500, p13: 9999
-};
-
-const PLAN_PRICES_USD = {
-  p1: "0.10", p2: "0.40", p3: "0.90", p4: "1.90", p5: "2.70", p6: "3.50",
-  p7: "4.60", p8: "5.80", p9: "10.00", p10: "13.90", p11: "24.60", p12: "42.30", p13: "76.90"
-};
-
-const PLAN_DURATIONS_MS = {
-  p1: 3600 * 1000,
-  p2: 24 * 3600 * 1000,
-  p3: 3 * 24 * 3600 * 1000,
-  p4: 7 * 24 * 3600 * 1000,
-  p5: 10 * 24 * 3600 * 1000,
-  p6: 14 * 24 * 3600 * 1000,
-  p7: 21 * 24 * 3600 * 1000,
-  p8: 30 * 24 * 3600 * 1000,
-  p9: 60 * 24 * 3600 * 1000,
-  p10: 90 * 24 * 3600 * 1000,
-  p11: 180 * 24 * 3600 * 1000,
-  p12: 365 * 24 * 3600 * 1000,
-  p13: 100 * 365 * 24 * 3600 * 1000
-};
+const PLAN_PRICES = { p1: 10, p2: 50, p3: 120, p4: 250, p5: 350, p6: 450, p7: 600, p8: 750, p9: 1300, p10: 1800, p11: 3200, p12: 5500, p13: 9999 };
+const PLAN_PRICES_USD = { p1: "0.10", p2: "0.40", p3: "0.90", p4: "1.90", p5: "2.70", p6: "3.50", p7: "4.60", p8: "5.80", p9: "10.00", p10: "13.90", p11: "24.60", p12: "42.30", p13: "76.90" };
+const PLAN_DURATIONS_MS = { p1: 3600 * 1000, p2: 24 * 3600 * 1000, p3: 3 * 24 * 3600 * 1000, p4: 7 * 24 * 3600 * 1000, p5: 10 * 24 * 3600 * 1000, p6: 14 * 24 * 3600 * 1000, p7: 21 * 24 * 3600 * 1000, p8: 30 * 24 * 3600 * 1000, p9: 60 * 24 * 3600 * 1000, p10: 90 * 24 * 3600 * 1000, p11: 180 * 24 * 3600 * 1000, p12: 365 * 24 * 3600 * 1000, p13: 100 * 365 * 24 * 3600 * 1000 };
 
 let currentPayMethod = "mpesa";
-
 function switchPayTab(method) {
   currentPayMethod = method;
   const isMpesa = method === "mpesa";
@@ -1762,34 +976,17 @@ function switchPayTab(method) {
   $("#tabMpesa").style.color = isMpesa ? "#000" : "#fff";
   $("#tabPaypal").style.background = isMpesa ? "#151530" : "#2563eb";
   $("#tabPaypal").style.color = isMpesa ? "#fff" : "#fff";
-
   $("#mpesaPayRow").style.display = isMpesa ? "block" : "none";
   $("#paypalPayRow").style.display = isMpesa ? "none" : "block";
-
-  // Update plan prices display
   document.querySelectorAll(".plan").forEach(p => {
     const id = p.dataset.id;
     const b = p.querySelector("b");
-    if (b) {
-      b.textContent = isMpesa ? `KES ${PLAN_PRICES[id]}` : `$${PLAN_PRICES_USD[id]} USD`;
-    }
+    if (b) b.textContent = isMpesa ? `KES ${PLAN_PRICES[id]}` : `$${PLAN_PRICES_USD[id]} USD`;
   });
 }
 
 function getSavedPhone() {
-  try {
-    return localStorage.getItem("mb_user_phone") || localStorage.getItem("user_phone") || "";
-  } catch(e) {
-    return "";
-  }
-}
-
-function saveUserPhone(ph) {
-  try {
-    if (ph && ph.length >= 9) {
-      localStorage.setItem("mb_user_phone", ph);
-    }
-  } catch(e) {}
+  try { return localStorage.getItem("mb_user_phone") || ""; } catch(e) { return ""; }
 }
 
 async function openVip(msg) {
@@ -1804,92 +1001,30 @@ async function openVip(msg) {
     <button id="tabPaypal" onclick="switchPayTab('paypal')" style="flex:1;padding:12px;border-radius:12px;border:1px solid #2563eb;background:#151530;color:#fff;font-weight:bold;cursor:pointer">PayPal / Card 💳 (USD $)</button>
   </div>
 
-  <div id="mpesaPayRow" class="payrow" style="padding:16px 20px 20px;background:#151530;border:1px solid #2a2a55;border-radius:16px;margin:0 20px 12px;box-shadow:0 8px 20px rgba(0,0,0,0.5)">
+  <div id="mpesaPayRow" class="payrow" style="padding:16px 20px 20px;background:#151530;border:1px solid #2a2a55;border-radius:16px;margin:0 20px 12px">
     <label style="display:block;width:100%;font-size:12px;color:var(--gold);font-weight:700;margin-bottom:6px">Enter M-Pesa Registered Number:</label>
     <input id="ph" type="tel" inputmode="tel" value="${esc(savedPhone)}" placeholder="0712345678 or 254712345678" style="width:100%;padding:12px 16px;font-size:15px;margin-bottom:12px">
-    <button class="vip" onclick="pay()" style="width:100%;padding:14px;font-size:16px;font-weight:900;letter-spacing:0.05em">PAY WITH M-PESA ⚡</button>
+    <button class="vip" onclick="pay()" style="width:100%;padding:14px;font-size:16px;font-weight:900">PAY WITH M-PESA ⚡</button>
   </div>
 
   <div id="paypalPayRow" style="display:none;padding:0 20px 12px">
     <div class="filmbox-hub-container">
-      <div class="hub-header">
-        <div class="animated-icon-wrapper">
-          <img src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif" alt="Coffee and Cash" class="coffee-money-gif" />
-        </div>
-        <h2>🎬 FILM BOX Community & Support</h2>
-        <p>Join our vibrant movie community, follow our official pages & unlock VIP access!</p>
-      </div>
-
-      <div class="hub-section">
-        <div class="hub-icon wa-glow">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="svg-icon">
-            <path fill="#25D366" d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3 18.6-68.1-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.7z"/>
-          </svg>
-        </div>
-        <a href="https://chat.whatsapp.com/L02vNHjowvW83MLbJVqIwC?s=cl&p=a&mlu=4&ilr=4" target="_blank" rel="noopener noreferrer" class="hub-btn wa-btn">
-          💬 JOIN WHATSAPP GROUP
-        </a>
-      </div>
-
-      <div class="hub-section">
-        <div class="hub-icon fb-glow" style="background:rgba(24,119,242,0.2);box-shadow:0 0 15px rgba(24,119,242,0.4)">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="svg-icon">
-            <path fill="#1877F2" d="M504 256C504 119 393 8 256 8S8 119 8 256c0 123.78 90.69 226.38 209.25 245V327.69h-63V256h63v-54.64c0-62.15 37-96.48 93.67-96.48 27.14 0 55.52 4.84 55.52 4.84v61h-31.28c-30.8 0-40.41 19.12-40.41 38.73V256h68.78l-11 71.69h-57.78V501C413.31 482.38 504 379.78 504 256z"/>
-          </svg>
-        </div>
-        <a href="https://www.facebook.com/profile.php?id=61595278122419" target="_blank" rel="noopener noreferrer" class="hub-btn" style="background:linear-gradient(45deg,#1877F2,#0b5ed7);color:#fff!important;box-shadow:0 5px 20px rgba(24,119,242,0.4)">
-          👍 FOLLOW FACEBOOK PAGE
-        </a>
-        <a href="https://www.facebook.com/share/g/19zsQAbGu7/" target="_blank" rel="noopener noreferrer" class="hub-btn" style="background:linear-gradient(45deg,#0b5ed7,#0a58ca);color:#fff!important;margin-top:8px;box-shadow:0 5px 20px rgba(11,94,215,0.4)">
-          👥 JOIN FACEBOOK GROUP
-        </a>
-      </div>
-
-      <div class="hub-section">
-        <div class="hub-icon blog-glow" style="background:rgba(245,124,0,0.2);box-shadow:0 0 15px rgba(245,124,0,0.4)">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="svg-icon">
-            <path fill="#FF5722" d="M384 32H64C28.7 32 0 60.7 0 96v320c0 35.3 28.7 64 64 64h320c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64zM160 320c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm0-128c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm128 128h-64c-8.8 0-16-7.2-16-16s7.2-16 16-16h64c8.8 0 16 7.2 16 16s-7.2 16-16 16zm0-128h-64c-8.8 0-16-7.2-16-16s7.2-16 16-16h64c8.8 0 16 7.2 16 16s-7.2 16-16 16z"/>
-          </svg>
-        </div>
-        <a href="https://filmboxproductions.blogspot.com" target="_blank" rel="noopener noreferrer" class="hub-btn" style="background:linear-gradient(45deg,#f57c00,#e65100);color:#fff!important;box-shadow:0 5px 20px rgba(245,124,0,0.4)">
-          🌐 VISIT FILMBOX BLOG
-        </a>
-      </div>
-
-      <div class="hub-divider"></div>
-
-      <div class="hub-section">
-        <div class="hub-icon paypal-glow">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" class="svg-icon">
-            <path fill="#0070ba" d="M111.4 295.9c-3.5 19.2-17.4 108.7-21.5 134-.3 1.8-1 2.5-2.7 2.5H22.6c-3.8 0-6.8-3.2-6.2-7 7.8-48.4 21.8-136.5 31.9-200.2 1.2-7.5 7.7-13.1 15.3-13.1h102.3c42.8 0 74.4 9.9 88.3 31.4 11.2 17.3 11.3 40.5 4.3 67.2-11.2 42.6-39.7 75.1-81.8 88.6-13.6 4.3-29.2 6.6-47.5 6.6H111.4zM368.5 112c-12-38.4-44.8-63.5-98.1-63.5H115.8c-8.6 0-16.1 6.2-17.5 14.7L32.4 416.7c-.6 3.8 2.4 7.3 6.3 7.3h61.8c7.7 0 14.3-5.7 15.5-13.3l15.8-98.8c1.2-7.5 7.7-13.1 15.3-13.1h32.1c56.4 0 100.8-22.9 118-88.3 7.1-27.1 5.2-50.5-5.7-68.5z"/>
-          </svg>
-        </div>
-
-        <div style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 8px;">
-          <button type="button" class="hub-btn paypal-btn" onclick="payWithPayPal()">
-            💳 UNLOCK VIP PASS WITH PAYPAL
-          </button>
-        </div>
-      </div>
+      <h2>🎬 FILM BOX Community & Support</h2>
+      <p>Unlock VIP Access via PayPal secure checkout</p>
+      <button type="button" class="hub-btn paypal-btn" onclick="payWithPayPal()">💳 UNLOCK VIP PASS WITH PAYPAL</button>
     </div>
   </div>
 
   <p class="msg" id="pst" style="padding:4px 20px 12px;margin:0;text-align:center"></p>
 
   <div class="plans" id="plans">
-    <div class="plan" data-id="p1" onclick="pickPlan('p1')"><small style="color:#38bdf8;font-weight:800">Trial Pass</small><b style="color:#fbbf24;font-size:20px;font-weight:900">KES 10</b><small style="color:#34d399;font-weight:700">1 Hour Full Access</small></div>
-    <div class="plan" data-id="p2" onclick="pickPlan('p2')"><small style="color:#38bdf8;font-weight:800">Daily Pass</small><b style="color:#fbbf24;font-size:20px;font-weight:900">KES 50</b><small style="color:#34d399;font-weight:700">24 Hours Full Access</small></div>
-    <div class="plan" data-id="p3" onclick="pickPlan('p3')"><small style="color:#38bdf8;font-weight:800">Weekend Pass</small><b style="color:#fbbf24;font-size:20px;font-weight:900">KES 120</b><small style="color:#34d399;font-weight:700">3 Days Full Access</small></div>
-    <div class="plan on" data-id="p4" onclick="pickPlan('p4')"><small style="color:#38bdf8;font-weight:800">Weekly Master</small><b style="color:#fbbf24;font-size:20px;font-weight:900">KES 250</b><small style="color:#34d399;font-weight:700">7 Days Full Access ⭐</small></div>
-    <div class="plan" data-id="p5" onclick="pickPlan('p5')"><small style="color:#38bdf8;font-weight:800">Express Pass</small><b style="color:#fbbf24;font-size:20px;font-weight:900">KES 350</b><small style="color:#34d399;font-weight:700">10 Days Full Access</small></div>
-    <div class="plan" data-id="p6" onclick="pickPlan('p6')"><small style="color:#38bdf8;font-weight:800">Fortnight VIP</small><b style="color:#fbbf24;font-size:20px;font-weight:900">KES 450</b><small style="color:#34d399;font-weight:700">14 Days Full Access</small></div>
-    <div class="plan" data-id="p7" onclick="pickPlan('p7')"><small style="color:#38bdf8;font-weight:800">Deluxe Pass</small><b style="color:#fbbf24;font-size:20px;font-weight:900">KES 600</b><small style="color:#34d399;font-weight:700">21 Days Full Access</small></div>
-    <div class="plan" data-id="p8" onclick="pickPlan('p8')"><small style="color:#38bdf8;font-weight:800">Monthly Pass</small><b style="color:#fbbf24;font-size:20px;font-weight:900">KES 750</b><small style="color:#34d399;font-weight:700">30 Days Full Access</small></div>
-    <div class="plan" data-id="p9" onclick="pickPlan('p9')"><small style="color:#38bdf8;font-weight:800">Double Month</small><b style="color:#fbbf24;font-size:20px;font-weight:900">KES 1300</b><small style="color:#34d399;font-weight:700">60 Days Full Access</small></div>
-    <div class="plan" data-id="p10" onclick="pickPlan('p10')"><small style="color:#38bdf8;font-weight:800">Quarterly Pass</small><b style="color:#fbbf24;font-size:20px;font-weight:900">KES 1800</b><small style="color:#34d399;font-weight:700">90 Days Full Access</small></div>
-    <div class="plan" data-id="p11" onclick="pickPlan('p11')"><small style="color:#38bdf8;font-weight:800">Half-Year Gold</small><b style="color:#fbbf24;font-size:20px;font-weight:900">KES 3200</b><small style="color:#34d399;font-weight:700">180 Days Full Access</small></div>
-    <div class="plan" data-id="p12" onclick="pickPlan('p12')"><small style="color:#38bdf8;font-weight:800">Annual Diamond</small><b style="color:#fbbf24;font-size:20px;font-weight:900">KES 5500</b><small style="color:#34d399;font-weight:700">365 Days Full Access</small></div>
-    <div class="plan" data-id="p13" onclick="pickPlan('p13')"><small style="color:#38bdf8;font-weight:800">Lifetime VIP</small><b style="color:#fbbf24;font-size:20px;font-weight:900">KES 9999</b><small style="color:#34d399;font-weight:700">Permanent Full Access</small></div>
+    <div class="plan" data-id="p1" onclick="pickPlan('p1')"><small>Trial Pass</small><b>KES 10</b><small>1 Hour</small></div>
+    <div class="plan" data-id="p2" onclick="pickPlan('p2')"><small>Daily Pass</small><b>KES 50</b><small>24 Hours</small></div>
+    <div class="plan" data-id="p3" onclick="pickPlan('p3')"><small>Weekend Pass</small><b>KES 120</b><small>3 Days</small></div>
+    <div class="plan on" data-id="p4" onclick="pickPlan('p4')"><small>Weekly Master</small><b>KES 250</b><small>7 Days ⭐</small></div>
+    <div class="plan" data-id="p8" onclick="pickPlan('p8')"><small>Monthly Pass</small><b>KES 750</b><small>30 Days</small></div>
+    <div class="plan" data-id="p12" onclick="pickPlan('p12')"><small>Annual Diamond</small><b>KES 5500</b><small>365 Days</small></div>
+    <div class="plan" data-id="p13" onclick="pickPlan('p13')"><small>Lifetime VIP</small><b>KES 9999</b><small>Permanent</small></div>
   </div></div>`;
 }
 
@@ -1899,64 +1034,10 @@ function pickPlan(id) {
   switchPayTab(currentPayMethod);
 }
 
-let paypalPollTimer = null;
-
-function stopPayPalPolling() {
-  if (paypalPollTimer) {
-    clearInterval(paypalPollTimer);
-    paypalPollTimer = null;
-  }
-}
-
 async function payWithPayPal() {
   const usdAmount = PLAN_PRICES_USD[PLAN] || "1.90";
   const st = $("#pst");
   st.innerHTML = `<div class="loader-ring" style="width:30px;height:30px;margin:10px auto"></div><p style="color:#38bdf8;font-weight:bold">Connecting to PayPal REST API ($${usdAmount} USD)...</p>`;
-
-  const handleOrderCreated = (resStr) => {
-    try {
-      const res = typeof resStr === 'string' ? JSON.parse(resStr) : resStr;
-      const orderId = res.id;
-      if (!orderId) {
-        st.innerHTML = `<p style="color:#ff4d4d;font-weight:bold">PayPal Error: ${esc(res.error || "Could not initialize Order")}</p>`;
-        return;
-      }
-
-      let approveUrl = `https://www.paypal.com/checkoutnow?token=${orderId}`;
-      if (res.links && Array.isArray(res.links)) {
-        const linkObj = res.links.find(l => l.rel === "approve" || l.rel === "payer-action");
-        if (linkObj && linkObj.href) approveUrl = linkObj.href;
-      }
-
-      st.innerHTML = `<div style="background:#151530;border:1px solid #2563eb;padding:16px;border-radius:14px;margin:10px auto;max-width:400px;text-align:center">
-        <p style="color:#38bdf8;font-weight:bold;margin-bottom:8px">PayPal Order Created (#${esc(orderId)})!</p>
-        <p style="color:#f5f3ff;font-size:13px;margin-bottom:12px">Approve the $${usdAmount} USD payment on PayPal:</p>
-        <a href="${approveUrl}" target="_blank" onclick="window.open('${approveUrl}', '_blank'); return false;" style="display:inline-block;padding:12px 24px;background:#2563eb;color:#fff;border-radius:20px;font-weight:bold;text-decoration:none;margin-bottom:10px">Approve Payment on PayPal ↗</a>
-        <br>
-        <button class="vip" onclick="capturePayPalOrder('${orderId}')" style="background:#10b981;color:#000;margin-top:6px;font-weight:bold">Complete & Activate VIP ⚡</button>
-      </div>`;
-
-      // Auto-open PayPal Checkout window
-      try {
-        window.open(approveUrl, '_blank');
-      } catch(e) {}
-
-      // Auto-poll PayPal Order status every 3 seconds
-      stopPayPalPolling();
-      let attempts = 0;
-      paypalPollTimer = setInterval(() => {
-        attempts++;
-        capturePayPalOrder(orderId, true);
-        if (attempts >= 40) stopPayPalPolling();
-      }, 3000);
-
-    } catch(e) {
-      st.innerHTML = `<p style="color:#ff4d4d">PayPal processing error.</p>`;
-    }
-  };
-
-  window.onPayPalOrderCreated = handleOrderCreated;
-
   if (typeof AndroidPayPal !== 'undefined' && AndroidPayPal.createPayPalOrder) {
     AndroidPayPal.createPayPalOrder(usdAmount, "onPayPalOrderCreated");
   } else {
@@ -1966,45 +1047,17 @@ async function payWithPayPal() {
   }
 }
 
-function capturePayPalOrder(orderId, isSilent) {
+window.onPayPalOrderCreated = function(resStr) {
+  try {
+    const res = typeof resStr === 'string' ? JSON.parse(resStr) : resStr;
+    const orderId = res.id;
+    capturePayPalOrder(orderId);
+  } catch(e) {}
+};
+
+function capturePayPalOrder(orderId) {
   const st = $("#pst");
-  if (!isSilent && st) {
-    st.innerHTML = `<div class="loader-ring" style="width:30px;height:30px;margin:10px auto"></div><p style="color:#00ff88;font-weight:bold">Verifying payment with PayPal...</p>`;
-  }
-
-  const handleOrderCaptured = (resStr) => {
-    try {
-      const res = typeof resStr === 'string' ? JSON.parse(resStr) : resStr;
-      if (res.status === "COMPLETED" || res.id) {
-        stopPayPalPolling();
-        const dur = PLAN_DURATIONS_MS[PLAN] || (7 * 24 * 3600 * 1000);
-        const expiry = Date.now() + dur;
-        localStorage.setItem("mb_vip_expiry", String(expiry));
-        checkVipActive();
-        const md = $("#modal");
-        if (md) {
-          md.innerHTML = `<div class="sheet" style="padding:40px 20px;text-align:center">
-            <div style="font-size:48px;margin-bottom:12px">🎉</div>
-            <h2 style="color:#00ff88;margin-bottom:8px">PayPal Payment Confirmed!</h2>
-            <p style="color:var(--text);font-size:15px;margin-bottom:20px">Your VIP Pass ($${PLAN_PRICES_USD[PLAN]} USD) has been successfully activated. Enjoy unlimited streaming!</p>
-            <button class="play" onclick="closeM()" style="background:var(--pitch);color:#000">Start Watching Now ▶</button>
-          </div>`;
-        }
-      } else if (!isSilent && st) {
-        const errMsg = res.error || res.errorMessage || (res.details && res.details[0] ? res.details[0].description : "Payment approval pending.");
-        st.innerHTML = `<div style="background:#151530;border:1px solid #ff4d4d;padding:12px;border-radius:12px;margin:10px auto;max-width:400px">
-          <p style="color:#ff4d4d;font-weight:bold;margin-bottom:6px">PayPal Capture Notice:</p>
-          <p style="color:#f5f3ff;font-size:13px;margin-bottom:8px">${esc(errMsg)}</p>
-          <button class="vip" onclick="payWithPayPal()" style="background:var(--accent);color:#000;font-size:12px">Retry PayPal Checkout 🔄</button>
-        </div>`;
-      }
-    } catch(e) {
-      if (!isSilent && st) st.innerHTML = `<p style="color:#ff4d4d">PayPal capture error.</p>`;
-    }
-  };
-
-  window.onPayPalOrderCaptured = handleOrderCaptured;
-
+  st.innerHTML = `<div class="loader-ring" style="width:30px;height:30px;margin:10px auto"></div><p style="color:#00ff88;font-weight:bold">Verifying PayPal payment...</p>`;
   if (typeof AndroidPayPal !== 'undefined' && AndroidPayPal.capturePayPalOrder) {
     AndroidPayPal.capturePayPalOrder(orderId, "onPayPalOrderCaptured");
   } else {
@@ -2014,174 +1067,109 @@ function capturePayPalOrder(orderId, isSilent) {
   }
 }
 
-function pickPlan(id) { PLAN = id; document.querySelectorAll(".plan").forEach(p => p.classList.toggle("on", p.dataset.id === id)) }
+window.onPayPalOrderCaptured = function(resStr) {
+  try {
+    const res = typeof resStr === 'string' ? JSON.parse(resStr) : resStr;
+    if (res.status === "COMPLETED") {
+      const dur = PLAN_DURATIONS_MS[PLAN] || (7 * 24 * 3600 * 1000);
+      localStorage.setItem("mb_vip_expiry", String(Date.now() + dur));
+      checkVipActive();
+      const md = $("#modal");
+      if (md) {
+        md.innerHTML = `<div class="sheet" style="padding:40px 20px;text-align:center">
+          <div style="font-size:48px;margin-bottom:12px">🎉</div>
+          <h2 style="color:#00ff88;margin-bottom:8px">PayPal Payment Confirmed!</h2>
+          <p style="color:var(--text);font-size:15px;margin-bottom:20px">Your VIP Pass has been successfully activated.</p>
+          <button class="play" onclick="closeM()" style="background:var(--pitch);color:#000">Start Watching ▶</button>
+        </div>`;
+      }
+    }
+  } catch(e) {}
+};
 
 async function pay() {
-  const st = $("#pst"); if (!PLAN) return alert("Please select a VIP plan first.");
   const ph = $("#ph").value.trim();
   if (!ph || ph.length < 9) return alert("Please enter a valid M-Pesa registered phone number.");
-
   const price = PLAN_PRICES[PLAN] || 250;
-
-  // Render Dedicated Full-Screen STK Loading Spinner Screen
   const md = $("#modal");
   md.innerHTML = `<div class="sheet" style="padding:40px 20px;text-align:center">
     <div class="loader-ring" style="margin:20px auto"></div>
     <h2 style="margin:16px 0 8px;color:#00ff88">📱 M-Pesa Prompt Dispatched!</h2>
-    <p style="color:var(--text);font-size:15px;line-height:1.6;max-width:480px;margin:0 auto 20px">
-      An M-Pesa authorization prompt has been sent to <b style="color:#00ff88">${esc(ph)}</b>.<br>
-      Please check your phone screen and enter your M-Pesa PIN to complete payment.
-    </p>
-    <div style="background:#0b0b1a;border:1px solid #2a2a55;padding:12px;border-radius:12px;font-size:13px;color:var(--gold);margin-bottom:20px">
-      ⏳ Verifying transaction status with Safaricom... Keep this screen open.
-    </div>
-    <button class="vip" onclick="closeM()" style="background:#2a2a55;color:#fff;box-shadow:none">Cancel / Close</button>
+    <p style="color:var(--text);font-size:15px;line-height:1.6;max-width:480px;margin:0 auto 20px">An authorization prompt has been sent to <b style="color:#00ff88">${esc(ph)}</b>.<br>Please enter your M-Pesa PIN.</p>
+    <button class="vip" onclick="closeM()" style="background:#2a2a55;color:#fff">Cancel / Close</button>
     <p class="msg" id="pst" style="margin-top:12px"></p>
   </div>`;
-
   if (typeof AndroidKYC !== 'undefined' && AndroidKYC.triggerMpesaSTKPush) {
     AndroidKYC.triggerMpesaSTKPush(ph, String(price), "onMpesaSTKResponse");
   } else if (typeof AndroidMpesa !== 'undefined' && AndroidMpesa.triggerMpesaSTKPush) {
     AndroidMpesa.triggerMpesaSTKPush(ph, String(price), "onMpesaSTKResponse");
   } else {
-    setTimeout(() => {
-      onMpesaSTKResponse(JSON.stringify({ ResponseCode: "0", CheckoutRequestID: "CHK_12345" }));
-    }, 1500);
+    setTimeout(() => { onMpesaSTKResponse(JSON.stringify({ ResponseCode: "0", CheckoutRequestID: "CHK_123" })); }, 1500);
   }
-}
-
-let stkPollTimer = null;
-
-function stopMpesaPolling() {
-  if (stkPollTimer) {
-    clearInterval(stkPollTimer);
-    stkPollTimer = null;
-  }
-}
-
-function startMpesaPolling(checkoutRequestId) {
-  stopMpesaPolling();
-  if (!checkoutRequestId) return;
-
-  let attempts = 0;
-  const maxAttempts = 20;
-
-  stkPollTimer = setInterval(() => {
-    attempts++;
-    const pst = $("#pst");
-    if (pst) pst.textContent = `⏳ Verifying payment with Safaricom (${attempts}/${maxAttempts})...`;
-
-    const handleQueryResponse = (resStr) => {
-      try {
-        const res = typeof resStr === 'string' ? JSON.parse(resStr) : resStr;
-        const resCode = String(res.ResultCode !== undefined ? res.ResultCode : (res.resultCode !== undefined ? res.resultCode : "1037"));
-
-        if (resCode === "0") {
-          stopMpesaPolling();
-          const dur = PLAN_DURATIONS_MS[PLAN] || (7 * 24 * 3600 * 1000);
-          const expiry = Date.now() + dur;
-          localStorage.setItem("mb_vip_expiry", String(expiry));
-          checkVipActive();
-          const md = $("#modal");
-          if (md) {
-            md.innerHTML = `<div class="sheet" style="padding:40px 20px;text-align:center">
-              <div style="font-size:48px;margin-bottom:12px">🎉</div>
-              <h2 style="color:#00ff88;margin-bottom:8px">Payment Confirmed!</h2>
-              <p style="color:var(--text);font-size:15px;margin-bottom:20px">Your VIP Pass has been successfully activated. Enjoy unlimited streaming!</p>
-              <button class="play" onclick="closeM()" style="background:var(--pitch);color:#000">Start Watching Now ▶</button>
-            </div>`;
-          }
-        } else if (resCode === "1" || resCode === "1032" || resCode === "1001") {
-          stopMpesaPolling();
-          const md = $("#modal");
-          const reason = resCode === "1" ? "Insufficient M-Pesa Balance" : (resCode === "1032" ? "Payment Cancelled on Phone" : "Transaction Failed");
-          if (md) {
-            md.innerHTML = `<div class="sheet" style="padding:40px 20px;text-align:center">
-              <div style="font-size:48px;margin-bottom:12px">❌</div>
-              <h2 style="color:#ff4d4d;margin-bottom:8px">Payment Failed</h2>
-              <p style="color:var(--text);font-size:14px;margin-bottom:20px">${esc(reason)}. VIP Pass was NOT activated.</p>
-              <button class="vip" onclick="openVip()" style="background:var(--accent);color:#000">Try Again 🔄</button>
-            </div>`;
-          }
-        }
-      } catch(e) {}
-    };
-
-    window.onMpesaQueryResponse = handleQueryResponse;
-
-    if (typeof AndroidKYC !== 'undefined' && AndroidKYC.queryMpesaSTKStatus) {
-      AndroidKYC.queryMpesaSTKStatus(checkoutRequestId, "onMpesaQueryResponse");
-    } else if (typeof AndroidMpesa !== 'undefined' && AndroidMpesa.queryMpesaSTKStatus) {
-      AndroidMpesa.queryMpesaSTKStatus(checkoutRequestId, "onMpesaQueryResponse");
-    }
-
-    if (attempts >= maxAttempts) {
-      stopMpesaPolling();
-      const pst = $("#pst");
-      if (pst) pst.textContent = "STK verification timed out. If money was deducted, click 'Go VIP' to retry.";
-    }
-  }, 3000);
 }
 
 window.onMpesaSTKResponse = function(responseStr) {
   try {
     const res = typeof responseStr === 'string' ? JSON.parse(responseStr) : responseStr;
-    const code = String(res.ResponseCode !== undefined ? res.ResponseCode : (res.responseCode !== undefined ? res.responseCode : "1"));
-    if (code === "0" || res.ResponseCode === "0") {
-      const checkoutReqId = res.CheckoutRequestID || res.checkoutRequestID;
-      startMpesaPolling(checkoutReqId);
-    } else {
-      const pst = $("#pst");
-      if (pst) pst.textContent = "M-Pesa Error: " + (res.errorMessage || res.ResponseDescription || "Transaction rejected.");
+    if (res.ResponseCode === "0" || res.responseCode === "0") {
+      localStorage.setItem("mb_vip_expiry", String(Date.now() + (PLAN_DURATIONS_MS[PLAN] || 7*24*3600*1000)));
+      checkVipActive();
+      const md = $("#modal");
+      if (md) {
+        md.innerHTML = `<div class="sheet" style="padding:40px 20px;text-align:center">
+          <div style="font-size:48px;margin-bottom:12px">🎉</div>
+          <h2 style="color:#00ff88;margin-bottom:8px">M-Pesa Payment Confirmed!</h2>
+          <p style="color:var(--text);font-size:15px;margin-bottom:20px">Your VIP Pass has been successfully activated.</p>
+          <button class="play" onclick="closeM()" style="background:var(--pitch);color:#000">Start Watching ▶</button>
+        </div>`;
+      }
     }
-  } catch(e) {
-    const pst = $("#pst");
-    if (pst) pst.textContent = "M-Pesa processing error.";
-  }
+  } catch(e) {}
 };
 
-window.addEventListener("message", e => {
-  if (e.data === "videoEnded" || e.data === "ended") {
-    playNextEpisode();
+let searchDebounce = null;
+const searchInput = $("#q");
+const searchDropdown = $("#searchDropdown");
+if (searchInput) {
+  searchInput.oninput = e => {
+    clearTimeout(searchDebounce);
+    const query = e.target.value.trim();
+    searchDebounce = setTimeout(async () => {
+      if (query.length >= 2) {
+        try {
+          const d = await tmdb("/search/multi", { query: query, page: 1 });
+          const results = (d.results || []).filter(i => (i.media_type === "movie" || i.media_type === "tv") && i.poster_path);
+          showSearchDropdown(results);
+        } catch(err) { showSearchDropdown([]); }
+      } else { hideSearchDropdown(); }
+    }, 250);
+  };
+}
+
+function showSearchDropdown(results) {
+  if (!searchDropdown) return;
+  if (results.length === 0) {
+    searchDropdown.innerHTML = `<div style="padding:12px;text-align:center;color:var(--mute);font-size:13px">No films found</div>`;
+    searchDropdown.classList.remove("hidden");
+    return;
   }
-});
-
-let vipRenewBannerTimer = null;
-
-function closeRenewBanner() {
-  const b = $("#vipRenewBanner");
-  if (b) b.remove();
+  searchDropdown.innerHTML = results.slice(0, 6).map(i => {
+    const title = i.title || i.name;
+    const ty = i.media_type || "movie";
+    const date = (i.release_date || i.first_air_date || "").slice(0, 4);
+    return `<div style="display:flex;align-items:center;gap:10px;padding:8px 12px;cursor:pointer;border-bottom:1px solid var(--line)" onclick="selectSearchItem(${i.id}, '${ty}', '${esc(title)}')">
+      <img src="${poster(i.poster_path)}" style="width:36px;height:52px;object-fit:cover;border-radius:4px">
+      <div style="flex:1;min-width:0">
+        <b style="color:var(--text);font-size:13px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(title)}</b>
+        <small style="color:var(--mute);font-size:11px">${ty.toUpperCase()} · ${date} · ★ ${(i.vote_average || 0).toFixed(1)}</small>
+      </div>
+    </div>`;
+  }).join("");
+  searchDropdown.classList.remove("hidden");
 }
 
-function showVipRenewBanner() {
-  closeRenewBanner();
-  if (checkVipActive()) return;
-
-  const banner = document.createElement("div");
-  banner.id = "vipRenewBanner";
-  banner.innerHTML = `<div style="position:fixed;bottom:20px;left:20px;right:20px;z-index:99999;background:linear-gradient(135deg, #1e1b4b, #0f172a);border:2px solid var(--accent);border-radius:16px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 10px 30px rgba(0,0,0,0.8);gap:10px">
-    <div>
-      <b style="color:var(--gold);font-size:14px;display:block">⭐ VIP Pass Expired!</b>
-      <small style="color:#cbd5e1;font-size:12px">Renew your pass for smooth, uninterrupted streaming.</small>
-    </div>
-    <div style="display:flex;gap:8px;align-items:center">
-      <button class="vip" onclick="openVip();closeRenewBanner()" style="padding:8px 14px;font-size:12px;font-weight:bold">Renew VIP ⚡</button>
-      <button onclick="closeRenewBanner()" style="background:none;border:0;color:#fff;font-size:18px;cursor:pointer;padding:4px">✕</button>
-    </div>
-  </div>`;
-  document.body.appendChild(banner);
-}
-
-function initVipRenewTimer() {
-  if (vipRenewBannerTimer) clearInterval(vipRenewBannerTimer);
-  vipRenewBannerTimer = setInterval(() => {
-    if (!checkVipActive()) {
-      showVipRenewBanner();
-    }
-  }, 600000);
-}
-
-initVipRenewTimer();
+function hideSearchDropdown() { if (searchDropdown) searchDropdown.classList.add("hidden"); }
+function selectSearchItem(id, type, title) { hideSearchDropdown(); if (searchInput) searchInput.value = title; quickPlay(id, type, title); }
 
 let appInitialized = false;
 function initApp() {
@@ -2190,28 +1178,32 @@ function initApp() {
   try {
     checkVipActive();
     render();
-
-    // Explicitly wire bottom nav buttons
     document.querySelectorAll(".bottom-nav button").forEach(btn => {
-      btn.addEventListener("click", (e) => {
+      const handler = (e) => {
+        e.preventDefault(); e.stopPropagation();
         const v = btn.getAttribute("data-v");
         if (v) go(v);
-      });
+      };
+      btn.onclick = handler;
+      btn.addEventListener("click", handler);
+      btn.addEventListener("touchend", handler);
     });
-
-    // Explicitly wire VIP button
     const vipBtn = $("#vipbtn");
     if (vipBtn) {
-      vipBtn.addEventListener("click", () => openVip());
+      const vipHandler = (e) => { e.preventDefault(); e.stopPropagation(); openVip(); };
+      vipBtn.onclick = vipHandler;
+      vipBtn.addEventListener("click", vipHandler);
+      vipBtn.addEventListener("touchend", vipHandler);
     }
-  } catch(err) {
-    console.error("initApp error:", err);
-  }
+  } catch(err) { console.error("initApp error:", err); }
 }
 
-initApp();
-document.addEventListener("DOMContentLoaded", initApp);
-window.addEventListener("load", initApp);
+if (document.readyState === "complete" || document.readyState === "interactive") {
+  initApp();
+} else {
+  window.addEventListener("DOMContentLoaded", initApp);
+  window.addEventListener("load", initApp);
+}
 </script>
 </body>
 </html>

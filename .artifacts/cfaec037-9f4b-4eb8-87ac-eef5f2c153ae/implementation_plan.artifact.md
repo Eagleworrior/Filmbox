@@ -1,27 +1,26 @@
-# Implementation Plan - Clean Up and Update with Downloaded Hub & Server Files
+# Implementation Plan - Merge Clean Downloaded HTML with Complete Film Box JavaScript Engine
 
-Replace the app's main frontend asset (`index.html`) with the clean, verified version from Downloads, integrate server files for backend payment processing (`server.js`, `package.json`, `env.example`, `colorful-hub.html`), and clean up obsolete or redundant scratch files.
+Combine the clean UI layout from the user's downloaded HTML file with the complete Film Box JavaScript engine (local master catalog of movies/series, full browse & genre categories, endless scroll, live search auto-suggestions, M-Pesa & PayPal payment modals, Football matches, News, and Community hub) to ensure movies display immediately and all buttons work perfectly.
 
 ## User Review Required
 
 > [!IMPORTANT]
-> - **File Replacement**: Update `app/src/main/assets/index.html` with the clean version from Downloads.
-> - **Backend / Server Integration**: Place `server.js`, `package.json`, and `env.example` in the project root or server directory.
-> - **Cleanup**: Remove any redundant or obsolete temporary files.
+> - **Full Functionality Restoration**: Merges the clean layout structure from the downloaded `index.html` with the complete JavaScript runtime engine so that movies, series, search dropdown, VIP payment modal, football scores, and navigation buttons work 100%.
+> - **Local-First Master Catalog**: Pre-loads 20+ blockbuster movies and series for instant rendering on Home, Movies, and Series tabs.
+> - **Robust Event Listeners**: Explicitly binds `click` and `touchend` handlers to all navigation tabs, category chips, movie cards, and the VIP button.
 
 ## Proposed Changes
 
-### Project Files Update & Cleanup
+### Web Application Asset Engine
 #### [MODIFY] [index.html](file:///C:/Users/EAGLE/AndroidStudioProjects/FilmBox/app/src/main/assets/index.html)
-- Replace with the clean frontend code from Downloads.
-
-#### [NEW] [server.js](file:///C:/Users/EAGLE/AndroidStudioProjects/FilmBox/server.js)
-- Add Node backend for M-Pesa & PayPal.
-
-#### [NEW] [package.json](file:///C:/Users/EAGLE/AndroidStudioProjects/FilmBox/package.json)
-- Add Node dependencies.
+- Combine clean CSS/HTML layout structure with the full JavaScript runtime engine (`home`, `browse`, `fetchPage`, `openVip`, `pay`, `football`, `newsView`, `socialCommunityView`, `initApp`).
+- Ensure all movie cards, search auto-suggestions, and bottom navigation buttons are fully wired and functional.
 
 ## Verification Plan
 
 ### Automated Tests
 - Run Gradle build `app:assembleDebug` to verify clean compilation.
+
+### Manual Verification
+- Test opening the app to verify movies and posters appear immediately on Home.
+- Test tapping Movies, Series, Library, and Go VIP to confirm instant button responsiveness.
