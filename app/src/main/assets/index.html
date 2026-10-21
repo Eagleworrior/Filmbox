@@ -366,55 +366,37 @@ header {
 
 /* Individual Bottom Nav Tab Themes */
 .bottom-nav button[data-v="home"] {
-  background: linear-gradient(135deg, rgba(255, 77, 141, 0.2), rgba(139, 92, 246, 0.2));
-  border-color: rgba(255, 77, 141, 0.5);
-  color: #f472b6;
-}
-.bottom-nav button[data-v="home"].on {
-  background: linear-gradient(135deg, #ff4d8d, #8b5cf6);
-  color: #fff;
-  border-color: transparent;
-  box-shadow: 0 6px 20px rgba(255, 77, 141, 0.6);
-  transform: translateY(-3px);
+  background: linear-gradient(135deg, #ff4d8d, #8b5cf6) !important;
+  color: #ffffff !important;
+  border-color: transparent !important;
+  box-shadow: 0 4px 15px rgba(255, 77, 141, 0.4) !important;
 }
 
 .bottom-nav button[data-v="movie"] {
-  background: linear-gradient(135deg, rgba(2, 132, 199, 0.2), rgba(56, 189, 248, 0.2));
-  border-color: rgba(56, 189, 248, 0.5);
-  color: #38bdf8;
-}
-.bottom-nav button[data-v="movie"].on {
-  background: linear-gradient(135deg, #0284c7, #38bdf8);
-  color: #fff;
-  border-color: transparent;
-  box-shadow: 0 6px 20px rgba(56, 189, 248, 0.6);
-  transform: translateY(-3px);
+  background: linear-gradient(135deg, #0284c7, #38bdf8) !important;
+  color: #ffffff !important;
+  border-color: transparent !important;
+  box-shadow: 0 4px 15px rgba(56, 189, 248, 0.4) !important;
 }
 
 .bottom-nav button[data-v="tv"] {
-  background: linear-gradient(135deg, rgba(5, 150, 105, 0.2), rgba(52, 211, 153, 0.2));
-  border-color: rgba(52, 211, 153, 0.5);
-  color: #34d399;
-}
-.bottom-nav button[data-v="tv"].on {
-  background: linear-gradient(135deg, #059669, #34d399);
-  color: #fff;
-  border-color: transparent;
-  box-shadow: 0 6px 20px rgba(52, 211, 153, 0.6);
-  transform: translateY(-3px);
+  background: linear-gradient(135deg, #059669, #34d399) !important;
+  color: #ffffff !important;
+  border-color: transparent !important;
+  box-shadow: 0 4px 15px rgba(52, 211, 153, 0.4) !important;
 }
 
 .bottom-nav button[data-v="library"] {
-  background: linear-gradient(135deg, rgba(217, 119, 6, 0.2), rgba(251, 191, 36, 0.2));
-  border-color: rgba(251, 191, 36, 0.5);
-  color: #fbbf24;
+  background: linear-gradient(135deg, #d97706, #fbbf24) !important;
+  color: #000000 !important;
+  border-color: transparent !important;
+  box-shadow: 0 4px 15px rgba(251, 191, 36, 0.4) !important;
 }
-.bottom-nav button[data-v="library"].on {
-  background: linear-gradient(135deg, #d97706, #fbbf24);
-  color: #000;
-  border-color: transparent;
-  box-shadow: 0 6px 20px rgba(251, 191, 36, 0.6);
-  transform: translateY(-3px);
+
+.bottom-nav button.on {
+  transform: translateY(-3px) scale(1.05) !important;
+  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.4) !important;
+  outline: 2px solid #ffffff !important;
 }
 
 button, .chip, .card, .bottom-nav button, .vip, .play, nav button, a {
@@ -2137,15 +2119,17 @@ let appInitialized = false;
 function initApp() {
   if (appInitialized) return;
   appInitialized = true;
-  checkVipActive();
-  render();
+  try {
+    checkVipActive();
+    render();
+  } catch(err) {
+    console.error("initApp error:", err);
+  }
 }
 
-if (document.readyState === "complete" || document.readyState === "interactive") {
-  initApp();
-} else {
-  document.addEventListener("DOMContentLoaded", initApp);
-}
+initApp();
+document.addEventListener("DOMContentLoaded", initApp);
+window.addEventListener("load", initApp);
 </script>
 </body>
 </html>
