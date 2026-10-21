@@ -2149,6 +2149,20 @@ function initApp() {
   try {
     checkVipActive();
     render();
+
+    // Explicitly wire bottom nav buttons
+    document.querySelectorAll(".bottom-nav button").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        const v = btn.getAttribute("data-v");
+        if (v) go(v);
+      });
+    });
+
+    // Explicitly wire VIP button
+    const vipBtn = $("#vipbtn");
+    if (vipBtn) {
+      vipBtn.addEventListener("click", () => openVip());
+    }
   } catch(err) {
     console.error("initApp error:", err);
   }
