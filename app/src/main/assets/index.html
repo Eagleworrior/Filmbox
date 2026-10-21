@@ -59,8 +59,9 @@ header{background:#0b0b1acc;backdrop-filter:blur(14px);border-bottom:1px solid v
 .logo{background:linear-gradient(90deg,var(--gold),var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent;font-size:26px}
 nav button.on,.chip.on,.seasons button.on{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-color:transparent;box-shadow:0 4px 14px #7c5cff55}
 .chip,nav button{background:#ffffff0d}
-.card{transition:.2s;border-color:#ffffff14}.card:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 12px 30px #7c5cff55}
-h2{border-left:4px solid var(--accent);padding-left:10px}
+.card{cursor:pointer;background:rgba(21,21,48,0.75);backdrop-filter:blur(12px);border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.12);box-shadow:0 8px 20px rgba(0,0,0,0.4);transition:transform 0.25s,box-shadow 0.25s,border-color 0.25s}
+.card:hover{transform:translateY(-6px) scale(1.02);border-color:var(--accent);box-shadow:0 12px 30px rgba(255,77,141,0.35)}
+h2{font:800 22px Georgia,serif;margin:22px 0 12px;background:linear-gradient(90deg,#ffc23c,#ff4d8d,#38bdf8);-webkit-background-clip:text;background-clip:text;color:transparent;border-left:4px solid var(--accent);padding-left:10px}
 .vip,.play{border:0;cursor:pointer;font:700 14px inherit;color:#2a1500;background:linear-gradient(135deg,#ffe27a,var(--gold),#ff9a3c);padding:9px 18px;border-radius:22px;box-shadow:0 4px 16px #ffc23c55}
 .play{color:#fff;background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 4px 16px #ff4d8d66;padding:11px 24px;font-size:16px}
 .hero{min-height:260px;border-radius:18px;background:#151530 center/cover;padding:36px;display:flex;flex-direction:column;justify-content:flex-end;gap:10px;margin-bottom:8px}
@@ -713,16 +714,29 @@ async function home() {
 const SORTS = [["popularity.desc", "Most popular"], ["vote_average.desc", "Top rated"], ["primary_release_date.desc", "Newest"], ["revenue.desc", "Box office"]];
 const genreCache = {};
 async function browse() {
-  const type = S.view, m = $("#main");
-  if (!genreCache[type]) { try { genreCache[type] = (await tmdb(`/genre/${type}/list`)).genres } catch (e) { genreCache[type] = [] } }
-  const sorts = type === "tv" ? SORTS.slice(0, 3).map(s => s[0] === "primary_release_date.desc" ? ["first_air_date.desc", s[1]] : s) : SORTS;
-  if (!sorts.some(s => s[0] === S.sort)) S.sort = "popularity.desc";
-  m.innerHTML = `<h2>${S.query ? `Results for “${esc(S.query)}”` : type === "movie" ? "All movies" : "All series"}</h2>` +
-    (S.query ? "" : `<div class="bar"><select id="sort" aria-label="Sort">${sorts.map(s => `<option value="${s[0]}" ${s[0] === S.sort ? "selected" : ""}>${s[1]}</option>`).join("")}</select></div>
-    <div class="bar"><button class="chip ${S.genre ? "" : "on"}" onclick="setGenre('')">All genres</button>${genreCache[type].map(g => `<button class="chip ${S.genre == g.id ? "on" : ""}" onclick="setGenre(${g.id})">${esc(g.name)}</button>`).join("")}</div>`) +
-    `<div class="grid" id="grid"></div><p class="msg" id="info"></p><button class="more" id="more" hidden onclick="more()">Load more</button>`;
-  if ($("#sort")) $("#sort").onchange = e => { S.sort = e.target.value; S.page = 1; browse() };
-  fetchPage(false);
+  try {
+    const type = S.view, m = $("#main");
+    if (!type || (type !== "movie" && type !== "tv")) return;
+    if (!genreCache[type]) {
+      try {
+        const res = await tmdb(`/genre/${type}/list`);
+        genreCache[type] = (res && res.genres) ? res.genres : [];
+      } catch (e) {
+        genreCache[type] = [];
+      }
+    }
+    const genresList = genreCache[type] || [];
+    const sorts = type === "tv" ? SORTS.slice(0, 3).map(s => s[0] === "primary_release_date.desc" ? ["first_air_date.desc", s[1]] : s) : SORTS;
+    if (!sorts.some(s => s[0] === S.sort)) S.sort = "popularity.desc";
+    m.innerHTML = `<h2>${S.query ? `Results for “${esc(S.query)}”` : type === "movie" ? "All movies" : "All series"}</h2>` +
+      (S.query ? "" : `<div class="bar"><select id="sort" aria-label="Sort">${sorts.map(s => `<option value="${s[0]}" ${s[0] === S.sort ? "selected" : ""}>${s[1]}</option>`).join("")}</select></div>
+      <div class="bar"><button class="chip ${S.genre ? "" : "on"}" onclick="setGenre('')">All genres</button>${genresList.map(g => `<button class="chip ${S.genre == g.id ? "on" : ""}" onclick="setGenre(${g.id})">${esc(g.name)}</button>`).join("")}</div>`) +
+      `<div class="grid" id="grid"></div><p class="msg" id="info"></p><button class="more" id="more" hidden onclick="more()">Load more</button>`;
+    if ($("#sort")) $("#sort").onchange = e => { S.sort = e.target.value; S.page = 1; browse() };
+    fetchPage(false);
+  } catch(e) {
+    console.error("browse error:", e);
+  }
 }
 function setGenre(g) { S.genre = g; S.page = 1; browse() }
 async function fetchPage(append) {
