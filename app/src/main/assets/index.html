@@ -278,6 +278,61 @@ h2{font:800 22px Georgia,serif;margin:22px 0 12px;background:linear-gradient(90d
   box-shadow: 0 4px 12px rgba(242, 177, 52, 0.3);
 }
 
+header {
+  position: sticky;
+  top: 0;
+  z-index: 99;
+  background: rgba(11, 11, 26, 0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--line);
+  padding: max(12px, env(safe-area-inset-top)) 16px 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  width: 100%;
+}
+.logo {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font: 900 24px Georgia, serif;
+  background: linear-gradient(90deg, #ffc23c, #ff4d8d, #38bdf8);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.search-row {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.search-row input {
+  width: 100%;
+  max-width: 500px;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 25px;
+  background: rgba(21, 21, 48, 0.85);
+  border: 1.5px solid rgba(56, 189, 248, 0.4);
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+.search-row input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 15px rgba(255, 77, 141, 0.4);
+  outline: none;
+}
+
 .bottom-nav {
   position: fixed;
   bottom: 0;
@@ -294,28 +349,74 @@ h2{font:800 22px Georgia,serif;margin:22px 0 12px;background:linear-gradient(90d
   box-shadow: 0 -10px 30px rgba(0,0,0,0.8);
 }
 .bottom-nav button {
-  background: #151530;
-  border: 1px solid var(--line);
-  color: var(--mute);
+  border: 1.5px solid var(--line);
+  color: var(--text);
   padding: 8px 6px;
-  border-radius: 14px;
+  border-radius: 16px;
   cursor: pointer;
-  font: 700 11px inherit;
+  font: 800 11px inherit;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  transition: 0.2s;
+  transition: all 0.25s ease;
   flex: 1;
-  max-width: 75px;
+  max-width: 80px;
 }
-.bottom-nav button.on {
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
+
+/* Individual Bottom Nav Tab Themes */
+.bottom-nav button[data-v="home"] {
+  background: linear-gradient(135deg, rgba(255, 77, 141, 0.2), rgba(139, 92, 246, 0.2));
+  border-color: rgba(255, 77, 141, 0.5);
+  color: #f472b6;
+}
+.bottom-nav button[data-v="home"].on {
+  background: linear-gradient(135deg, #ff4d8d, #8b5cf6);
   color: #fff;
   border-color: transparent;
-  box-shadow: 0 4px 14px #7c5cff55;
-  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 77, 141, 0.6);
+  transform: translateY(-3px);
 }
+
+.bottom-nav button[data-v="movie"] {
+  background: linear-gradient(135deg, rgba(2, 132, 199, 0.2), rgba(56, 189, 248, 0.2));
+  border-color: rgba(56, 189, 248, 0.5);
+  color: #38bdf8;
+}
+.bottom-nav button[data-v="movie"].on {
+  background: linear-gradient(135deg, #0284c7, #38bdf8);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 6px 20px rgba(56, 189, 248, 0.6);
+  transform: translateY(-3px);
+}
+
+.bottom-nav button[data-v="tv"] {
+  background: linear-gradient(135deg, rgba(5, 150, 105, 0.2), rgba(52, 211, 153, 0.2));
+  border-color: rgba(52, 211, 153, 0.5);
+  color: #34d399;
+}
+.bottom-nav button[data-v="tv"].on {
+  background: linear-gradient(135deg, #059669, #34d399);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 6px 20px rgba(52, 211, 153, 0.6);
+  transform: translateY(-3px);
+}
+
+.bottom-nav button[data-v="library"] {
+  background: linear-gradient(135deg, rgba(217, 119, 6, 0.2), rgba(251, 191, 36, 0.2));
+  border-color: rgba(251, 191, 36, 0.5);
+  color: #fbbf24;
+}
+.bottom-nav button[data-v="library"].on {
+  background: linear-gradient(135deg, #d97706, #fbbf24);
+  color: #000;
+  border-color: transparent;
+  box-shadow: 0 6px 20px rgba(251, 191, 36, 0.6);
+  transform: translateY(-3px);
+}
+
 button, .chip, .card, .bottom-nav button, .vip, .play, nav button, a {
   touch-action: manipulation !important;
   -webkit-tap-highlight-color: transparent !important;
@@ -333,9 +434,13 @@ body {
 </head>
 <body>
 <header>
-  <input id="q" type="search" placeholder="Search..." aria-label="Search" style="max-width:140px;padding:6px 12px;font-size:13px">
-  <span class="logo" onclick="go('home')" style="font-size:22px">Film Box</span>
-  <button class="vip" id="vipbtn" onclick="openVip()" style="padding:8px 14px;font-size:13px">★ Go VIP</button>
+  <div class="top-bar">
+    <button class="vip" id="vipbtn" onclick="openVip()" style="padding:8px 14px;font-size:13px">★ Go VIP</button>
+    <span class="logo" onclick="go('home')">Film Box</span>
+  </div>
+  <div class="search-row">
+    <input id="q" type="search" placeholder="🔍 Search any movie, series or sports..." aria-label="Search">
+  </div>
 </header>
 <main id="main"></main>
 <div id="modal" class="modal" hidden></div>
