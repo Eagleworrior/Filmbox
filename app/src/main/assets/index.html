@@ -684,7 +684,7 @@ async function fetchPage(append) {
   const gridEl = $("#grid");
   const localList = (type === "tv" ? LOCAL_MASTER_SERIES : LOCAL_MASTER_MOVIES);
 
-  if (!append && gridEl && gridEl.children.length === 0) {
+  if (!append && gridEl) {
     gridEl.innerHTML = localList.map(i => card(i, type)).join("");
   }
 
@@ -714,7 +714,7 @@ async function fetchPage(append) {
       if (moreEl) moreEl.hidden = S.page >= pages;
     }
   } catch (e) {
-    if ($("#info")) $("#info").textContent = `${localList.length} titles available. Check internet connection for live discovery.`;
+    if ($("#info")) $("#info").textContent = `${localList.length} blockbuster titles loaded.`;
   }
 }
 function more() { S.page++; fetchPage(true) }
