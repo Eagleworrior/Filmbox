@@ -386,21 +386,6 @@ let freeWatchTimer = null;
 let pbarTimer = null;
 let isZoomedCover = false;
 
-const tmdb = (path, p = {}, retry = 0) => {
-  const u = new URL("https://api.themoviedb.org/3" + path);
-  u.searchParams.set("api_key", TMDB_KEY);
-  Object.entries(p).forEach(([k, v]) => v !== "" && u.searchParams.set(k, v));
-  return fetch(u.toString()).then(r => {
-    if (!r.ok) throw new Error("TMDb " + r.status);
-    return r.json();
-  }).catch(err => {
-    if (retry < 2) {
-      return new Promise(res => setTimeout(res, 1200)).then(() => tmdb(path, p, retry + 1));
-    }
-    throw err;
-  });
-};
-
 function go(v) {
   if (v === "news" || v === "social" || v === "football") {
     librarySubTab = v;
