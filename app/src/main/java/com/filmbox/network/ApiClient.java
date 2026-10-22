@@ -9,8 +9,8 @@ public class ApiClient {
     private static final String BASE_URL = "https://api.themoviedb.org/3/";
     private static final String OMDB_BASE_URL = "http://www.omdbapi.com/";
 
-    public static final String API_KEY = "4e44d9029b1270a757cddc766a1bcb63";
-    public static final String READ_ACCESS_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMGYzMzNmZDQyYzNiMGRlNDc5ZmUzY2IzMjFiMGNiZSIsIm5iZiI6MTc5MTcwMDUwMC43NCwic3ViIjoiNmFjYjJlMTRmNGY5M2Y1Zjc3ZGU0ODVhIiwic2NvcGVzIjpbImFwaV9yZWFkIl0sInZlcnNpb24iOjF9.D2mqfhkPGIZjF7d0jaqrrFtaT65srGIwtnpK5Wq5Z-8";
+    public static final String API_KEY = "ea220cf0b8ca48bb8aa393a5228b688b";
+    public static final String READ_ACCESS_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlYTIyMGNmMGI4Y2E0OGJiOGFhMzkzYTUyMjhiNjg4YiIsIm5iZiI6MTc5MjY1NzgwNC41NDU5OTk4LCJzdWIiOiI2YWQ5Yzk4YzE2NGI4NTAxNGExNDJiMDciLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.iGu3sg_JZvJHnhXGtowf02RveYEyeeX9krB77GR0-t8";
 
     public static final String OMDB_API_KEY = "fd1b18ad";
 

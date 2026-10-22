@@ -305,7 +305,42 @@ button,.chip,.card,.bottom-nav button,.vip,.play,nav button,a{touch-action:manip
 </nav>
 
 <script>
-const TMDB_KEY = "4e44d9029b1270a757cddc766a1bcb63";
+const TMDB_KEYS = [
+  "ea220cf0b8ca48bb8aa393a5228b688b",
+  "34ec842764ccb43044ef60aedd440182",
+  "4e44d9029b1270a757cddc766a1bcb63"
+];
+
+const TMDB_TOKENS = [
+  "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlYTIyMGNmMGI4Y2E0OGJiOGFhMzkzYTUyMjhiNjg4YiIsIm5iZiI6MTc5MjY1NzgwNC41NDU5OTk4LCJzdWIiOiI2YWQ5Yzk4YzE2NGI4NTAxNGExNDJiMDciLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.iGu3sg_JZvJHnhXGtowf02RveYEyeeX9krB77GR0-t8",
+  "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzNGVjODQyNzY0Y2NiNDMwNDRlZjYwYWVkZDQ0MDE4MiIsIm5iZiI6MTc5MjY1ODI3MS41NzQwMDAxLCJzdWIiOiI2YWQ5Y2I1Zjc5MzRkNmU2ZDQ1NzAwNTEiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.Tr1Nme1UtIsouphKL_E7IwxfJ248xRS0T7e6ULILMSA"
+];
+
+let currentKeyIndex = 0;
+
+const tmdb = (path, p = {}, retry = 0) => {
+  const key = TMDB_KEYS[currentKeyIndex % TMDB_KEYS.length];
+  const token = TMDB_TOKENS[currentKeyIndex % TMDB_TOKENS.length];
+  const u = new URL("https://api.themoviedb.org/3" + path);
+  u.searchParams.set("api_key", key);
+  Object.entries(p).forEach(([k, v]) => v !== "" && u.searchParams.set(k, v));
+
+  const headers = {};
+  if (token) {
+    headers["Authorization"] = "Bearer " + token;
+  }
+
+  return fetch(u.toString(), { headers }).then(r => {
+    if (!r.ok) throw new Error("TMDb " + r.status);
+    return r.json();
+  }).catch(err => {
+    if (retry < TMDB_KEYS.length * 2) {
+      currentKeyIndex = (currentKeyIndex + 1) % TMDB_KEYS.length;
+      return new Promise(res => setTimeout(res, 600)).then(() => tmdb(path, p, retry + 1));
+    }
+    throw err;
+  });
+};
 const FOOTBALL_DATA_TOKEN = "deefb3193ba84b1ebdffad3f9e3df2d6";
 const SPORTSRC_KEY = "2ccca35a74930eb00a71a67597928545";
 
