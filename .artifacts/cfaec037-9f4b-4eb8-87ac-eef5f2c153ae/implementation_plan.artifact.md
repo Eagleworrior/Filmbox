@@ -1,22 +1,35 @@
-# Implementation Plan - Master Catalog Rendering Fix, Real-Time M-Pesa STK Polling & Fullscreen Video Player Upgrades
+# Implementation Plan - Strict Ad Interception, Browser Intent Whitelisting & Instant Master Catalog Rendering
 
-Fix movie rendering so blockbusters display immediately on Home, Movies, and Series tabs; enforce real-time M-Pesa STK push polling with live error messages (wrong PIN, insufficient funds, cancellation); restrict external browser intents to approved domains (PayPal, Facebook, WhatsApp, Blogger); and upgrade the HTML5 video player with perfect screen fit, top-left back arrow, and auto-hiding controls.
+Implement background network-level ad blocking in `WebViewClient.shouldInterceptRequest`, enforce strict browser intent whitelisting (allowing only PayPal, Facebook Page/Group, WhatsApp, and Blogger), explain the cause of the dark screen, and ensure `home()` renders local master catalog movies immediately.
+
+## Explanation: Why the Screen Appeared Dark
+
+The screen appeared dark because `home()` previously rendered empty loading messages (`<p class="msg">Loading live trending movies…</p>`) while waiting for the TMDb network request to complete. If the TMDb network call took time or failed, `#h1`, `#h2`, `#h4`, and `#h5` remained blank over the dark background (`#0b0b1a`).
+
+**The Solution**: Modify `home()` so that `LOCAL_MASTER_MOVIES` and `LOCAL_MASTER_SERIES` render **synchronously on 0ms page load**, displaying 20+ blockbuster movie posters immediately, and then updating smoothly in the background when TMDb network data arrives.
 
 ## User Review Required
 
 > [!IMPORTANT]
-> - **Master Catalog Rendering (`home()` & `browse()`)**: Fully populate Home and catalogue views with the 20+ embedded blockbuster movies and series so films appear instantly with gorgeous posters.
-> - **Real-Time M-Pesa STK Polling**: Full-screen STK waiting screen that polls transaction status every 3 seconds, showing precise Safaricom error messages (wrong PIN, insufficient balance, cancelled on phone) if unconfirmed.
-> - **Strict Browser Whitelisting**: Ensure official external links (PayPal checkout, Facebook Page/Group, WhatsApp lounge, Blogger) open correctly in external browsers/intents.
-> - **Fullscreen Video Player (`showPlayer`)**: Perfect screen fit, top-left back arrow (`‹`), duration display, and controls that auto-hide after 2 seconds or on screen tap.
+> - **Strict Network Ad Interception (`MainActivity.java`)**: Added `shouldInterceptRequest` to cancel and block requests to ad networks, pop-unders, and tracking domains (`popads.net`, `propellerads.com`, `exoclick.com`, `adsterra.com`, `alwingulla.com`, `doubleclick.net`, `clickadu.com`, etc.) before they load.
+> - **Strict External Browser Intent Whitelist**: `shouldOverrideUrlLoading` allows ONLY approved community and payment links:
+>   - **PayPal**: `paypal.com`, `sandbox.paypal.com`
+>   - **Facebook**: `facebook.com`, `fb.com`, `m.facebook.com` (Official Page & Group)
+>   - **WhatsApp**: `chat.whatsapp.com`, `wa.me` (VIP Group)
+>   - **Blogger**: `filmboxproductions.blogspot.com`, `blogspot.com` (Official Blog)
+>   - *All other external URL redirects and popup requests are strictly blocked.*
+> - **Instant Master Movie Catalog Rendering**: `home()` renders 20+ blockbuster movie/series posters synchronously on startup so movies are visible immediately with zero black screens.
 
 ## Proposed Changes
 
-### Web Application Core Engine
+### Android Native Core
+#### [MODIFY] [MainActivity.java](file:///C:/Users/EAGLE/AndroidStudioProjects/FilmBox/app/src/main/java/com/filmbox/MainActivity.java)
+- Implement `shouldInterceptRequest` with an extensive ad & tracking domain blocklist to kill ad scripts before they execute.
+- Enforce strict domain whitelisting in `shouldOverrideUrlLoading` allowing only PayPal, Facebook, WhatsApp, and Blogger.
+
+### Web Application UI Engine
 #### [MODIFY] [index.html](file:///C:/Users/EAGLE/AndroidStudioProjects/FilmBox/app/src/main/assets/index.html)
-- **Instant Movie Catalog Rendering**: Ensure `home()`, `browse()`, and `fetchPage()` render local master catalog items instantly.
-- **Real-Time M-Pesa Polling**: Robust STK status polling with detailed Safaricom error descriptions.
-- **Fullscreen Player Enhancements**: Top-left back arrow, auto-hiding control bar (2 seconds timeout), and exact screen fit.
+- Synchronously render `LOCAL_MASTER_MOVIES` and `LOCAL_MASTER_SERIES` inside `home()` on page load so movies display instantly.
 
 ## Verification Plan
 
@@ -24,6 +37,5 @@ Fix movie rendering so blockbusters display immediately on Home, Movies, and Ser
 - Run Gradle build `app:assembleDebug` to verify clean compilation.
 
 ### Manual Verification
-- Test opening Home and Movies tabs to verify instant movie posters.
-- Test M-Pesa payment prompt and observe real-time status feedback.
-- Test video player playback, back arrow, and auto-hiding controls.
+- Test opening the app to verify movie cards appear immediately on Home.
+- Test tapping external links to confirm only PayPal, Facebook, WhatsApp, and Blogger open externally, while ads and unknown redirects are blocked.

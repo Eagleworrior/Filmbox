@@ -625,15 +625,16 @@ function quickPlay(id, type, title) {
 async function home() {
   const m = $("#main");
   if (!m) return;
-  m.innerHTML = `<div class="hero" id="hero" style="background:linear-gradient(90deg,#0b0b1af0 25%,#151530);min-height:260px;display:flex;flex-direction:column;justify-content:flex-end;padding:30px">
-    <h1 style="color:var(--text);font-size:28px">Today's Trending Blockbuster</h1>
-    <p style="color:var(--mute);font-size:14px">Fetching live trending movies from TMDb network...</p>
+  m.innerHTML = `<div class="hero" id="hero" style="background-image:linear-gradient(90deg,#0b0b1af0 25%,transparent),url('${poster(LOCAL_MASTER_MOVIES[0].poster_path, 'w780')}');min-height:260px;display:flex;flex-direction:column;justify-content:flex-end;padding:30px">
+    <h1>${esc(LOCAL_MASTER_MOVIES[0].title)}</h1>
+    <p>${esc(LOCAL_MASTER_MOVIES[0].overview)}</p>
+    <button class="play" onclick="quickPlay(${LOCAL_MASTER_MOVIES[0].id},'movie','${esc(LOCAL_MASTER_MOVIES[0].title)}')">▶ Watch Now</button>
   </div>
-  <h2>Trending movies</h2><div class="row" id="h1"><p class="msg">Loading live trending movies…</p></div>
-  <h2>Trending series</h2><div class="row" id="h2"><p class="msg">Loading live trending series…</p></div>
+  <h2>Trending movies</h2><div class="row" id="h1">${LOCAL_MASTER_MOVIES.map(i => card(i, 'movie')).join('')}</div>
+  <h2>Trending series</h2><div class="row" id="h2">${LOCAL_MASTER_SERIES.map(i => card(i, 'tv')).join('')}</div>
   <div class="hd"><h2>Football today</h2><a onclick="go('football')">All matches</a></div><div id="h3"><p class="msg">Loading live football matches…</p></div>
-  <div class="hd"><h2>Top rated movies</h2><a onclick="go('movie')">Browse all movies</a></div><div class="row" id="h4"><p class="msg">Loading top rated movies…</p></div>
-  <div class="hd"><h2>Top rated series</h2><a onclick="go('tv')">Browse all series</a></div><div class="row" id="h5"><p class="msg">Loading top rated series…</p></div>`;
+  <div class="hd"><h2>Top rated movies</h2><a onclick="go('movie')">Browse all movies</a></div><div class="row" id="h4">${LOCAL_MASTER_MOVIES.slice().reverse().map(i => card(i, 'movie')).join('')}</div>
+  <div class="hd"><h2>Top rated series</h2><a onclick="go('tv')">Browse all series</a></div><div class="row" id="h5">${LOCAL_MASTER_SERIES.slice().reverse().map(i => card(i, 'tv')).join('')}</div>`;
 
   const fill = (id, p, type) => p.then(d => {
     if (d && d.results && d.results.length > 0) {
@@ -657,7 +658,7 @@ async function home() {
     }
   }).catch(e => {
     const h1 = $("#h1");
-    if (h1) h1.innerHTML = LOCAL_MASTER_MOVIES.map(i => card(i, "movie")).join("");
+    if (h1 && h1.children.length === 0) h1.innerHTML = LOCAL_MASTER_MOVIES.map(i => card(i, "movie")).join("");
   });
 
   fill("#h2", tmdb("/trending/tv/day"), "tv");
