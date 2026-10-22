@@ -1,6 +1,6 @@
-# Task List - Merge Clean HTML with Full JS Runtime Engine
+# Task List - Master Catalog, M-Pesa STK Polling & Video Player Upgrades
 
-- [ ] Merge clean downloaded HTML layout with the full Film Box JavaScript engine `[ ]`
-- [ ] Verify local master catalog movies render instantly on Home, Movies, and Series tabs `[ ]`
-- [ ] Verify all navigation and VIP buttons respond instantly to taps `[ ]`
+- [ ] Ensure `home()`, `browse()`, and `fetchPage()` render local master catalog movies and series instantly `[ ]`
+- [ ] Implement robust M-Pesa STK push polling with live error messages (wrong PIN, insufficient funds) `[ ]`
+- [ ] Upgrade fullscreen video player with top-left back arrow, auto-hiding controls (2s timer), and screen fit `[ ]`
 - [ ] Verify build via gradle `app:assembleDebug` `[ ]`

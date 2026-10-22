@@ -1171,11 +1171,28 @@ function showSearchDropdown(results) {
 function hideSearchDropdown() { if (searchDropdown) searchDropdown.classList.add("hidden"); }
 function selectSearchItem(id, type, title) { hideSearchDropdown(); if (searchInput) searchInput.value = title; quickPlay(id, type, title); }
 
+function checkOnlineStatus() {
+  if (!navigator.onLine) {
+    const m = $("#main");
+    if (m) {
+      m.innerHTML = `<div style="text-align:center;padding:80px 20px">
+        <div style="font-size:64px;margin-bottom:16px">📡</div>
+        <h2 style="color:#ff4d4d;margin-bottom:10px">No Internet Connection</h2>
+        <p style="color:var(--mute);font-size:15px;max-width:400px;margin:0 auto 20px">Film Box requires an active internet connection to stream movies, live sports, and news. Please check your network and reconnect.</p>
+        <button class="play" onclick="location.reload()" style="background:var(--accent);color:#000">Retry Connection 🔄</button>
+      </div>`;
+    }
+    return false;
+  }
+  return true;
+}
+
 let appInitialized = false;
 function initApp() {
   if (appInitialized) return;
   appInitialized = true;
   try {
+    if (!checkOnlineStatus()) return;
     checkVipActive();
     render();
     document.querySelectorAll(".bottom-nav button").forEach(btn => {
@@ -1197,6 +1214,8 @@ function initApp() {
     }
   } catch(err) { console.error("initApp error:", err); }
 }
+
+window.addEventListener("online", () => location.reload());
 
 if (document.readyState === "complete" || document.readyState === "interactive") {
   initApp();
