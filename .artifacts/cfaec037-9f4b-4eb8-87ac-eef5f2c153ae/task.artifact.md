@@ -1,6 +1,5 @@
-# Task List - Dynamic Ad Blocker & Home Rendering Fix
+# Task List - Fix Freeze & Community Hub
 
-- [ ] Add real-time MutationObserver ad killer script to `index.html` `[ ]`
-- [ ] Enhance ad interception in `MainActivity.java` `[ ]`
-- [ ] Ensure `home()` renders master catalog movies robustly on startup `[ ]`
+- [ ] Streamline startup initialization in `index.html` to eliminate freeze and black screen `[ ]`
+- [ ] Update `socialCommunityHtml()` with the exact user-provided HTML and CSS markup `[ ]`
 - [ ] Verify build via gradle `app:assembleDebug` `[ ]`
