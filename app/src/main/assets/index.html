@@ -590,16 +590,15 @@ function quickPlay(id, type, title) {
 async function home() {
   const m = $("#main");
   if (!m) return;
-  m.innerHTML = `<div class="hero" id="hero" style="background-image:linear-gradient(90deg,#0b0b1af0 25%,transparent),url('https://image.tmdb.org/t/p/w780/7WsyChLLEz331L3S8311.jpg')">
-    <h1>Avengers: Infinity War</h1>
-    <p>The Avengers and their allies must be willing to sacrifice all in an attempt to defeat Thanos.</p>
-    <button class="play" onclick="quickPlay(299536,'movie','Avengers: Infinity War')">▶ Watch Now</button>
+  m.innerHTML = `<div class="hero" id="hero" style="background:linear-gradient(90deg,#0b0b1af0 25%,#151530);min-height:260px;display:flex;flex-direction:column;justify-content:flex-end;padding:30px">
+    <h1 style="color:var(--text);font-size:28px">Today's Trending Blockbuster</h1>
+    <p style="color:var(--mute);font-size:14px">Fetching live trending movies from TMDb network...</p>
   </div>
-  <h2>Trending movies</h2><div class="row" id="h1">${LOCAL_MASTER_MOVIES.map(i => card(i, 'movie')).join('')}</div>
-  <h2>Trending series</h2><div class="row" id="h2">${LOCAL_MASTER_SERIES.map(i => card(i, 'tv')).join('')}</div>
-  <div class="hd"><h2>Football today</h2><a onclick="go('football')">All matches</a></div><div id="h3"><p class="msg">Loading matches…</p></div>
-  <div class="hd"><h2>Top rated movies</h2><a onclick="go('movie')">Browse all movies</a></div><div class="row" id="h4">${LOCAL_MASTER_MOVIES.slice().reverse().map(i => card(i, 'movie')).join('')}</div>
-  <div class="hd"><h2>Top rated series</h2><a onclick="go('tv')">Browse all series</a></div><div class="row" id="h5">${LOCAL_MASTER_SERIES.slice().reverse().map(i => card(i, 'tv')).join('')}</div>`;
+  <h2>Trending movies</h2><div class="row" id="h1"><p class="msg">Loading live trending movies…</p></div>
+  <h2>Trending series</h2><div class="row" id="h2"><p class="msg">Loading live trending series…</p></div>
+  <div class="hd"><h2>Football today</h2><a onclick="go('football')">All matches</a></div><div id="h3"><p class="msg">Loading live football matches…</p></div>
+  <div class="hd"><h2>Top rated movies</h2><a onclick="go('movie')">Browse all movies</a></div><div class="row" id="h4"><p class="msg">Loading top rated movies…</p></div>
+  <div class="hd"><h2>Top rated series</h2><a onclick="go('tv')">Browse all series</a></div><div class="row" id="h5"><p class="msg">Loading top rated series…</p></div>`;
 
   const fill = (id, p, type) => p.then(d => {
     if (d && d.results && d.results.length > 0) {
@@ -608,7 +607,7 @@ async function home() {
     }
   }).catch(e => {});
 
-  tmdb("/trending/movie/week").then(d => {
+  tmdb("/trending/movie/day").then(d => {
     if (d && d.results && d.results.length > 0) {
       const h1 = $("#h1");
       if (h1) h1.innerHTML = d.results.map(i => card(i, "movie")).join("");
@@ -616,14 +615,17 @@ async function home() {
       if (t) {
         const hero = $("#hero");
         if (hero) {
-          if (t.backdrop_path) hero.style.backgroundImage = `linear-gradient(90deg,#0b0b1af0 25%,transparent),url(${IMG}w780${t.backdrop_path})`;
-          hero.innerHTML = `<h1>${esc(t.title || "Film Box Cinema")}</h1><p>${esc((t.overview || "").slice(0, 170))}…</p><button class="play" onclick="quickPlay(${t.id},'movie','${esc(t.title || 'Film')}')">▶ Watch now</button>`;
+          if (t.backdrop_path) hero.style.backgroundImage = `linear-gradient(90deg,#0b0b1af0 30%,transparent),url(${IMG}w780${t.backdrop_path})`;
+          hero.innerHTML = `<h1>${esc(t.title || t.name)}</h1><p>${esc((t.overview || "").slice(0, 180))}…</p><button class="play" onclick="quickPlay(${t.id},'movie','${esc(t.title || 'Movie')}')">▶ Watch #1 Trending</button>`;
         }
       }
     }
-  }).catch(e => {});
+  }).catch(e => {
+    const h1 = $("#h1");
+    if (h1) h1.innerHTML = LOCAL_MASTER_MOVIES.map(i => card(i, "movie")).join("");
+  });
 
-  fill("#h2", tmdb("/trending/tv/week"), "tv");
+  fill("#h2", tmdb("/trending/tv/day"), "tv");
   fill("#h4", tmdb("/movie/top_rated"), "movie");
   fill("#h5", tmdb("/tv/top_rated"), "tv");
   loadMatches("#h3", { comp: "", range: "today" }, 6);
