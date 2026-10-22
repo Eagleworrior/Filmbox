@@ -1,5 +1,6 @@
-# Task List - Strict Browser Whitelisting & Redirect Blocker
+# Task List - Brand Colors & Remove Football
 
-- [ ] Update `shouldOverrideUrlLoading` in `MainActivity.java` to strictly whitelist approved community and payment browsers and block all others `[ ]`
-- [ ] Add JS redirect killer script in `index.html` `[ ]`
+- [ ] Remove football match API functions and library sports sub-tabs from `index.html` `[ ]`
+- [ ] Upgrade Community Hub with official brand colors and SVG icons `[ ]`
+- [ ] Streamline Library tab to feature News and Community `[ ]`
 - [ ] Verify build via gradle `app:assembleDebug` `[ ]`

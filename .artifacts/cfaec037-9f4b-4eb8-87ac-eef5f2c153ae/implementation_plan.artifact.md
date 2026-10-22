@@ -1,25 +1,25 @@
-# Implementation Plan - Strict Browser Intent Whitelisting & Ad Redirect Blocker
+# Implementation Plan - Official Brand Colors for Community Hub & Removal of Live Sports (Football)
 
-Enforce strict URL and browser intent restrictions in `MainActivity.java` (`shouldOverrideUrlLoading`), allowing external browser launches **ONLY** for approved community & payment destinations (PayPal, Facebook, WhatsApp, Instagram, and FilmBox Blogger), while strictly blocking all other external URLs and ad pop-unders; and add a JavaScript redirect killer in `index.html` to prevent video player clickjack overlays.
+Remove the Live Sports (Football) tab and feature set from the app; upgrade the Community Hub (`socialCommunityHtml()`) with official brand colors, SVGs, and glowing neon CSS gradients for Facebook, WhatsApp, Instagram, and PayPal; and ensure clean navigation across Home, Movies, Series, and Library (News & Community).
 
 ## User Review Required
 
 > [!IMPORTANT]
-> - **Strict Browser Intent Whitelisting (`MainActivity.java`)**: `shouldOverrideUrlLoading` now checks every outgoing URL:
->   - **Allowed External Browsers**: Strictly restricted to PayPal (`paypal.com`, `paypal.me`), Facebook (`facebook.com`, `fb.me`), WhatsApp (`whatsapp.com`, `wa.me`), Instagram (`instagram.com`), and Blogger (`blogspot.com`).
->   - **Blocked**: All other external URLs, ad popups, and unknown redirects are unconditionally blocked (`return true;`).
-> - **In-App Whitelist**: TMDb, Football-Data, SportSRC, and Vidsrc playback hosts load inside the app.
-> - **JavaScript Redirect Killer (`index.html`)**: Intercepts `window.open` and unexpected top-level navigation attempts to prevent ad overlay redirects when tapping play buttons.
+> - **Removal of Live Sports (Football)**: Completely removed the Football match API and Live Sports tab from the app and bottom navigation / Library sub-tabs as requested.
+> - **Official Brand Colors & High-Graphic CSS**: Upgraded the Community Hub cards with authentic brand gradients and glowing icons:
+>   - **Facebook Page & Group**: Official Facebook Blue (`#1877f2` / `#0084ff`).
+>   - **WhatsApp Lounge**: Official WhatsApp Green (`#25d366`).
+>   - **Instagram**: Official Instagram Gradient (`#f58529` to `#dd2a7b` to `#8134af`).
+>   - **PayPal Support**: Official Gold/Blue (`#f59e0b` / `#0070ba`).
+> - **Streamlined Library Tab**: Library view now focuses on **News** and **Community** for a cleaner, professional movie app experience.
 
 ## Proposed Changes
 
-### Android Native Core
-#### [MODIFY] [MainActivity.java](file:///C:/Users/EAGLE/AndroidStudioProjects/FilmBox/app/src/main/java/com/filmbox/MainActivity.java)
-- Restrict `shouldOverrideUrlLoading` to allow external browser intents exclusively for PayPal, Facebook, WhatsApp, Instagram, and Blogger; block all other unknown external browsers and ad redirects.
-
-### Web Application Engine
+### Web Application UI Engine
 #### [MODIFY] [index.html](file:///C:/Users/EAGLE/AndroidStudioProjects/FilmBox/app/src/main/assets/index.html)
-- Add runtime script interceptor to block unapproved `window.open` or redirect attempts when clicking player buttons.
+- **Remove Football**: Remove football match loading functions, API tokens, and library sports sub-tabs.
+- **Streamline Library Tab**: Library view now contains News and Community sub-tabs.
+- **Brand Colors & Hub Styles**: Ensure all community cards use authentic brand colors, SVG icons, and high-graphic styling.
 
 ## Verification Plan
 
@@ -27,5 +27,5 @@ Enforce strict URL and browser intent restrictions in `MainActivity.java` (`shou
 - Run Gradle build `app:assembleDebug` to verify clean compilation.
 
 ### Manual Verification
-- Test tapping community links (WhatsApp, Facebook, Instagram, PayPal) to confirm they open successfully in external browsers.
-- Test playing movies to confirm zero ad redirects or pop-under browser tabs open.
+- Test opening the Library tab to verify Football is removed and Community / News are present.
+- Verify community cards display official brand colors and icons.
