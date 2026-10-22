@@ -573,6 +573,16 @@ function socialCommunityHtml() {
 </div>`;
 }
 
+function downloadView() {
+  const m = $("#main");
+  let raw = localStorage.getItem("mb_offline_downloads") || "[]";
+  let list = [];
+  try { list = JSON.parse(raw); } catch(e) {}
+  m.innerHTML = `<h2>📥 My Downloads (${list.length})</h2>` +
+    (list.length ? `<div class="grid">${list.map(x => `<div class="card"><img src="${esc(x.poster || NO_POSTER)}" alt="" onerror="this.onerror=null;this.src=NO_POSTER"><div><b>${esc(x.title)}</b><br><small style="color:var(--pitch)">Downloaded · ${esc(x.estMB || 420)} MB</small></div></div>`).join("")}</div>`
+    : `<p class="msg" style="padding:30px;text-align:center">No saved downloads yet. Tap "📥 Download" inside any movie or episode!</p>`);
+}
+
 function render() {
   clearInterval(timer);
   ({ home, movie: browse, tv: browse, football, download: downloadView, social: socialCommunityView, news: newsView, library: libraryView })[S.view]();
@@ -1309,7 +1319,6 @@ if (document.readyState === "complete" || document.readyState === "interactive")
   window.addEventListener("DOMContentLoaded", initApp);
   window.addEventListener("load", initApp);
   setTimeout(initApp, 100);
-}
 }
 </script>
 </body>

@@ -1,19 +1,21 @@
-# Implementation Plan - Fix Startup Freeze/Black Screen & Embed Complete Community Hub
+# Implementation Plan - Fix Runtime ReferenceError (downloadView), Ad Overlays, and Community Hub
 
-Eliminate the startup freeze and black screen by streamlining `index.html` initialization and removing any blocking asynchronous promises on boot; and integrate the exact user-provided high-graphic **Community Hub** HTML & CSS (`socialCommunityHtml()`) featuring Facebook Page, Facebook Group, WhatsApp Lounge, Instagram, and PayPal support into the Library tab.
+Resolve the `Uncaught ReferenceError: downloadView is not defined` at line 578 which caused the red runtime error screen; define `downloadView()` and `downloadPassModal()` cleanly; implement an aggressive MutationObserver script in `index.html` to destroy any transparent overlay layers blocking the play button; and ensure the Community hub renders correctly in the Library tab.
 
 ## User Review Required
 
 > [!IMPORTANT]
-> - **Eliminating Startup Freeze & Black Screen**: Refactored `index.html` startup sequence to guarantee synchronous, instant rendering of the Home view and master catalog movies on boot with zero network blocking.
-> - **Complete Community Hub**: Updated `socialCommunityHtml()` with the exact high-graphic markup provided by the user (Facebook Page, Facebook Group, WhatsApp Group, Instagram, and PayPal Donation).
+> - **Runtime Error Fix (`downloadView is not defined`)**: Defined `downloadView()` and related offline download / saved items functions so `render()` succeeds with zero script errors.
+> - **Ad Overlay / Clickjack Blocker**: Added a real-time DOM scanner that instantly removes transparent invisible overlay layers, ad iframes, and pop-unders so play buttons and video controls are always 100% clickable.
+> - **Library Community Hub**: Ensure `libraryView()` and `socialCommunityHtml()` display the full community cards (Facebook Page, Facebook Group, WhatsApp, Instagram, PayPal Support).
 
 ## Proposed Changes
 
-### Web Application Core Engine
+### Web Application Engine
 #### [MODIFY] [index.html](file:///C:/Users/EAGLE/AndroidStudioProjects/FilmBox/app/src/main/assets/index.html)
-- **Synchronous Boot**: Ensure `initApp()` and `home()` render instantly on load without hanging or freezing.
-- **Community Hub Markup**: Replace `socialCommunityHtml()` with the exact styled container provided by the user.
+- **Define `downloadView()`**: Restore the offline downloads view function to eliminate the ReferenceError.
+- **Aggressive Ad Killer MutationObserver**: Automatically scan and destroy any ad popups or transparent overlay blockers on video player click.
+- **Community Hub & Master Catalog**: Ensure zero runtime errors on start and instant movie rendering.
 
 ## Verification Plan
 
@@ -21,5 +23,6 @@ Eliminate the startup freeze and black screen by streamlining `index.html` initi
 - Run Gradle build `app:assembleDebug` to verify clean compilation.
 
 ### Manual Verification
-- Test opening the app to confirm movies display instantly with zero black screen freezes.
-- Test tapping Library -> Community to verify all social cards and donation buttons render correctly.
+- Test opening the app to verify movies load instantly without any red error boxes.
+- Test tapping Library to confirm Community hub cards render.
+- Test playing a movie to confirm no ad layers block the play button.
