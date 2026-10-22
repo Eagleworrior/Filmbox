@@ -1,6 +1,6 @@
-# Task List - Strict Ad Interception & Master Catalog Rendering
+# Task List - Dynamic Ad Blocker & Home Rendering Fix
 
-- [ ] Implement `shouldInterceptRequest` ad blocklist in `MainActivity.java` `[ ]`
-- [ ] Enforce strict browser whitelisting (PayPal, Facebook, WhatsApp, Blogger) in `shouldOverrideUrlLoading` `[ ]`
-- [ ] Update `home()` in `index.html` to render local master movies synchronously on 0ms page load `[ ]`
+- [ ] Add real-time MutationObserver ad killer script to `index.html` `[ ]`
+- [ ] Enhance ad interception in `MainActivity.java` `[ ]`
+- [ ] Ensure `home()` renders master catalog movies robustly on startup `[ ]`
 - [ ] Verify build via gradle `app:assembleDebug` `[ ]`
