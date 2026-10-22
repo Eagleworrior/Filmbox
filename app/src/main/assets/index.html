@@ -305,6 +305,16 @@ button,.chip,.card,.bottom-nav button,.vip,.play,nav button,a{touch-action:manip
 </nav>
 
 <script>
+window.onerror = function(msg, url, line) {
+  const m = document.querySelector("#main");
+  if (m) {
+    m.innerHTML = `<div style="padding:30px;text-align:center;background:#201b18;border:2px solid red;border-radius:12px;margin:20px">
+      <h3 style="color:#ff4d4d;margin-bottom:8px">Runtime Script Error</h3>
+      <p style="color:#fff;font-size:13px">${msg}<br><small>Line: ${line}</small></p>
+    </div>`;
+  }
+};
+
 const TMDB_KEYS = [
   "ea220cf0b8ca48bb8aa393a5228b688b",
   "34ec842764ccb43044ef60aedd440182",
