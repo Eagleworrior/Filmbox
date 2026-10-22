@@ -1196,14 +1196,16 @@ let appInitialized = false;
 function initApp() {
   const m = $("#main");
   if (!m) {
-    setTimeout(initApp, 40);
+    setTimeout(initApp, 30);
     return;
   }
   if (appInitialized) return;
   appInitialized = true;
   try {
+    m.innerHTML = `<h2 style="color:var(--accent);padding:20px">Loading Film Box Cinema...</h2>`;
     checkVipActive();
     render();
+
     document.querySelectorAll(".bottom-nav button").forEach(btn => {
       const handler = (e) => {
         e.preventDefault(); e.stopPropagation();
@@ -1214,6 +1216,7 @@ function initApp() {
       btn.addEventListener("click", handler);
       btn.addEventListener("touchend", handler);
     });
+
     const vipBtn = $("#vipbtn");
     if (vipBtn) {
       const vipHandler = (e) => { e.preventDefault(); e.stopPropagation(); openVip(); };
@@ -1221,7 +1224,10 @@ function initApp() {
       vipBtn.addEventListener("click", vipHandler);
       vipBtn.addEventListener("touchend", vipHandler);
     }
-  } catch(err) { console.error("initApp error:", err); }
+  } catch(err) {
+    console.error("initApp error:", err);
+    if (m) m.innerHTML = `<div style="padding:40px;text-align:center"><h2 style="color:#ff4d4d">App Loading Error</h2><p style="color:#fff;margin-top:10px">${esc(err.message)}</p></div>`;
+  }
 }
 
 window.addEventListener("online", () => location.reload());
