@@ -1196,6 +1196,11 @@ function selectSearchItem(id, type, title) { hideSearchDropdown(); if (searchInp
 
 let appInitialized = false;
 function initApp() {
+  const m = $("#main");
+  if (!m) {
+    setTimeout(initApp, 40);
+    return;
+  }
   if (appInitialized) return;
   appInitialized = true;
   try {
@@ -1228,6 +1233,8 @@ if (document.readyState === "complete" || document.readyState === "interactive")
 } else {
   window.addEventListener("DOMContentLoaded", initApp);
   window.addEventListener("load", initApp);
+  setTimeout(initApp, 100);
+}
 }
 </script>
 </body>
