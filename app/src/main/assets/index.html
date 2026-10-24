@@ -306,6 +306,7 @@ button,.chip,.card,.bottom-nav button,.vip,.play,nav button,a{touch-action:manip
 
 <script>
 window.onerror = function(msg, url, line) {
+  if (msg === "Script error." || line === 0) return true;
   const m = document.querySelector("#main");
   if (m) {
     m.innerHTML = `<div style="padding:30px;text-align:center;background:#201b18;border:2px solid red;border-radius:12px;margin:20px">

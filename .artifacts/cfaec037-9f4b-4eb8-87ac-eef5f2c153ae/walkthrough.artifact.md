@@ -1,23 +1,20 @@
-# Walkthrough - Official App SVG Icons & Neon Pill Community Hub
+# Walkthrough - Video Player Controls Upgrade & High-Graphic Offline Screen
 
-Successfully updated the Community Hub in the Library tab with official brand SVG logos and neon pill styling matching `filmboxproductions.blogspot.com`.
+Successfully upgraded the video player overlay (`showPlayer`) with a prominent top-left back arrow (`‹`), 3-second auto-hide timer, and tap-to-toggle vanish behavior; and redesigned the offline screen with multi-color glowing neon typography.
 
 ## Accomplishments
 
-### 🎨 Authentic App Brand SVG Icons & Neon Pill Styling
-- Embedded high-res SVG brand logos for all 6 community platforms:
-  - 🌐 **Official FilmBox Blog**: Authentic Blogger SVG icon (`#f57c00` orange gradient).
-  - 📘 **Official Facebook Page**: Authentic Facebook SVG logo (`#1877f2` blue pill button).
-  - 👥 **Movie Fan Facebook Group**: Authentic Facebook Group SVG logo (`#0084ff` cyan blue pill button).
-  - 💬 **VIP WhatsApp Lounge**: Authentic WhatsApp SVG logo (`#25d366` emerald green pill button).
-  - 📸 **Official Instagram**: Authentic Instagram SVG logo (`#dd2a7b` magenta gradient pill button).
-  - ☕ **Support Project Growth**: Authentic PayPal SVG logo (`#f59e0b` gold/amber donation button).
+### ◀ Prominent Top-Left Back Arrow & Tap Controls (`showPlayer`)
+- **Prominent Back Arrow (`‹`)**: Placed at the top-left of the player overlay with a glowing cyan border (`border: 2px solid #38bdf8; box-shadow: 0 0 15px rgba(56,189,248,0.6)`).
+- **3-Second Auto-Hide**: Controls auto-hide after **3 seconds** of inactivity.
+- **Tap-to-Toggle / Tap-to-Vanish**: Tapping the screen when controls are visible hides all details immediately. Tapping when hidden brings back the controls and resets the 3-second timer.
 
-### 📰 Continuous News Feed
-- Confirmed `fetchNews(append)` retains all previous news articles when scrolling down, pushing older news downwards for continuous reading.
+### 📡 High-Graphic Multi-Color Glowing Offline Screen
+- Film Box strictly requires an active internet connection (`checkOnlineStatus()`).
+- Renders a neon-decorated offline screen featuring multi-color gradient typography (**`NO INTERNET CONNECTION`** in pink to cyan to gold), an animated pulsing radar ring, and a glowing `RETRY CONNECTION 🔄` pill button.
 
 ## Validation Results
 
 ### Automated Tests
 - Gradle Build `app:assembleDebug`: **BUILD SUCCESSFUL**
-- Git Push: Successfully pushed to GitHub (`https://github.com/Eagleworrior/Filmbox.git` - Commit `cba3580`).
+- Git Push: Successfully pushed to GitHub (`https://github.com/Eagleworrior/Filmbox.git` - Commit `1380516`).
