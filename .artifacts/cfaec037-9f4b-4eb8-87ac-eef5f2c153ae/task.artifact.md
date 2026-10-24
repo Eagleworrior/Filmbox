@@ -1,5 +1,5 @@
-# Task List - PayPal Payment Links Mapping
+# Task List - Real-Time Safaricom M-Pesa STK Polling
 
-- [ ] Add `PAYPAL_PLAN_URLS` mapping and update `payWithPayPal()` in `index.html` `[ ]`
-- [ ] Whitelist `paypal.com/ncp/` in `MainActivity.java` `[ ]`
+- [ ] Update `onMpesaSTKResponse` and `startMpesaPolling` in `index.html` to eliminate premature VIP activation `[ ]`
+- [ ] Add real-time Safaricom `ResultCode` inspection and live error feedback (insufficient balance, wrong PIN, cancelled) `[ ]`
 - [ ] Verify build via gradle `app:assembleDebug` `[ ]`
