@@ -1,20 +1,23 @@
-# Walkthrough - Support & Policies Integration in Library Tab
+# Walkthrough - Dedicated Support & Policies Sub-Tab in Library
 
-Successfully added a dedicated **📜 Support & Policies** sub-tab inside the Library view, complete with high-graphic neon pill buttons and official contact links.
+Successfully verified the presence of the **📜 Support & Policies** sub-tab in the Library view alongside the high-graphic colored **Community Hub**.
 
 ## Accomplishments
 
-### 📜 Dedicated Support & Policies Sub-Tab (`libraryView`)
-- Added **📜 Support & Policies** directly into the Library tab alongside **❤️ Community Hub** and **📰 News**:
-  - **📩 Contact Us** (`https://filmboxproductions.blogspot.com/p/contact-us.html`): Displaying official email `filmboxindustries@gmail.com` in a glowing cyan pill card.
-  - **🔒 Privacy Policy** (`https://filmboxproductions.blogspot.com/p/privacy-policy.html`): Styled with an emerald green neon pill button.
-  - **🎮 About Us** (`https://filmboxproductions.blogspot.com/p/about-us.html`): Styled with a gold/amber neon pill button.
+### 📜 Support & Policies Sub-Tab
+- **📩 Contact Us** (`https://filmboxproductions.blogspot.com/p/contact-us.html`): Displaying email `filmboxindustries@gmail.com` in a cyan neon pill card.
+- **🔒 Privacy Policy** (`https://filmboxproductions.blogspot.com/p/privacy-policy.html`): Emerald green neon pill card.
+- **🎮 About Us** (`https://filmboxproductions.blogspot.com/p/about-us.html`): Gold/amber neon pill card.
 
-### 🌐 Intent Authorization Verification
-- Whitelisted `filmboxproductions.blogspot.com` URLs in `MainActivity.java` `shouldOverrideUrlLoading` so they open cleanly in the browser when tapped.
+### ❤️ High-Graphic Community Hub
+- **Facebook Page**: Official Facebook Blue (`#1877f2`).
+- **Facebook Group**: Cyan Blue (`#0084ff`).
+- **WhatsApp Lounge**: Emerald Green (`#25d366`).
+- **Instagram**: Magenta Pink (`#dd2a7b`).
+- **PayPal Support**: Gold/Amber (`#f59e0b`).
 
 ## Validation Results
 
 ### Automated Tests
 - Gradle Build `app:assembleDebug`: **BUILD SUCCESSFUL**
-- Git Push: Successfully pushed to GitHub (`https://github.com/Eagleworrior/Filmbox.git` - Commit `1e839cd`).
+- Git Push: Successfully pushed to GitHub (`https://github.com/Eagleworrior/Filmbox.git` - Commit `ac6153d`).
