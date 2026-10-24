@@ -1,26 +1,24 @@
-# Implementation Plan - Match Community Hub Page to Exact Blog Neon Pill Design
+# Implementation Plan - Video Player Controls Upgrade & High-Graphic Offline Screen
 
-Re-architect the Community Hub page in `index.html` to replicate the exact layout, gradient typography, neon pill buttons, and vibrant brand colors shown in the user's `filmboxproductions.blogspot.com` screenshots.
+Upgrade the video player control overlay (`showPlayer`) with a prominent top-left back arrow button (`‹`), 3-second auto-hide timer, and tap-to-toggle vanish behavior; and redesign the offline screen with multi-color glowing neon typography and animated radar rings.
 
 ## User Review Required
 
 > [!IMPORTANT]
-> - **Exact Blog Design Match**: Replaces card grid layout with the exact neon pill container and glowing gradient buttons from `filmboxproductions.blogspot.com`:
->   - **Top Badge**: `🎬 OFFICIAL FILM BOX PLATFORM` in cyan neon pill container.
->   - **Gradient Title**: **`GET THE ANDROID APP & JOIN COMMUNITY`** in cyan to emerald to yellow gradient text (`linear-gradient(90deg, #38bdf8, #25D366, #fbbf24)`).
->   - **Glowing Pill Buttons**:
->     - 🌐 **BLOGGER WEBSITE** (`#00bcff` cyan border & text glow).
->     - 📘 **FACEBOOK PAGE** (`#1877f2` Facebook blue border & text glow).
->     - 👥 **FACEBOOK GROUP** (`#0084ff` cyan blue border & text glow).
->     - 💬 **WHATSAPP VIP** (`#25d366` emerald green border & text glow).
->     - 📸 **INSTAGRAM** (`#e1306c` magenta pink border & text glow).
->     - ☕ **SUPPORT PAYPAL** (`#f59e0b` gold/amber border & text glow).
+> - **Video Player Back Arrow & Tap Controls (`showPlayer`)**:
+>   - **Prominent Back Arrow (`‹`)**: Placed at the top-left of the player overlay with a glowing cyan border (`border: 2px solid #38bdf8; box-shadow: 0 0 15px rgba(56,189,248,0.6)`).
+>   - **3-Second Auto-Hide**: Controls auto-hide after 3 seconds of inactivity.
+>   - **Tap-to-Toggle / Tap-to-Vanish**: Tapping the screen when controls are visible hides all overlays immediately. Tapping when hidden brings back the controls and resets the 3-second timer.
+> - **Strict Online-Only & High-Graphic Offline Screen**:
+>   - The app strictly requires an online network connection (`checkOnlineStatus()`).
+>   - Render a high-graphic, neon-decorated offline screen featuring multi-color gradient title (**`📡 NO INTERNET CONNECTION`**), animated pulsing radar ring, and a glowing `Retry Connection 🔄` pill button.
 
 ## Proposed Changes
 
 ### Web Application UI Engine
 #### [MODIFY] [index.html](file:///C:/Users/EAGLE/AndroidStudioProjects/FilmBox/app/src/main/assets/index.html)
-- Update `socialCommunityHtml()` and embedded CSS to render the exact neon pill design and brand colors shown in the user's screenshots.
+- **Player Controls (`showPlayer`)**: Update `#pbar` styling, `z-index: 99999`, 3-second timer, tap-to-toggle vanish listener, and prominent back arrow button.
+- **High-Graphic Offline Screen (`checkOnlineStatus`)**: Replace plain offline message with glowing multi-color gradient typography and animated radar rings.
 
 ## Verification Plan
 
@@ -28,4 +26,5 @@ Re-architect the Community Hub page in `index.html` to replicate the exact layou
 - Run Gradle build `app:assembleDebug` to verify clean compilation.
 
 ### Manual Verification
-- Test opening the Library -> Community tab to verify that the page matches the user's screenshot layout and neon pill button styling.
+- Test playing a movie to confirm the top-left back arrow is visible, auto-hides in 3 seconds, and vanishes on screen tap.
+- Test offline state to verify the multi-color glowing offline screen.
