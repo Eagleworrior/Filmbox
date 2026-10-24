@@ -1,5 +1,5 @@
-# Task List - Player Back Arrow & High-Graphic Offline Screen
+# Task List - Support & Policies Sub-Tab & Whitelist Verification
 
-- [ ] Upgrade `showPlayer()` with top-left back arrow button (`‹`), `z-index: 99999`, 3-second auto-hide timer, and tap-to-vanish listener `[ ]`
-- [ ] Upgrade `checkOnlineStatus()` with multi-color glowing neon offline screen `[ ]`
+- [ ] Add **📜 Support & Policies** sub-tab in `libraryView()` in `index.html` `[ ]`
+- [ ] Whitelist `filmboxproductions.blogspot.com/p/` in `MainActivity.java` `[ ]`
 - [ ] Verify build via gradle `app:assembleDebug` `[ ]`

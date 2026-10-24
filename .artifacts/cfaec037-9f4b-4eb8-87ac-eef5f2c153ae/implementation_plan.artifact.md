@@ -1,24 +1,31 @@
-# Implementation Plan - Video Player Controls Upgrade & High-Graphic Offline Screen
+# Implementation Plan - Support & Policies Sub-Tab in Library & Whitelist Verification
 
-Upgrade the video player control overlay (`showPlayer`) with a prominent top-left back arrow button (`‹`), 3-second auto-hide timer, and tap-to-toggle vanish behavior; and redesign the offline screen with multi-color glowing neon typography and animated radar rings.
+Add a dedicated **Support & Policies** sub-tab in the Library view containing high-graphic neon pill buttons for Contact Us (`filmboxindustries@gmail.com`), Privacy Policy, and About Us; whitelist these official Blog links in `MainActivity.java`; and re-confirm all platform features (Community links, real-time VIP verification, player back arrow `‹`, colored typography, and startup script error filter).
 
 ## User Review Required
 
 > [!IMPORTANT]
-> - **Video Player Back Arrow & Tap Controls (`showPlayer`)**:
->   - **Prominent Back Arrow (`‹`)**: Placed at the top-left of the player overlay with a glowing cyan border (`border: 2px solid #38bdf8; box-shadow: 0 0 15px rgba(56,189,248,0.6)`).
->   - **3-Second Auto-Hide**: Controls auto-hide after 3 seconds of inactivity.
->   - **Tap-to-Toggle / Tap-to-Vanish**: Tapping the screen when controls are visible hides all overlays immediately. Tapping when hidden brings back the controls and resets the 3-second timer.
-> - **Strict Online-Only & High-Graphic Offline Screen**:
->   - The app strictly requires an online network connection (`checkOnlineStatus()`).
->   - Render a high-graphic, neon-decorated offline screen featuring multi-color gradient title (**`📡 NO INTERNET CONNECTION`**), animated pulsing radar ring, and a glowing `Retry Connection 🔄` pill button.
+> - **Support & Policies Sub-Tab (`libraryView()`)**:
+>   - **📩 Contact Us**: `https://filmboxproductions.blogspot.com/p/contact-us.html` (Displaying Email: `filmboxindustries@gmail.com`).
+>   - **🔒 Privacy Policy**: `https://filmboxproductions.blogspot.com/p/privacy-policy.html`
+>   - **🎮 About Us**: `https://filmboxproductions.blogspot.com/p/about-us.html`
+>   - Styled with glowing neon pill containers, vibrant brand icons, and gradient typography matching the Community Hub design.
+> - **Whitelisted Browser Intents (`MainActivity.java`)**: `filmboxproductions.blogspot.com` URLs are whitelisted in `shouldOverrideUrlLoading` so they open smoothly in external browsers when tapped.
+> - **Full System Re-Confirmation**:
+>   - **Community Links**: Facebook Page, Facebook Group, WhatsApp, Instagram, Blogger, PayPal.
+>   - **Real-Time VIP Activation**: M-Pesa STK polling & PayPal REST verification; VIP is activated **only** upon confirmation.
+>   - **Video Player Controls**: Top-left back arrow (`‹`), 3-second auto-hide timer, and tap-to-toggle vanish controls.
+>   - **Startup Script Error Filter**: `window.onerror` suppresses cross-origin CDN `Line 0` errors.
 
 ## Proposed Changes
 
-### Web Application UI Engine
+### Web Application Engine
 #### [MODIFY] [index.html](file:///C:/Users/EAGLE/AndroidStudioProjects/FilmBox/app/src/main/assets/index.html)
-- **Player Controls (`showPlayer`)**: Update `#pbar` styling, `z-index: 99999`, 3-second timer, tap-to-toggle vanish listener, and prominent back arrow button.
-- **High-Graphic Offline Screen (`checkOnlineStatus`)**: Replace plain offline message with glowing multi-color gradient typography and animated radar rings.
+- Add **📜 Support & Policies** sub-tab in `libraryView()` with styled neon pill buttons for Contact Us, Privacy Policy, and About Us.
+
+### Android Native Core
+#### [MODIFY] [MainActivity.java](file:///C:/Users/EAGLE/AndroidStudioProjects/FilmBox/app/src/main/java/com/filmbox/MainActivity.java)
+- Confirm `filmboxproductions.blogspot.com` is whitelisted in `shouldOverrideUrlLoading`.
 
 ## Verification Plan
 
@@ -26,5 +33,4 @@ Upgrade the video player control overlay (`showPlayer`) with a prominent top-lef
 - Run Gradle build `app:assembleDebug` to verify clean compilation.
 
 ### Manual Verification
-- Test playing a movie to confirm the top-left back arrow is visible, auto-hides in 3 seconds, and vanishes on screen tap.
-- Test offline state to verify the multi-color glowing offline screen.
+- Test opening Library -> Support & Policies sub-tab to verify Contact Us, Privacy Policy, and About Us buttons load properly.

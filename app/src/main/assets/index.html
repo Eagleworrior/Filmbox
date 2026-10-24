@@ -421,9 +421,10 @@ let librarySubTab = "social";
 
 function libraryView() {
   const m = $("#main");
-  m.innerHTML = `<div class="bar" style="justify-content:center;margin-bottom:20px;gap:12px">
+  m.innerHTML = `<div class="bar" style="justify-content:center;margin-bottom:20px;gap:10px;flex-wrap:wrap">
     <button class="chip ${librarySubTab === 'social' ? 'on' : ''}" onclick="librarySubTab='social';libraryView()">❤️ Community Hub</button>
     <button class="chip ${librarySubTab === 'news' ? 'on' : ''}" onclick="librarySubTab='news';libraryView()">📰 News</button>
+    <button class="chip ${librarySubTab === 'support' ? 'on' : ''}" onclick="librarySubTab='support';libraryView()">📜 Support & Policies</button>
   </div><div id="libContent"></div>`;
 
   const sub = $("#libContent");
@@ -434,7 +435,81 @@ function libraryView() {
     sub.innerHTML = `<div id="newsGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;margin-top:16px"></div><p class="msg" id="newsInfo">Loading latest news…</p>`;
     newsNextPage = null;
     fetchNews(false);
+  } else if (librarySubTab === "support") {
+    sub.innerHTML = supportPoliciesHtml();
   }
+}
+
+function supportPoliciesHtml() {
+  return `<div class="filmbox-ultimate-hub">
+  <div class="hub-hero">
+    <span class="badge-vip" style="background:rgba(56,189,248,0.2);color:#38bdf8;border:1px solid #38bdf8">🎬 OFFICIAL SUPPORT PLATFORM</span>
+    <h2 class="hero-title" style="background:linear-gradient(90deg,#38bdf8,#25D366,#fbbf24);-webkit-background-clip:text;-webkit-text-fill-color:transparent">SUPPORT & POLICIES</h2>
+    <p class="hero-subtitle" style="color:#cbd5e1">Official Contact Information, Terms of Service, and Privacy Guidelines</p>
+  </div>
+
+  <div class="hub-grid">
+    <!-- Contact Us -->
+    <div class="card-item" style="border-color:rgba(56,189,248,0.4);background:rgba(15,23,42,0.85)">
+      <div class="card-header">
+        <div class="icon-circle" style="background:linear-gradient(135deg,#0284c7,#38bdf8)">
+          <span style="font-size:24px">📩</span>
+        </div>
+        <div class="card-title-group">
+          <h3 style="color:#38bdf8;margin:0 0 2px 0">Contact Us</h3>
+          <span class="card-tag" style="background:rgba(56,189,248,0.2);color:#38bdf8;border:1px solid #38bdf8">Email Support</span>
+        </div>
+      </div>
+      <p style="color:#cbd5e1;font-size:13px;line-height:1.5;margin:0 0 12px 0">
+        Email: <b style="color:#fbbf24">filmboxindustries@gmail.com</b><br>
+        Reach our technical support team for help, inquiries, or feedback!
+      </p>
+      <a href="https://filmboxproductions.blogspot.com/p/contact-us.html" target="_blank" rel="noopener noreferrer" class="action-btn" style="background:linear-gradient(90deg,#0284c7,#38bdf8);color:#fff!important;box-shadow:0 6px 18px rgba(56,189,248,0.4)">
+        📩 VISIT CONTACT US PAGE
+      </a>
+    </div>
+
+    <!-- Privacy Policy -->
+    <div class="card-item" style="border-color:rgba(37,211,102,0.4);background:rgba(15,23,42,0.85)">
+      <div class="card-header">
+        <div class="icon-circle" style="background:linear-gradient(135deg,#059669,#25D366)">
+          <span style="font-size:24px">🔒</span>
+        </div>
+        <div class="card-title-group">
+          <h3 style="color:#4ade80;margin:0 0 2px 0">Privacy Policy</h3>
+          <span class="card-tag" style="background:rgba(37,211,102,0.2);color:#4ade80;border:1px solid #25D366">Data Protection</span>
+        </div>
+      </div>
+      <p style="color:#cbd5e1;font-size:13px;line-height:1.5;margin:0 0 12px 0">
+        Read our official user data guidelines, privacy policies, and security commitments.
+      </p>
+      <a href="https://filmboxproductions.blogspot.com/p/privacy-policy.html" target="_blank" rel="noopener noreferrer" class="action-btn" style="background:linear-gradient(90deg,#059669,#25D366);color:#fff!important;box-shadow:0 6px 18px rgba(37,211,102,0.4)">
+        🔒 VIEW PRIVACY POLICY
+      </a>
+    </div>
+
+    <!-- About Us -->
+    <div class="card-item" style="border-color:rgba(245,158,11,0.4);background:rgba(15,23,42,0.85)">
+      <div class="card-header">
+        <div class="icon-circle" style="background:linear-gradient(135deg,#d97706,#f59e0b)">
+          <span style="font-size:24px">🎮</span>
+        </div>
+        <div class="card-title-group">
+          <h3 style="color:#fbbf24;margin:0 0 2px 0">About Us</h3>
+          <span class="card-tag" style="background:rgba(245,158,11,0.2);color:#fbbf24;border:1px solid #f59e0b">Film Box Story</span>
+        </div>
+      </div>
+      <p style="color:#cbd5e1;font-size:13px;line-height:1.5;margin:0 0 12px 0">
+        Learn more about the Film Box Network platform, mission, and cinema streaming vision!
+      </p>
+      <a href="https://filmboxproductions.blogspot.com/p/about-us.html" target="_blank" rel="noopener noreferrer" class="action-btn" style="background:linear-gradient(90deg,#d97706,#f59e0b);color:#fff!important;box-shadow:0 6px 18px rgba(245,158,11,0.4)">
+        🎮 READ ABOUT US
+      </a>
+    </div>
+  </div>
+
+  <div class="hub-footer"><p class="footer-text">⚡ Powered by FILM BOX Network &bull; Official Support</p></div>
+</div>`;
 }
 
 function socialCommunityHtml() {
