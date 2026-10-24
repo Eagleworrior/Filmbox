@@ -1,24 +1,20 @@
-# Walkthrough - Official PayPal Checkout Links Mapped to VIP Plans
+# Walkthrough - Strict Real-Time Safaricom M-Pesa STK Polling
 
-Successfully mapped your official PayPal payment links to each VIP plan without touching M-Pesa functionality.
+Successfully eliminated premature VIP activation; implemented strict real-time Safaricom polling (`queryMpesaSTKStatus`), activating VIP **only** when Safaricom confirms `ResultCode === 0`, and displaying live error feedback for insufficient balance, incorrect PIN, and phone cancellation.
 
 ## Accomplishments
 
-### 💳 PayPal Plan Link Mapping
-When a user selects a plan and chooses PayPal, tapping **"PAY WITH PAYPAL"** opens the exact PayPal payment link for that plan:
-- **Trial VIP Pass (p1 - $0.10)**: `https://www.paypal.com/ncp/payment/GGNT396SFSNCC`
-- **Daily VIP Pass (p2 - $0.40)**: `https://www.paypal.com/ncp/payment/NUZ4E4JMHTB92`
-- **Weekend VIP Pass (p3 - $0.90)**: `https://www.paypal.com/ncp/payment/LMANQFKU3MMNS`
-- **Weekly Master VIP (p4 - $1.90)**: `https://www.paypal.com/ncp/payment/K8PHR3W33B83A`
-- **Monthly VIP Pass (p8 - $5.80)**: `https://www.paypal.com/ncp/payment/6JY7ZUPLGM78U`
-- **Annual Diamond VIP (p12 - $42.30)**: `https://www.paypal.com/ncp/payment/V3V43NQ97MAWC`
-- **Lifetime VIP Pass (p13 - $76.90)**: `https://www.paypal.com/ncp/payment/EDTSB5JV9CC8G`
-
-### 📱 M-Pesa Intact
-- M-Pesa registered phone number entry and STK Push prompt dispatch remain completely untouched for Kenyan Shillings (KES).
+### 📱 Real-Time Safaricom M-Pesa STK Polling
+- **Eliminated Premature Activation**: `onMpesaSTKResponse` no longer grants VIP access when Safaricom merely acknowledges receiving the STK request (`ResponseCode === "0"`).
+- **High-Graphic Safaricom Waiting Screen**: Displays a styled modal with Safaricom Green branding (`#25D366`), pulsing loader ring, and live status indicator.
+- **Real-Time `ResultCode` Verification**:
+  - **`ResultCode === "0"` (Confirmed Payment)**: VIP is activated (`mb_vip_expiry`), celebratory success modal displays 🎉.
+  - **`ResultCode === "1"` (Insufficient Funds)**: Displays live error modal *"M-Pesa Payment Failed: Insufficient Balance. VIP not activated."*
+  - **`ResultCode === "1032"` (Cancelled on Phone)**: Displays live warning modal *"M-Pesa Prompt Cancelled on Phone. VIP not activated."*
+  - **`ResultCode === "1001" / "2001"` (Incorrect PIN / Error)**: Displays live error modal *"M-Pesa Payment Failed: Incorrect PIN or Transaction Error."*
 
 ## Validation Results
 
 ### Automated Tests
 - Gradle Build `app:assembleDebug`: **BUILD SUCCESSFUL**
-- Git Push: Successfully pushed to GitHub (`https://github.com/Eagleworrior/Filmbox.git` - Commit `3881d8e`).
+- Local Git Commit: Successfully committed (`fe0180d`).

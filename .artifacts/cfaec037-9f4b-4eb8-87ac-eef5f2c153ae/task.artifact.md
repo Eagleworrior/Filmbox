@@ -1,5 +1,5 @@
-# Task List - Real-Time Safaricom M-Pesa STK Polling
+# Task List - Blog Neon Pill Design Match
 
-- [ ] Update `onMpesaSTKResponse` and `startMpesaPolling` in `index.html` to eliminate premature VIP activation `[ ]`
-- [ ] Add real-time Safaricom `ResultCode` inspection and live error feedback (insufficient balance, wrong PIN, cancelled) `[ ]`
+- [ ] Update `socialCommunityHtml()` in `index.html` to match the exact neon pill layout from screenshots `[ ]`
+- [ ] Add CSS glow styling for neon pill buttons (Blogger, Facebook Page, Facebook Group, WhatsApp, Instagram, PayPal) `[ ]`
 - [ ] Verify build via gradle `app:assembleDebug` `[ ]`

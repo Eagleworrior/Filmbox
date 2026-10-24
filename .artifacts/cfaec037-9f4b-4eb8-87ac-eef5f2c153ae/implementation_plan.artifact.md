@@ -1,24 +1,26 @@
-# Implementation Plan - Strict Real-Time Safaricom M-Pesa STK Polling & Verification
+# Implementation Plan - Match Community Hub Page to Exact Blog Neon Pill Design
 
-Eliminate premature VIP activation upon initial STK push dispatch; enforce strict real-time Safaricom polling (`queryMpesaSTKStatus`), activating VIP **only** when Safaricom confirms `ResultCode === 0`, and displaying live error feedback for insufficient balance, incorrect PIN, and phone cancellation.
+Re-architect the Community Hub page in `index.html` to replicate the exact layout, gradient typography, neon pill buttons, and vibrant brand colors shown in the user's `filmboxproductions.blogspot.com` screenshots.
 
 ## User Review Required
 
 > [!IMPORTANT]
-> - **Eliminate Premature VIP Activation**: `onMpesaSTKResponse` will no longer grant VIP access when Safaricom merely acknowledges receiving the STK request (`ResponseCode === "0"`).
-> - **Real-Time Safaricom STK Status Polling**: `startMpesaPolling` queries Safaricom's `stkpushquery` API every 3 seconds while showing a dedicated full-screen waiting modal.
-> - **Strict Real-Time Status Verification**:
->   - **`ResultCode === "0"` (Confirmed)**: VIP is activated (`mb_vip_expiry`), success screen displays.
->   - **`ResultCode === "1"` (Insufficient Funds)**: Shows live error *"M-Pesa Payment Failed: Insufficient Balance. VIP not activated."*
->   - **`ResultCode === "1032"` (Cancelled on Phone)**: Shows live error *"M-Pesa Prompt Cancelled on Phone. VIP not activated."*
->   - **`ResultCode === "1001" / "2001"` (Incorrect PIN / Error)**: Shows live error *"M-Pesa Payment Failed: Incorrect PIN or Transaction Error."*
+> - **Exact Blog Design Match**: Replaces card grid layout with the exact neon pill container and glowing gradient buttons from `filmboxproductions.blogspot.com`:
+>   - **Top Badge**: `🎬 OFFICIAL FILM BOX PLATFORM` in cyan neon pill container.
+>   - **Gradient Title**: **`GET THE ANDROID APP & JOIN COMMUNITY`** in cyan to emerald to yellow gradient text (`linear-gradient(90deg, #38bdf8, #25D366, #fbbf24)`).
+>   - **Glowing Pill Buttons**:
+>     - 🌐 **BLOGGER WEBSITE** (`#00bcff` cyan border & text glow).
+>     - 📘 **FACEBOOK PAGE** (`#1877f2` Facebook blue border & text glow).
+>     - 👥 **FACEBOOK GROUP** (`#0084ff` cyan blue border & text glow).
+>     - 💬 **WHATSAPP VIP** (`#25d366` emerald green border & text glow).
+>     - 📸 **INSTAGRAM** (`#e1306c` magenta pink border & text glow).
+>     - ☕ **SUPPORT PAYPAL** (`#f59e0b` gold/amber border & text glow).
 
 ## Proposed Changes
 
 ### Web Application UI Engine
 #### [MODIFY] [index.html](file:///C:/Users/EAGLE/AndroidStudioProjects/FilmBox/app/src/main/assets/index.html)
-- Update `onMpesaSTKResponse` to extract `CheckoutRequestID` and launch real-time Safaricom polling without granting VIP access.
-- Implement `startMpesaPolling` with real-time `ResultCode` inspection and live user error messaging.
+- Update `socialCommunityHtml()` and embedded CSS to render the exact neon pill design and brand colors shown in the user's screenshots.
 
 ## Verification Plan
 
@@ -26,5 +28,4 @@ Eliminate premature VIP activation upon initial STK push dispatch; enforce stric
 - Run Gradle build `app:assembleDebug` to verify clean compilation.
 
 ### Manual Verification
-- Test M-Pesa STK push and verify that VIP is NOT activated upon initial prompt.
-- Verify live polling messages and accurate feedback when cancelling or failing payment.
+- Test opening the Library -> Community tab to verify that the page matches the user's screenshot layout and neon pill button styling.
