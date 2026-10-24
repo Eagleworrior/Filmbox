@@ -1,25 +1,29 @@
-# Implementation Plan - Official Brand Colors for Community Hub & Removal of Live Sports (Football)
+# Implementation Plan - Map Official PayPal Payment Links to VIP Plans
 
-Remove the Live Sports (Football) tab and feature set from the app; upgrade the Community Hub (`socialCommunityHtml()`) with official brand colors, SVGs, and glowing neon CSS gradients for Facebook, WhatsApp, Instagram, and PayPal; and ensure clean navigation across Home, Movies, Series, and Library (News & Community).
+Integrate official individual PayPal Checkout links mapped to each VIP plan in `index.html` and update `MainActivity.java` `shouldOverrideUrlLoading` to allow seamless checkout redirection.
 
 ## User Review Required
 
 > [!IMPORTANT]
-> - **Removal of Live Sports (Football)**: Completely removed the Football match API and Live Sports tab from the app and bottom navigation / Library sub-tabs as requested.
-> - **Official Brand Colors & High-Graphic CSS**: Upgraded the Community Hub cards with authentic brand gradients and glowing icons:
->   - **Facebook Page & Group**: Official Facebook Blue (`#1877f2` / `#0084ff`).
->   - **WhatsApp Lounge**: Official WhatsApp Green (`#25d366`).
->   - **Instagram**: Official Instagram Gradient (`#f58529` to `#dd2a7b` to `#8134af`).
->   - **PayPal Support**: Official Gold/Blue (`#f59e0b` / `#0070ba`).
-> - **Streamlined Library Tab**: Library view now focuses on **News** and **Community** for a cleaner, professional movie app experience.
+> - **PayPal Plan Link Mapping**: Each selected VIP plan now routes to its exact official PayPal Checkout page:
+>   - **Trial VIP Pass (p1 - KES 10)**: `https://www.paypal.com/ncp/payment/GGNT396SFSNCC`
+>   - **Daily VIP Pass (p2 - KES 50)**: `https://www.paypal.com/ncp/payment/NUZ4E4JMHTB92`
+>   - **Weekend VIP Pass (p3 - KES 120)**: `https://www.paypal.com/ncp/payment/LMANQFKU3MMNS`
+>   - **Weekly Master VIP (p4 - KES 250)**: `https://www.paypal.com/ncp/payment/K8PHR3W33B83A`
+>   - **Monthly VIP Pass (p8 - KES 750)**: `https://www.paypal.com/ncp/payment/6JY7ZUPLGM78U`
+>   - **Annual Diamond VIP (p12 - KES 5500)**: `https://www.paypal.com/ncp/payment/V3V43NQ97MAWC`
+>   - **Lifetime VIP Pass (p13 - KES 9999)**: `https://www.paypal.com/ncp/payment/EDTSB5JV9CC8G`
+> - **Android Intent Authorization (`MainActivity.java`)**: Whitelists `paypal.com/ncp/` URLs to ensure smooth external browser launching.
 
 ## Proposed Changes
 
 ### Web Application UI Engine
 #### [MODIFY] [index.html](file:///C:/Users/EAGLE/AndroidStudioProjects/FilmBox/app/src/main/assets/index.html)
-- **Remove Football**: Remove football match loading functions, API tokens, and library sports sub-tabs.
-- **Streamline Library Tab**: Library view now contains News and Community sub-tabs.
-- **Brand Colors & Hub Styles**: Ensure all community cards use authentic brand colors, SVG icons, and high-graphic styling.
+- Add `PAYPAL_PLAN_URLS` map and update `payWithPayPal()` to redirect users to the exact PayPal payment link for their selected plan.
+
+### Android Native Core
+#### [MODIFY] [MainActivity.java](file:///C:/Users/EAGLE/AndroidStudioProjects/FilmBox/app/src/main/java/com/filmbox/MainActivity.java)
+- Ensure `paypal.com/ncp/` checkout URLs are authorized in `shouldOverrideUrlLoading`.
 
 ## Verification Plan
 
@@ -27,5 +31,4 @@ Remove the Live Sports (Football) tab and feature set from the app; upgrade the 
 - Run Gradle build `app:assembleDebug` to verify clean compilation.
 
 ### Manual Verification
-- Test opening the Library tab to verify Football is removed and Community / News are present.
-- Verify community cards display official brand colors and icons.
+- Test selecting each VIP plan and tapping "CREDIT / DEBIT CARD / PAYPAL" to verify redirection to the corresponding PayPal link.

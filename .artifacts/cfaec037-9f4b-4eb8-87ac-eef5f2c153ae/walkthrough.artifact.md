@@ -1,19 +1,19 @@
-# Walkthrough - Community Hub & Startup Stabilization
+# Walkthrough - Video Player Back Arrow & Controls Upgrades
 
-Successfully updated the **Community Hub** (`socialCommunityHtml`) with the exact high-graphic colored markup provided by the user, and verified clean compilation.
+Successfully implemented auto-hiding player controls (2-second timer), tap-to-show control bar with top-left back arrow (`‹`), and streamlined library view.
 
 ## Accomplishments
 
-### 🌟 Community Hub (`socialCommunityHtml`)
-- Updated `socialCommunityHtml()` in `index.html` with the exact rich colored hub markup provided:
-  - **Official Facebook Page** (`👍 FOLLOW OUR PAGE`)
-  - **Movie Fan Community Group** (`👥 JOIN FACEBOOK GROUP`)
-  - **VIP WhatsApp Lounge** (`💬 JOIN WHATSAPP GROUP`)
-  - **Official Instagram** (`📸 FOLLOW ON INSTAGRAM`)
-  - **Support Project Growth (PayPal Donation)** (`☕ SUPPORT VIA PAYPAL`)
+### ◀ Video Player Control Bar & Back Arrow (`showPlayer`)
+- When watching a movie, series, or live stream, the top control bar with the back arrow (`‹`), title, and zoom button appears immediately, and **auto-hides after 2 seconds** for an immersive viewing experience.
+- Tapping anywhere on the video screen toggles the controls back on instantly.
+
+### 📚 Streamlined Library Tab
+- Removed Live Sports (Football) sub-tab.
+- Library now centers cleanly around the rich **Community Hub** (*Facebook Page, Facebook Group, WhatsApp Lounge, Instagram, and PayPal Support Donation*) and **News**.
 
 ## Validation Results
 
 ### Automated Tests
 - Gradle Build `app:assembleDebug`: **BUILD SUCCESSFUL**
-- Local Git Commit: Successfully committed (`fc36c40`).
+- Local Git Commit: Successfully committed (`32d1223`).

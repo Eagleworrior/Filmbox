@@ -1151,17 +1151,23 @@ function pickPlan(id) {
   switchPayTab(currentPayMethod);
 }
 
+const PAYPAL_PLAN_URLS = {
+  p1: "https://www.paypal.com/ncp/payment/GGNT396SFSNCC",
+  p2: "https://www.paypal.com/ncp/payment/NUZ4E4JMHTB92",
+  p3: "https://www.paypal.com/ncp/payment/LMANQFKU3MMNS",
+  p4: "https://www.paypal.com/ncp/payment/K8PHR3W33B83A",
+  p8: "https://www.paypal.com/ncp/payment/6JY7ZUPLGM78U",
+  p12: "https://www.paypal.com/ncp/payment/V3V43NQ97MAWC",
+  p13: "https://www.paypal.com/ncp/payment/EDTSB5JV9CC8G"
+};
+
 async function payWithPayPal() {
-  const usdAmount = PLAN_PRICES_USD[PLAN] || "1.90";
+  const url = PAYPAL_PLAN_URLS[PLAN] || PAYPAL_PLAN_URLS["p4"];
   const st = $("#pst");
-  st.innerHTML = `<div class="loader-ring" style="width:30px;height:30px;margin:10px auto"></div><p style="color:#38bdf8;font-weight:bold">Connecting to PayPal REST API ($${usdAmount} USD)...</p>`;
-  if (typeof AndroidPayPal !== 'undefined' && AndroidPayPal.createPayPalOrder) {
-    AndroidPayPal.createPayPalOrder(usdAmount, "onPayPalOrderCreated");
-  } else {
-    setTimeout(() => {
-      onPayPalOrderCreated(JSON.stringify({ id: "PAYID_MOCK_" + Date.now(), status: "CREATED" }));
-    }, 1000);
+  if (st) {
+    st.innerHTML = `<p style="color:#00ff88;font-weight:bold">Redirecting to PayPal Checkout ($${PLAN_PRICES_USD[PLAN] || '1.90'} USD)...</p>`;
   }
+  window.open(url, "_blank");
 }
 
 window.onPayPalOrderCreated = function(resStr) {

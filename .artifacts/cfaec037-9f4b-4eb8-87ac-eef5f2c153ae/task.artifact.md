@@ -1,6 +1,5 @@
-# Task List - Brand Colors & Remove Football
+# Task List - PayPal Payment Links Mapping
 
-- [ ] Remove football match API functions and library sports sub-tabs from `index.html` `[ ]`
-- [ ] Upgrade Community Hub with official brand colors and SVG icons `[ ]`
-- [ ] Streamline Library tab to feature News and Community `[ ]`
+- [ ] Add `PAYPAL_PLAN_URLS` mapping and update `payWithPayPal()` in `index.html` `[ ]`
+- [ ] Whitelist `paypal.com/ncp/` in `MainActivity.java` `[ ]`
 - [ ] Verify build via gradle `app:assembleDebug` `[ ]`
