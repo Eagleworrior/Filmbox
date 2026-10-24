@@ -295,7 +295,41 @@ button,.chip,.card,.bottom-nav button,.vip,.play,nav button,a{touch-action:manip
     <div id="searchDropdown" style="position:absolute;top:100%;left:0;right:0;background:var(--panel);border:1px solid var(--line);border-radius:12px;margin-top:6px;max-height:300px;overflow-y:auto;z-index:9999;box-shadow:0 10px 30px rgba(0,0,0,0.8)" class="hidden"></div>
   </div>
 </header>
-<main id="main"></main>
+<main id="main">
+  <div class="hero" id="hero" style="background-image:linear-gradient(90deg,#0b0b1af0 25%,transparent),url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=500&q=80');min-height:260px;display:flex;flex-direction:column;justify-content:flex-end;padding:30px">
+    <h1>Avengers: Infinity War</h1>
+    <p>The Avengers and their allies must be willing to sacrifice all in an attempt to defeat Thanos.</p>
+    <button class="play" onclick="quickPlay(299536,'movie','Avengers: Infinity War')">▶ Watch Now</button>
+  </div>
+  <h2>Trending movies</h2>
+  <div class="row" id="h1">
+    <div class="card" tabindex="0" onclick="quickPlay(299536,'movie','Avengers: Infinity War')"><img loading="lazy" src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=500&q=80" alt="Avengers: Infinity War"><div>Avengers: Infinity War<br><small>2018 · ★ 8.3</small></div></div>
+    <div class="card" tabindex="0" onclick="quickPlay(299534,'movie','Avengers: Endgame')"><img loading="lazy" src="https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?w=500&q=80" alt="Avengers: Endgame"><div>Avengers: Endgame<br><small>2019 · ★ 8.3</small></div></div>
+    <div class="card" tabindex="0" onclick="quickPlay(157336,'movie','Interstellar')"><img loading="lazy" src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=500&q=80" alt="Interstellar"><div>Interstellar<br><small>2014 · ★ 8.4</small></div></div>
+    <div class="card" tabindex="0" onclick="quickPlay(27205,'movie','Inception')"><img loading="lazy" src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=500&q=80" alt="Inception"><div>Inception<br><small>2010 · ★ 8.4</small></div></div>
+    <div class="card" tabindex="0" onclick="quickPlay(155,'movie','The Dark Knight')"><img loading="lazy" src="https://images.unsplash.com/photo-1509347528160-9a9e33742cdb?w=500&q=80" alt="The Dark Knight"><div>The Dark Knight<br><small>2008 · ★ 8.5</small></div></div>
+    <div class="card" tabindex="0" onclick="quickPlay(671,'movie','Harry Potter')"><img loading="lazy" src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500&q=80" alt="Harry Potter"><div>Harry Potter<br><small>2001 · ★ 7.9</small></div></div>
+  </div>
+  <h2>Trending series</h2>
+  <div class="row" id="h2">
+    <div class="card" tabindex="0" onclick="quickPlay(1399,'tv','Game of Thrones')"><img loading="lazy" src="https://images.unsplash.com/photo-1514533450685-4493e01d1fdc?w=500&q=80" alt="Game of Thrones"><div>Game of Thrones<br><small>2011 · ★ 8.4</small></div></div>
+    <div class="card" tabindex="0" onclick="quickPlay(66732,'tv','Stranger Things')"><img loading="lazy" src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=500&q=80" alt="Stranger Things"><div>Stranger Things<br><small>2016 · ★ 8.6</small></div></div>
+    <div class="card" tabindex="0" onclick="quickPlay(119051,'tv','Wednesday')"><img loading="lazy" src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=500&q=80" alt="Wednesday"><div>Wednesday<br><small>2022 · ★ 8.5</small></div></div>
+  </div>
+  <div class="hd"><h2>Top rated movies</h2><a onclick="go('movie')">Browse all movies</a></div>
+  <div class="row" id="h4">
+    <div class="card" tabindex="0" onclick="quickPlay(671,'movie','Harry Potter')"><img loading="lazy" src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500&q=80" alt="Harry Potter"><div>Harry Potter<br><small>2001 · ★ 7.9</small></div></div>
+    <div class="card" tabindex="0" onclick="quickPlay(155,'movie','The Dark Knight')"><img loading="lazy" src="https://images.unsplash.com/photo-1509347528160-9a9e33742cdb?w=500&q=80" alt="The Dark Knight"><div>The Dark Knight<br><small>2008 · ★ 8.5</small></div></div>
+    <div class="card" tabindex="0" onclick="quickPlay(27205,'movie','Inception')"><img loading="lazy" src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=500&q=80" alt="Inception"><div>Inception<br><small>2010 · ★ 8.4</small></div></div>
+    <div class="card" tabindex="0" onclick="quickPlay(157336,'movie','Interstellar')"><img loading="lazy" src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=500&q=80" alt="Interstellar"><div>Interstellar<br><small>2014 · ★ 8.4</small></div></div>
+  </div>
+  <h2>Top rated series</h2>
+  <div class="row" id="h5">
+    <div class="card" tabindex="0" onclick="quickPlay(119051,'tv','Wednesday')"><img loading="lazy" src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=500&q=80" alt="Wednesday"><div>Wednesday<br><small>2022 · ★ 8.5</small></div></div>
+    <div class="card" tabindex="0" onclick="quickPlay(66732,'tv','Stranger Things')"><img loading="lazy" src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=500&q=80" alt="Stranger Things"><div>Stranger Things<br><small>2016 · ★ 8.6</small></div></div>
+    <div class="card" tabindex="0" onclick="quickPlay(1399,'tv','Game of Thrones')"><img loading="lazy" src="https://images.unsplash.com/photo-1514533450685-4493e01d1fdc?w=500&q=80" alt="Game of Thrones"><div>Game of Thrones<br><small>2011 · ★ 8.4</small></div></div>
+  </div>
+</main>
 <div id="modal" class="modal" hidden></div>
 <nav class="bottom-nav">
   <button data-v="home" class="on" onclick="go('home')">🏠 Home</button>
