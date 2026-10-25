@@ -865,23 +865,33 @@ async function browse() {
   try {
     const type = S.view, m = $("#main");
     if (!type || (type !== "movie" && type !== "tv")) return;
-    if (!genreCache[type]) {
-      try {
-        const res = await tmdb(`/genre/${type}/list`);
-        genreCache[type] = (res && res.genres) ? res.genres : [];
-      } catch (e) {
-        genreCache[type] = [];
-      }
-    }
-    const genresList = genreCache[type] || [];
+
+    const defaultGenres = [
+      { id: 28, name: "Action" },
+      { id: 35, name: "Comedy" },
+      { id: 18, name: "Drama" },
+      { id: 27, name: "Horror" },
+      { id: 878, name: "Sci-Fi" },
+      { id: 53, name: "Thriller" },
+      { id: 16, name: "Animation" }
+    ];
+    const genresList = genreCache[type] || defaultGenres;
     const sorts = type === "tv" ? SORTS.slice(0, 3).map(s => s[0] === "primary_release_date.desc" ? ["first_air_date.desc", s[1]] : s) : SORTS;
     if (!sorts.some(s => s[0] === S.sort)) S.sort = "popularity.desc";
-    m.innerHTML = `<h2>${S.query ? `Results for “${esc(S.query)}”` : type === "movie" ? "All movies" : "All series"}</h2>` +
+
+    m.innerHTML = `<h2>${S.query ? `Results for “${esc(S.query)}”` : type === "movie" ? "All Movies" : "All Series"}</h2>` +
       (S.query ? "" : `<div class="bar"><select id="sort" aria-label="Sort">${sorts.map(s => `<option value="${s[0]}" ${s[0] === S.sort ? "selected" : ""}>${s[1]}</option>`).join("")}</select></div>
       <div class="bar"><button class="chip ${S.genre ? "" : "on"}" onclick="setGenre('')">All genres</button>${genresList.map(g => `<button class="chip ${S.genre == g.id ? "on" : ""}" onclick="setGenre(${g.id})">${esc(g.name)}</button>`).join("")}</div>`) +
       `<div class="grid" id="grid"></div><p class="msg" id="info"></p><button class="more" id="more" hidden onclick="more()">Load more</button>`;
     if ($("#sort")) $("#sort").onchange = e => { S.sort = e.target.value; S.page = 1; browse() };
+
     fetchPage(false);
+
+    if (!genreCache[type]) {
+      tmdb(`/genre/${type}/list`).then(res => {
+        if (res && res.genres) genreCache[type] = res.genres;
+      }).catch(e => {});
+    }
   } catch(e) {
     console.error("browse error:", e);
   }
