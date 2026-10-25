@@ -7,7 +7,7 @@
 <style>
 :root{--bg:#14110f;--panel:#201b18;--line:#352e29;--text:#f3ece4;--mute:#a79c91;--accent:#f2b134;--pitch:#2fa36b;--accent2:#7c5cff;--gold:#ffc23c}
 *{box-sizing:border-box;margin:0}
-html,body{margin:0!important;padding:0!important;width:100%!important;min-height:100vh!important;background:var(--bg)!important;color:var(--text)!important;font:15px/1.5 "Trebuchet MS",Verdana,sans-serif!important;padding-bottom:100px!important;overflow-x:hidden!important}
+html,body{margin:0!important;padding:0!important;width:100%!important;min-height:100vh!important;background:var(--bg)!important;color:var(--text)!important;font:15px/1.5 "Trebuchet MS",Verdana,sans-serif!important;padding-bottom:90px!important;overflow-x:hidden!important}
 header{position:sticky;top:0;z-index:99;background:rgba(11, 11, 26, 0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:max(12px, env(safe-area-inset-top)) 16px 12px 16px;display:flex;flex-direction:column;gap:10px}
 .top-bar{display:flex;align-items:center;justify-content:space-between;position:relative;width:100%}
 .logo{position:absolute;left:50%;transform:translateX(-50%);font:900 24px Georgia,serif;background:linear-gradient(90deg,#ffc23c,#ff4d8d,#38bdf8);-webkit-background-clip:text;background-clip:text;color:transparent;cursor:pointer;white-space:nowrap}
@@ -342,19 +342,19 @@ h2{font:800 22px Georgia,serif;margin:22px 0 12px;background:linear-gradient(90d
   right: 0 !important;
   width: 100% !important;
   max-width: 100% !important;
-  z-index: 999999 !important;
+  z-index: 2147483647 !important;
   background: rgba(10, 10, 22, 0.98) !important;
-  backdrop-filter: blur(25px) !important;
-  -webkit-backdrop-filter: blur(25px) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
   border-top: 2px solid rgba(255, 255, 255, 0.15) !important;
   display: flex !important;
   flex-direction: row !important;
   justify-content: space-evenly !important;
   align-items: center !important;
   gap: 8px !important;
-  padding: 10px 10px calc(10px + env(safe-area-inset-bottom)) 10px !important;
-  box-shadow: 0 -10px 35px rgba(0, 0, 0, 0.95) !important;
+  padding: 10px 8px calc(10px + env(safe-area-inset-bottom)) 8px !important;
   box-sizing: border-box !important;
+  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.9) !important;
 }
 
 .dock-btn {
@@ -365,56 +365,54 @@ h2{font:800 22px Georgia,serif;margin:22px 0 12px;background:linear-gradient(90d
   gap: 6px !important;
   cursor: pointer !important;
   flex: 1 !important;
-  padding: 10px 8px !important;
-  border-radius: 16px !important;
+  padding: 10px 6px !important;
+  margin: 0 3px !important;
+  border-radius: 14px !important;
+  font-weight: 800 !important;
+  font-size: 13px !important;
+  box-sizing: border-box !important;
   transition: all 0.25s ease-in-out !important;
   white-space: nowrap !important;
 }
 
-.dock-icon {
-  font-size: 16px !important;
-}
-
-.dock-label {
-  font-size: 12px !important;
-  font-weight: 800 !important;
-  letter-spacing: 0.4px !important;
-}
-
+/* Home Box - Neon Pink */
 .dock-btn[data-v="home"] {
-  background: rgba(255, 77, 141, 0.12) !important;
+  background: linear-gradient(135deg, rgba(255, 77, 141, 0.2), rgba(217, 70, 239, 0.2)) !important;
   color: #ff4d8d !important;
-  border: 1.5px solid rgba(255, 77, 141, 0.4) !important;
+  border: 1.5px solid #ff4d8d !important;
 }
 .dock-btn[data-v="home"].on {
   background: linear-gradient(135deg, #ff4d8d 0%, #d946ef 100%) !important;
   color: #ffffff !important;
 }
 
+/* Movies Box - Electric Cyan */
 .dock-btn[data-v="movie"] {
-  background: rgba(56, 189, 248, 0.12) !important;
+  background: linear-gradient(135deg, rgba(2, 132, 199, 0.2), rgba(56, 189, 248, 0.2)) !important;
   color: #38bdf8 !important;
-  border: 1.5px solid rgba(56, 189, 248, 0.4) !important;
+  border: 1.5px solid #38bdf8 !important;
 }
 .dock-btn[data-v="movie"].on {
   background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%) !important;
   color: #ffffff !important;
 }
 
+/* Series Box - Emerald Green */
 .dock-btn[data-v="tv"] {
-  background: rgba(52, 211, 153, 0.12) !important;
+  background: linear-gradient(135deg, rgba(5, 150, 105, 0.2), rgba(52, 211, 153, 0.2)) !important;
   color: #34d399 !important;
-  border: 1.5px solid rgba(52, 211, 153, 0.4) !important;
+  border: 1.5px solid #34d399 !important;
 }
 .dock-btn[data-v="tv"].on {
   background: linear-gradient(135deg, #059669 0%, #34d399 100%) !important;
   color: #ffffff !important;
 }
 
+/* Library Box - Amber Gold */
 .dock-btn[data-v="library"] {
-  background: rgba(251, 191, 36, 0.12) !important;
+  background: linear-gradient(135deg, rgba(217, 119, 6, 0.2), rgba(251, 191, 36, 0.2)) !important;
   color: #fbbf24 !important;
-  border: 1.5px solid rgba(251, 191, 36, 0.4) !important;
+  border: 1.5px solid #fbbf24 !important;
 }
 .dock-btn[data-v="library"].on {
   background: linear-gradient(135deg, #d97706 0%, #fbbf24 100%) !important;
