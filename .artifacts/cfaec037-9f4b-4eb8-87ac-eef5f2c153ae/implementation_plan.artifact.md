@@ -1,24 +1,25 @@
-# Implementation Plan - Complete High-Graphic CSS Upgrade for Community & Support Hub Pages
+# Implementation Plan - Floating Rounded Dock Navigation Bar Matching Screenshot
 
-Add all missing CSS style rules for `.filmbox-ultimate-hub`, `.card-item`, `.icon-circle`, `.action-btn`, `.btn-fb-page`, `.btn-wa`, `.btn-insta`, `.btn-paypal`, `.card-tag`, `.desc-*`, `.title-*`, and `.hero-*` into `<style>` in `index.html`. This will transform both the **Community Hub** and **Support & Policies** pages into ultra-high-graphic, beautifully styled cards with vibrant brand colors, glowing borders, SVG icons, and gradient typography matching your dream design.
+Re-architect the bottom navigation bar into a **Floating Rounded Dock Bar** floating over content at the bottom of the screen, matching the exact 5-item layout and active icon box design from the user's screenshot.
 
 ## User Review Required
 
 > [!IMPORTANT]
-> - **Fix Missing CSS Styles**: The CSS rules for `.filmbox-ultimate-hub` card containers, icon circles, colored text descriptions, badges, and action buttons were missing from `<style>`, causing the browser to render unstyled text. Adding these full CSS definitions will immediately fix both pages.
-> - **High-Graphic Neon Pill Design**:
->   - **Facebook Page**: Facebook Blue (`#1877f2`) icon circle, glowing blue button, and cyan title.
->   - **Facebook Group**: Cyan Blue (`#0084ff`) icon circle and glowing action button.
->   - **VIP WhatsApp Lounge**: Official WhatsApp Green (`#25d366`) icon circle, glowing green button, and bright green text.
->   - **Official Instagram**: Instagram Magenta Gradient (`#f58529` -> `#dd2a7b` -> `#8134af`) icon circle and glowing pink button.
->   - **Support Project Growth (PayPal)**: Official PayPal Blue/Gold (`#0070ba` / `#f59e0b`) icon circle and gold button.
->   - **Contact Us, Privacy Policy & About Us**: High-graphic cards with cyan, emerald, and gold borders, pill tags, and glowing buttons.
+> - **Floating Rounded Dock Container**: `.floating-dock` floating 12px above the screen bottom with `border-radius: 28px`, `backdrop-filter: blur(20px)`, and `box-shadow: 0 15px 40px rgba(0,0,0,0.8)`.
+> - **5-Item Dock Layout**:
+>   1. 🏠 **Home**
+>   2. 🗂️ **Library**
+>   3. 🎬 **Movies**
+>   4. 📥 **Download**
+>   5. 👤 **Community**
+> - **Active Pill Icon Box**: When selected, the active item's icon highlights inside a vibrant hot-pink rounded icon box (`background: #ff4d8d; box-shadow: 0 4px 15px rgba(255,77,141,0.5)`) with a bold white label below, matching the screenshot!
 
 ## Proposed Changes
 
 ### Web Application UI Engine
 #### [MODIFY] [index.html](file:///C:/Users/EAGLE/AndroidStudioProjects/FilmBox/app/src/main/assets/index.html)
-- Add complete CSS definitions for all Community Hub and Support/Policy cards, icon circles, buttons, badges, descriptions, and typography into `<style>`.
+- Replace `.bottom-nav` with `.floating-dock` container and update CSS to render the floating rounded dock bar with active pill icon boxes.
+- Update `go(v)` view router to handle 5 items (`home`, `library`, `movie`, `download`, `social`).
 
 ## Verification Plan
 
@@ -26,5 +27,5 @@ Add all missing CSS style rules for `.filmbox-ultimate-hub`, `.card-item`, `.ico
 - Run Gradle build `app:assembleDebug` to verify clean compilation.
 
 ### Manual Verification
-- Test opening Library -> Community Hub to verify vibrant brand colors, glowing buttons, and SVG icons.
-- Test opening Library -> Support & Policies to verify high-graphic cards for Contact Us, Privacy Policy, and About Us.
+- Test opening the app to verify the floating rounded dock bar appears at the bottom.
+- Test tapping each item (`Home`, `Library`, `Movies`, `Download`, `Community`) to verify active pill icon highlights and instant view routing.

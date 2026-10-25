@@ -1,4 +1,5 @@
-# Task List - High-Graphic CSS Upgrade for Community & Support Pages
+# Task List - Floating Rounded Dock Navigation Bar
 
-- [ ] Add complete CSS definitions for `.filmbox-ultimate-hub`, `.card-item`, `.icon-circle`, `.action-btn`, `.btn-*`, `.desc-*`, `.title-*`, and `.hero-*` into `<style>` in `index.html` `[ ]`
+- [ ] Update `.bottom-nav` markup & CSS to `.floating-dock` matching screenshot `[ ]`
+- [ ] Update `go(v)` view router to sync active pill icon highlights `[ ]`
 - [ ] Verify build via gradle `app:assembleDebug` `[ ]`
