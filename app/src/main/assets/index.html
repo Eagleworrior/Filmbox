@@ -351,12 +351,53 @@ h2{font:800 22px Georgia,serif;margin:22px 0 12px;background:linear-gradient(90d
   padding: 8px 10px calc(8px + env(safe-area-inset-bottom)) !important;
   box-shadow: 0 -10px 30px rgba(0,0,0,0.9) !important;
 }
-.bottom-nav button{border:1.5px solid var(--line);color:var(--text);padding:8px 6px;border-radius:16px;cursor:pointer;font:800 11px inherit;display:flex;flex-direction:column;align-items:center;gap:4px;transition:all 0.25s ease;flex:1;max-width:80px;opacity:0.65;transform:scale(0.95)}
-.bottom-nav button[data-v="home"]{background:linear-gradient(135deg,#ff4d8d,#8b5cf6)!important;color:#fff!important;border-color:transparent!important}
-.bottom-nav button[data-v="movie"]{background:linear-gradient(135deg,#0284c7,#38bdf8)!important;color:#fff!important;border-color:transparent!important}
-.bottom-nav button[data-v="tv"]{background:linear-gradient(135deg,#059669,#34d399)!important;color:#fff!important;border-color:transparent!important}
-.bottom-nav button[data-v="library"]{background:linear-gradient(135deg,#d97706,#fbbf24)!important;color:#fff!important;border-color:transparent!important}
-.bottom-nav button.on{opacity:1!important;transform:translateY(-4px) scale(1.08)!important;box-shadow:0 10px 25px rgba(255,255,255,0.5)!important;outline:3px solid #fff!important}
+.bottom-nav button {
+  border: 1.5px solid rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+  padding: 8px 6px !important;
+  border-radius: 18px !important;
+  cursor: pointer !important;
+  font: 900 11px inherit !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 4px !important;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  flex: 1 !important;
+  max-width: 82px !important;
+  opacity: 0.85 !important;
+  letter-spacing: 0.5px !important;
+}
+.bottom-nav button[data-v="home"] {
+  background: linear-gradient(135deg, #ff4d8d 0%, #8b5cf6 100%) !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 77, 141, 0.6) !important;
+  box-shadow: 0 4px 15px rgba(255, 77, 141, 0.4) !important;
+}
+.bottom-nav button[data-v="movie"] {
+  background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%) !important;
+  color: #ffffff !important;
+  border-color: rgba(56, 189, 248, 0.6) !important;
+  box-shadow: 0 4px 15px rgba(56, 189, 248, 0.4) !important;
+}
+.bottom-nav button[data-v="tv"] {
+  background: linear-gradient(135deg, #059669 0%, #34d399 100%) !important;
+  color: #ffffff !important;
+  border-color: rgba(52, 211, 153, 0.6) !important;
+  box-shadow: 0 4px 15px rgba(52, 211, 153, 0.4) !important;
+}
+.bottom-nav button[data-v="library"] {
+  background: linear-gradient(135deg, #d97706 0%, #fbbf24 100%) !important;
+  color: #000000 !important;
+  border-color: rgba(251, 191, 36, 0.6) !important;
+  box-shadow: 0 4px 15px rgba(251, 191, 36, 0.4) !important;
+}
+.bottom-nav button.on {
+  opacity: 1 !important;
+  transform: translateY(-5px) scale(1.1) !important;
+  box-shadow: 0 10px 30px rgba(255, 255, 255, 0.6) !important;
+  outline: 2.5px solid #ffffff !important;
+}
 button,.chip,.card,.bottom-nav button,.vip,.play,nav button,a{touch-action:manipulation!important;-webkit-tap-highlight-color:transparent!important;pointer-events:auto!important;user-select:none!important;-webkit-user-select:none!important}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.17/dist/hls.min.js"></script>
