@@ -1,5 +1,4 @@
-# Task List - Support & Policies Sub-Tab & Whitelist Verification
+# Task List - High-Graphic CSS Upgrade for Community & Support Pages
 
-- [ ] Add **📜 Support & Policies** sub-tab in `libraryView()` in `index.html` `[ ]`
-- [ ] Whitelist `filmboxproductions.blogspot.com/p/` in `MainActivity.java` `[ ]`
+- [ ] Add complete CSS definitions for `.filmbox-ultimate-hub`, `.card-item`, `.icon-circle`, `.action-btn`, `.btn-*`, `.desc-*`, `.title-*`, and `.hero-*` into `<style>` in `index.html` `[ ]`
 - [ ] Verify build via gradle `app:assembleDebug` `[ ]`

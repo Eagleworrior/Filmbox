@@ -1,31 +1,24 @@
-# Implementation Plan - Support & Policies Sub-Tab in Library & Whitelist Verification
+# Implementation Plan - Complete High-Graphic CSS Upgrade for Community & Support Hub Pages
 
-Add a dedicated **Support & Policies** sub-tab in the Library view containing high-graphic neon pill buttons for Contact Us (`filmboxindustries@gmail.com`), Privacy Policy, and About Us; whitelist these official Blog links in `MainActivity.java`; and re-confirm all platform features (Community links, real-time VIP verification, player back arrow `‹`, colored typography, and startup script error filter).
+Add all missing CSS style rules for `.filmbox-ultimate-hub`, `.card-item`, `.icon-circle`, `.action-btn`, `.btn-fb-page`, `.btn-wa`, `.btn-insta`, `.btn-paypal`, `.card-tag`, `.desc-*`, `.title-*`, and `.hero-*` into `<style>` in `index.html`. This will transform both the **Community Hub** and **Support & Policies** pages into ultra-high-graphic, beautifully styled cards with vibrant brand colors, glowing borders, SVG icons, and gradient typography matching your dream design.
 
 ## User Review Required
 
 > [!IMPORTANT]
-> - **Support & Policies Sub-Tab (`libraryView()`)**:
->   - **📩 Contact Us**: `https://filmboxproductions.blogspot.com/p/contact-us.html` (Displaying Email: `filmboxindustries@gmail.com`).
->   - **🔒 Privacy Policy**: `https://filmboxproductions.blogspot.com/p/privacy-policy.html`
->   - **🎮 About Us**: `https://filmboxproductions.blogspot.com/p/about-us.html`
->   - Styled with glowing neon pill containers, vibrant brand icons, and gradient typography matching the Community Hub design.
-> - **Whitelisted Browser Intents (`MainActivity.java`)**: `filmboxproductions.blogspot.com` URLs are whitelisted in `shouldOverrideUrlLoading` so they open smoothly in external browsers when tapped.
-> - **Full System Re-Confirmation**:
->   - **Community Links**: Facebook Page, Facebook Group, WhatsApp, Instagram, Blogger, PayPal.
->   - **Real-Time VIP Activation**: M-Pesa STK polling & PayPal REST verification; VIP is activated **only** upon confirmation.
->   - **Video Player Controls**: Top-left back arrow (`‹`), 3-second auto-hide timer, and tap-to-toggle vanish controls.
->   - **Startup Script Error Filter**: `window.onerror` suppresses cross-origin CDN `Line 0` errors.
+> - **Fix Missing CSS Styles**: The CSS rules for `.filmbox-ultimate-hub` card containers, icon circles, colored text descriptions, badges, and action buttons were missing from `<style>`, causing the browser to render unstyled text. Adding these full CSS definitions will immediately fix both pages.
+> - **High-Graphic Neon Pill Design**:
+>   - **Facebook Page**: Facebook Blue (`#1877f2`) icon circle, glowing blue button, and cyan title.
+>   - **Facebook Group**: Cyan Blue (`#0084ff`) icon circle and glowing action button.
+>   - **VIP WhatsApp Lounge**: Official WhatsApp Green (`#25d366`) icon circle, glowing green button, and bright green text.
+>   - **Official Instagram**: Instagram Magenta Gradient (`#f58529` -> `#dd2a7b` -> `#8134af`) icon circle and glowing pink button.
+>   - **Support Project Growth (PayPal)**: Official PayPal Blue/Gold (`#0070ba` / `#f59e0b`) icon circle and gold button.
+>   - **Contact Us, Privacy Policy & About Us**: High-graphic cards with cyan, emerald, and gold borders, pill tags, and glowing buttons.
 
 ## Proposed Changes
 
-### Web Application Engine
+### Web Application UI Engine
 #### [MODIFY] [index.html](file:///C:/Users/EAGLE/AndroidStudioProjects/FilmBox/app/src/main/assets/index.html)
-- Add **📜 Support & Policies** sub-tab in `libraryView()` with styled neon pill buttons for Contact Us, Privacy Policy, and About Us.
-
-### Android Native Core
-#### [MODIFY] [MainActivity.java](file:///C:/Users/EAGLE/AndroidStudioProjects/FilmBox/app/src/main/java/com/filmbox/MainActivity.java)
-- Confirm `filmboxproductions.blogspot.com` is whitelisted in `shouldOverrideUrlLoading`.
+- Add complete CSS definitions for all Community Hub and Support/Policy cards, icon circles, buttons, badges, descriptions, and typography into `<style>`.
 
 ## Verification Plan
 
@@ -33,4 +26,5 @@ Add a dedicated **Support & Policies** sub-tab in the Library view containing hi
 - Run Gradle build `app:assembleDebug` to verify clean compilation.
 
 ### Manual Verification
-- Test opening Library -> Support & Policies sub-tab to verify Contact Us, Privacy Policy, and About Us buttons load properly.
+- Test opening Library -> Community Hub to verify vibrant brand colors, glowing buttons, and SVG icons.
+- Test opening Library -> Support & Policies to verify high-graphic cards for Contact Us, Privacy Policy, and About Us.

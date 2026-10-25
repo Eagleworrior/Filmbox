@@ -167,42 +167,105 @@ h2{font:800 22px Georgia,serif;margin:22px 0 12px;background:linear-gradient(90d
   display: inline-block;
   width: 90%;
   max-width: 280px;
-  padding: 12px 20px;
-  border-radius: 35px;
-  font-size: 14px;
-  font-weight: 700;
-  border: none;
-  cursor: pointer;
-  text-decoration: none !important;
-  transition: all 0.3s ease;
-  letter-spacing: 0.5px;
-}
-.wa-btn {
-  background: linear-gradient(45deg, #25D366, #128C7E);
-  color: #ffffff !important;
-  box-shadow: 0 5px 20px rgba(37, 211, 102, 0.4);
-}
-.wa-btn:hover {
-  background: linear-gradient(45deg, #128C7E, #25D366);
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(37, 211, 102, 0.7);
-}
-.paypal-btn {
-  background: linear-gradient(45deg, #0070ba, #003087);
-  color: #ffffff !important;
-  box-shadow: 0 5px 20px rgba(0, 112, 186, 0.4);
-}
-.paypal-btn:hover {
-  background: linear-gradient(45deg, #003087, #0070ba);
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(0, 112, 186, 0.7);
-}
-.hub-divider {
-  width: 85%;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.3), transparent);
-  margin: 18px auto;
-}
+/* HIGH-GRAPHIC NEON PILL COMMUNITY HUB & SUPPORT STYLES */
+  .filmbox-ultimate-hub {
+    max-width: 520px;
+    margin: 25px auto;
+    background: radial-gradient(circle at top left, #1e1b4b 0%, #0f172a 50%, #020617 100%);
+    border: 2px solid rgba(56, 189, 248, 0.6);
+    border-radius: 28px;
+    padding: 30px 20px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(56, 189, 248, 0.3);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    box-sizing: border-box;
+  }
+
+  .hub-hero { text-align: center; margin-bottom: 26px; }
+  .gif-container { position: relative; display: inline-block; margin-bottom: 12px; }
+  .gif-glow-ring {
+    position: absolute; top: -6px; left: -6px; right: -6px; bottom: -6px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #38bdf8, #25D366, #f59e0b, #1877F2);
+    filter: blur(12px); opacity: 0.85; animation: rotateGlow 6s linear infinite;
+  }
+  @keyframes rotateGlow { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  .hero-gif {
+    position: relative; width: 90px; height: 90px; border-radius: 50%; object-fit: cover;
+    border: 3px solid #38bdf8; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+    animation: floatHero 3.5s ease-in-out infinite;
+  }
+  @keyframes floatHero { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+  .badge-vip {
+    display: inline-block; padding: 5px 14px; background: rgba(56, 189, 248, 0.15);
+    border: 1px solid rgba(56, 189, 248, 0.5); border-radius: 20px; color: #38bdf8;
+    font-size: 11px; font-weight: 800; letter-spacing: 1.5px; margin-bottom: 10px; text-transform: uppercase;
+  }
+  .hero-title {
+    font-size: 26px; font-weight: 900; margin: 0 0 8px 0;
+    background: linear-gradient(90deg, #38bdf8 0%, #25D366 50%, #fbbf24 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 1px;
+  }
+  .hero-subtitle {
+    font-size: 13.5px; font-weight: 600;
+    background: linear-gradient(90deg, #f472b6, #38bdf8);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.5; margin: 0 auto;
+  }
+
+  .hub-grid { display: flex; flex-direction: column; gap: 18px; }
+  .card-item {
+    background: rgba(15, 23, 42, 0.85); border-radius: 20px; padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.12); backdrop-filter: blur(10px);
+    transition: all 0.3s ease; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  }
+  .card-item:hover { transform: translateY(-4px); border-color: rgba(56, 189, 248, 0.6); box-shadow: 0 14px 35px rgba(0, 0, 0, 0.6); }
+
+  .card-header { display: flex; align-items: center; gap: 14px; margin-bottom: 10px; }
+  .icon-circle {
+    width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+  }
+
+  .fb-icon-bg { background: linear-gradient(135deg, #1877f2, #0056b3); }
+  .fb-group-icon-bg { background: linear-gradient(135deg, #0084ff, #004499); }
+  .wa-icon-bg { background: linear-gradient(135deg, #25d366, #128c7e); }
+  .insta-icon-bg { background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af); }
+  .paypal-icon-bg { background: linear-gradient(135deg, #0070ba, #003087); }
+
+  .card-title-group h3 { margin: 0 0 3px 0; font-size: 16px; font-weight: 800; }
+  .title-fb { color: #60a5fa; }
+  .title-group { color: #38bdf8; }
+  .title-wa { color: #4ade80; }
+  .title-insta { color: #f43f5e; }
+  .title-paypal { color: #fbbf24; }
+
+  .desc-blue { color: #93c5fd; font-size: 13px; font-weight: 600; margin: 0 0 14px 0; line-height: 1.45; }
+  .desc-cyan { color: #7dd3fc; font-size: 13px; font-weight: 600; margin: 0 0 14px 0; line-height: 1.45; }
+  .desc-green { color: #86efac; font-size: 13px; font-weight: 600; margin: 0 0 14px 0; line-height: 1.45; }
+  .desc-insta { color: #fda4af; font-size: 13px; font-weight: 600; margin: 0 0 14px 0; line-height: 1.45; }
+  .desc-gold { color: #fde047; font-size: 13px; font-weight: 600; margin: 0 0 14px 0; line-height: 1.45; }
+
+  .card-tag { font-size: 10px; font-weight: 800; padding: 3px 10px; border-radius: 12px; text-transform: uppercase; }
+  .tag-blue { background: rgba(24, 119, 242, 0.25); color: #60a5fa; border: 1px solid #1877f2; }
+  .tag-cyan { background: rgba(0, 132, 255, 0.25); color: #38bdf8; border: 1px solid #0084ff; }
+  .tag-green { background: rgba(37, 211, 102, 0.25); color: #4ade80; border: 1px solid #25d366; }
+  .tag-pink { background: rgba(225, 48, 108, 0.25); color: #f43f5e; border: 1px solid #e1306c; }
+  .tag-gold { background: rgba(245, 158, 11, 0.25); color: #fbbf24; border: 1px solid #f59e0b; }
+
+  .action-btn {
+    display: block; width: 100%; padding: 13px 18px; border-radius: 16px; font-size: 13.5px; font-weight: 800;
+    text-align: center; text-decoration: none !important; border: none; cursor: pointer; box-sizing: border-box;
+    transition: all 0.3s ease; letter-spacing: 0.5px;
+  }
+  .btn-fb-page { background: linear-gradient(90deg, #1877f2, #0056b3); color: #ffffff !important; box-shadow: 0 6px 18px rgba(24, 119, 242, 0.4); }
+  .btn-fb-group { background: linear-gradient(90deg, #0084ff, #0052cc); color: #ffffff !important; box-shadow: 0 6px 18px rgba(0, 132, 255, 0.4); }
+  .btn-wa { background: linear-gradient(90deg, #25d366, #128c7e); color: #ffffff !important; box-shadow: 0 6px 18px rgba(37, 211, 102, 0.4); }
+  .btn-insta { background: linear-gradient(90deg, #f58529, #dd2a7b, #8134af); color: #ffffff !important; box-shadow: 0 6px 18px rgba(221, 42, 123, 0.4); }
+  .btn-paypal { background: linear-gradient(90deg, #f59e0b, #d97706); color: #ffffff !important; box-shadow: 0 6px 18px rgba(245, 158, 11, 0.4); }
+  .paypal-form { width: 100%; margin: 0; }
+
+  .hub-footer { text-align: center; margin-top: 24px; padding-top: 16px; border-top: 1px solid rgba(255, 255, 255, 0.1); }
+  .footer-text { font-size: 12px; font-weight: 700; background: linear-gradient(90deg, #38bdf8, #25d366, #fbbf24); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0; }
 
 .news-card {
   background: var(--panel);
