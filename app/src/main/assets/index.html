@@ -1349,17 +1349,29 @@ function checkFreeTrialExpired() {
   return Date.now() >= getTrialExpiry();
 }
 
+let vipUpsellInterval = null;
+
 function startWatchTimer() {
   stopWatchTimer();
   if (checkVipActive()) return;
   if (checkFreeTrialExpired()) { closePlayer(); openVip("Your 30-minute free trial has ended. Subscribe to a VIP Pass!"); return; }
+
+  vipUpsellInterval = setInterval(() => {
+    if (checkVipActive()) { stopWatchTimer(); return; }
+    if (checkFreeTrialExpired()) { stopWatchTimer(); closePlayer(); openVip("Your 30-minute free trial has ended. Subscribe to a VIP Pass!"); return; }
+    openVip("Upgrade to VIP to continue enjoying uninterrupted HD streaming!");
+  }, 5 * 60 * 1000);
+
   freeWatchTimer = setInterval(() => {
     if (checkVipActive()) { stopWatchTimer(); return; }
     if (checkFreeTrialExpired()) { stopWatchTimer(); closePlayer(); openVip("Your 30-minute free trial has ended. Subscribe to a VIP Pass!"); }
   }, 1000);
 }
 
-function stopWatchTimer() { if (freeWatchTimer) { clearInterval(freeWatchTimer); freeWatchTimer = null; } }
+function stopWatchTimer() {
+  if (freeWatchTimer) { clearInterval(freeWatchTimer); freeWatchTimer = null; }
+  if (vipUpsellInterval) { clearInterval(vipUpsellInterval); vipUpsellInterval = null; }
+}
 
 /* ---------- VIP Payment Engine ---------- */
 let PLAN = "p4";
