@@ -1494,16 +1494,32 @@ const searchDropdown = $("#searchDropdown");
 if (searchInput) {
   searchInput.oninput = e => {
     clearTimeout(searchDebounce);
-    const query = e.target.value.trim();
-    searchDebounce = setTimeout(async () => {
-      if (query.length >= 2) {
+    const query = e.target.value.trim().toLowerCase();
+    if (query.length >= 1) {
+      const localMatches = [...LOCAL_MASTER_MOVIES, ...LOCAL_MASTER_SERIES].filter(item => {
+        const name = (item.title || item.name || "").toLowerCase();
+        return name.includes(query);
+      });
+      if (localMatches.length > 0) {
+        showSearchDropdown(localMatches);
+      }
+
+      searchDebounce = setTimeout(async () => {
         try {
           const d = await tmdb("/search/multi", { query: query, page: 1 });
-          const results = (d.results || []).filter(i => (i.media_type === "movie" || i.media_type === "tv") && i.poster_path);
-          showSearchDropdown(results);
-        } catch(err) { showSearchDropdown([]); }
-      } else { hideSearchDropdown(); }
-    }, 250);
+          const liveResults = (d.results || []).filter(i => (i.media_type === "movie" || i.media_type === "tv") && i.poster_path);
+          if (liveResults.length > 0) {
+            showSearchDropdown(liveResults);
+          } else if (localMatches.length === 0) {
+            showSearchDropdown([]);
+          }
+        } catch(err) {
+          if (localMatches.length === 0) showSearchDropdown([]);
+        }
+      }, 180);
+    } else {
+      hideSearchDropdown();
+    }
   };
 }
 
