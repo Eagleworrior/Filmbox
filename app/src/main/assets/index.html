@@ -360,33 +360,29 @@ h2{font:800 22px Georgia,serif;margin:22px 0 12px;background:linear-gradient(90d
 }
 
 .dock-btn {
-  background: none !important;
+  background: transparent !important;
   border: none !important;
   color: #a09dcc !important;
   display: flex !important;
-  flex-direction: column !important;
+  flex-direction: row !important;
   align-items: center !important;
-  gap: 3px !important;
+  gap: 6px !important;
   cursor: pointer !important;
   flex: 1 !important;
-  transition: all 0.25s ease !important;
-  padding: 4px 0 !important;
-  opacity: 0.75 !important;
+  padding: 8px 12px !important;
+  border-radius: 20px !important;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  opacity: 0.8 !important;
+  white-space: nowrap !important;
+  justify-content: center !important;
 }
 
 .dock-icon {
-  width: 40px !important;
-  height: 32px !important;
-  border-radius: 14px !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  font-size: 18px !important;
-  transition: all 0.25s ease !important;
+  font-size: 16px !important;
 }
 
 .dock-label {
-  font-size: 11px !important;
+  font-size: 12px !important;
   font-weight: 800 !important;
   letter-spacing: 0.4px !important;
 }
@@ -394,17 +390,13 @@ h2{font:800 22px Georgia,serif;margin:22px 0 12px;background:linear-gradient(90d
 .dock-btn.on {
   opacity: 1 !important;
   color: #ffffff !important;
+  transform: scale(1.05);
 }
 
-.dock-btn[data-v="home"] .dock-icon { background: rgba(255, 77, 141, 0.15); color: #ff4d8d; }
-.dock-btn[data-v="movie"] .dock-icon { background: rgba(56, 189, 248, 0.15); color: #38bdf8; }
-.dock-btn[data-v="tv"] .dock-icon { background: rgba(52, 211, 153, 0.15); color: #34d399; }
-.dock-btn[data-v="library"] .dock-icon { background: rgba(251, 191, 36, 0.15); color: #fbbf24; }
-
-.dock-btn[data-v="home"].on .dock-icon { background: linear-gradient(135deg, #ff4d8d, #8b5cf6) !important; color: #fff !important; box-shadow: 0 6px 20px rgba(255, 77, 141, 0.6) !important; transform: scale(1.1); }
-.dock-btn[data-v="movie"].on .dock-icon { background: linear-gradient(135deg, #0284c7, #38bdf8) !important; color: #fff !important; box-shadow: 0 6px 20px rgba(56, 189, 248, 0.6) !important; transform: scale(1.1); }
-.dock-btn[data-v="tv"].on .dock-icon { background: linear-gradient(135deg, #059669, #34d399) !important; color: #fff !important; box-shadow: 0 6px 20px rgba(52, 211, 153, 0.6) !important; transform: scale(1.1); }
-.dock-btn[data-v="library"].on .dock-icon { background: linear-gradient(135deg, #f59e0b, #fbbf24) !important; color: #000 !important; box-shadow: 0 6px 20px rgba(251, 191, 36, 0.7) !important; transform: scale(1.1); }
+.dock-btn[data-v="home"].on { background: linear-gradient(135deg, #ff4d8d, #8b5cf6) !important; color: #fff !important; box-shadow: 0 4px 18px rgba(255, 77, 141, 0.6) !important; }
+.dock-btn[data-v="movie"].on { background: linear-gradient(135deg, #0284c7, #38bdf8) !important; color: #fff !important; box-shadow: 0 4px 18px rgba(56, 189, 248, 0.6) !important; }
+.dock-btn[data-v="tv"].on { background: linear-gradient(135deg, #059669, #34d399) !important; color: #fff !important; box-shadow: 0 4px 18px rgba(52, 211, 153, 0.6) !important; }
+.dock-btn[data-v="library"].on { background: linear-gradient(135deg, #f59e0b, #fbbf24) !important; color: #000 !important; box-shadow: 0 4px 18px rgba(251, 191, 36, 0.7) !important; }
 button,.chip,.card,.dock-btn,.vip,.play,nav button,a{touch-action:manipulation!important;-webkit-tap-highlight-color:transparent!important;pointer-events:auto!important;user-select:none!important;-webkit-user-select:none!important}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.17/dist/hls.min.js"></script>
