@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
                 webSettings.setJavaScriptCanOpenWindowsAutomatically(false);
                 webSettings.setSupportMultipleWindows(false);
                 webSettings.setRenderPriority(WebSettings.RenderPriority.HIGH);
-                webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
+                webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
                 webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
                 webSettings.setUserAgentString("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
 
