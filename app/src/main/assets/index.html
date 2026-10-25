@@ -7,7 +7,7 @@
 <style>
 :root{--bg:#14110f;--panel:#201b18;--line:#352e29;--text:#f3ece4;--mute:#a79c91;--accent:#f2b134;--pitch:#2fa36b;--accent2:#7c5cff;--gold:#ffc23c}
 *{box-sizing:border-box;margin:0}
-html,body{margin:0!important;padding:0!important;width:100%!important;min-height:100vh!important;background:var(--bg)!important;color:var(--text)!important;font:15px/1.5 "Trebuchet MS",Verdana,sans-serif!important;padding-bottom:95px!important;overflow-x:hidden!important}
+html,body{margin:0!important;padding:0!important;width:100%!important;min-height:100vh!important;background:var(--bg)!important;color:var(--text)!important;font:15px/1.5 "Trebuchet MS",Verdana,sans-serif!important;padding-bottom:100px!important;overflow-x:hidden!important}
 header{position:sticky;top:0;z-index:99;background:rgba(11, 11, 26, 0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:max(12px, env(safe-area-inset-top)) 16px 12px 16px;display:flex;flex-direction:column;gap:10px}
 .top-bar{display:flex;align-items:center;justify-content:space-between;position:relative;width:100%}
 .logo{position:absolute;left:50%;transform:translateX(-50%);font:900 24px Georgia,serif;background:linear-gradient(90deg,#ffc23c,#ff4d8d,#38bdf8);-webkit-background-clip:text;background-clip:text;color:transparent;cursor:pointer;white-space:nowrap}
@@ -337,44 +337,38 @@ h2{font:800 22px Georgia,serif;margin:22px 0 12px;background:linear-gradient(90d
 
 .floating-dock {
   position: fixed !important;
-  bottom: 14px !important;
-  left: 50% !important;
-  transform: translateX(-50%) translateZ(0) !important;
-  -webkit-transform: translateX(-50%) translateZ(0) !important;
-  width: 92% !important;
-  max-width: 440px !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
   z-index: 2147483647 !important;
-  background: rgba(18, 18, 38, 0.98) !important;
+  background: rgba(10, 10, 22, 0.98) !important;
   backdrop-filter: blur(25px) !important;
   -webkit-backdrop-filter: blur(25px) !important;
-  border-radius: 30px !important;
-  border: 1.5px solid rgba(255, 255, 255, 0.28) !important;
+  border-top: 2px solid rgba(255, 255, 255, 0.15) !important;
   display: flex !important;
   flex-direction: row !important;
-  flex-wrap: nowrap !important;
-  justify-content: space-around !important;
+  justify-content: space-evenly !important;
   align-items: center !important;
-  padding: 10px 14px calc(10px + env(safe-area-inset-bottom)) !important;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.95), 0 0 35px rgba(124, 92, 255, 0.4) !important;
+  gap: 8px !important;
+  padding: 10px 10px calc(10px + env(safe-area-inset-bottom)) 10px !important;
+  box-shadow: 0 -10px 35px rgba(0, 0, 0, 0.95) !important;
   box-sizing: border-box !important;
 }
 
 .dock-btn {
-  background: transparent !important;
-  border: none !important;
-  color: #a09dcc !important;
   display: flex !important;
   flex-direction: row !important;
   align-items: center !important;
+  justify-content: center !important;
   gap: 6px !important;
   cursor: pointer !important;
   flex: 1 !important;
-  padding: 8px 12px !important;
-  border-radius: 20px !important;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
-  opacity: 0.8 !important;
+  padding: 10px 8px !important;
+  border-radius: 16px !important;
+  transition: all 0.25s ease-in-out !important;
   white-space: nowrap !important;
-  justify-content: center !important;
 }
 
 .dock-icon {
@@ -387,21 +381,45 @@ h2{font:800 22px Georgia,serif;margin:22px 0 12px;background:linear-gradient(90d
   letter-spacing: 0.4px !important;
 }
 
-.dock-btn.on {
-  opacity: 1 !important;
+.dock-btn[data-v="home"] {
+  background: rgba(255, 77, 141, 0.12) !important;
+  color: #ff4d8d !important;
+  border: 1.5px solid rgba(255, 77, 141, 0.4) !important;
+}
+.dock-btn[data-v="home"].on {
+  background: linear-gradient(135deg, #ff4d8d 0%, #d946ef 100%) !important;
   color: #ffffff !important;
-  transform: scale(1.05);
 }
 
-.dock-btn[data-v="home"] { background: rgba(255, 77, 141, 0.18); color: #ff4d8d; border: 1px solid rgba(255, 77, 141, 0.4); }
-.dock-btn[data-v="movie"] { background: rgba(56, 189, 248, 0.18); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4); }
-.dock-btn[data-v="tv"] { background: rgba(52, 211, 153, 0.18); color: #34d399; border: 1px solid rgba(52, 211, 153, 0.4); }
-.dock-btn[data-v="library"] { background: rgba(251, 191, 36, 0.18); color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.4); }
+.dock-btn[data-v="movie"] {
+  background: rgba(56, 189, 248, 0.12) !important;
+  color: #38bdf8 !important;
+  border: 1.5px solid rgba(56, 189, 248, 0.4) !important;
+}
+.dock-btn[data-v="movie"].on {
+  background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%) !important;
+  color: #ffffff !important;
+}
 
-.dock-btn[data-v="home"].on { background: linear-gradient(135deg, #ff4d8d, #8b5cf6) !important; color: #fff !important; border-color: #ff4d8d !important; box-shadow: 0 6px 20px rgba(255, 77, 141, 0.7) !important; transform: scale(1.08); }
-.dock-btn[data-v="movie"].on { background: linear-gradient(135deg, #0284c7, #38bdf8) !important; color: #fff !important; border-color: #38bdf8 !important; box-shadow: 0 6px 20px rgba(56, 189, 248, 0.7) !important; transform: scale(1.08); }
-.dock-btn[data-v="tv"].on { background: linear-gradient(135deg, #059669, #34d399) !important; color: #fff !important; border-color: #34d399 !important; box-shadow: 0 6px 20px rgba(52, 211, 153, 0.7) !important; transform: scale(1.08); }
-.dock-btn[data-v="library"].on { background: linear-gradient(135deg, #f59e0b, #fbbf24) !important; color: #000 !important; border-color: #fbbf24 !important; box-shadow: 0 6px 20px rgba(251, 191, 36, 0.8) !important; transform: scale(1.08); }
+.dock-btn[data-v="tv"] {
+  background: rgba(52, 211, 153, 0.12) !important;
+  color: #34d399 !important;
+  border: 1.5px solid rgba(52, 211, 153, 0.4) !important;
+}
+.dock-btn[data-v="tv"].on {
+  background: linear-gradient(135deg, #059669 0%, #34d399 100%) !important;
+  color: #ffffff !important;
+}
+
+.dock-btn[data-v="library"] {
+  background: rgba(251, 191, 36, 0.12) !important;
+  color: #fbbf24 !important;
+  border: 1.5px solid rgba(251, 191, 36, 0.4) !important;
+}
+.dock-btn[data-v="library"].on {
+  background: linear-gradient(135deg, #d97706 0%, #fbbf24 100%) !important;
+  color: #0d0d11 !important;
+}
 button,.chip,.card,.dock-btn,.vip,.play,nav button,a{touch-action:manipulation!important;-webkit-tap-highlight-color:transparent!important;pointer-events:auto!important;user-select:none!important;-webkit-user-select:none!important}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.17/dist/hls.min.js"></script>
