@@ -1581,6 +1581,36 @@ function initApp() {
   try {
     checkVipActive();
     render();
+
+    // Global Capture Event Listeners for 100% Guaranteed Touch & Click Response
+    function handleGlobalPointerEvent(e) {
+      const target = e.target;
+      if (!target) return;
+
+      const vip = target.closest("#vipbtn") || target.closest(".vip");
+      if (vip && vip.id === "vipbtn") {
+        openVip();
+        return;
+      }
+
+      const navBtn = target.closest(".bottom-nav button") || target.closest("button[data-v]");
+      if (navBtn) {
+        const v = navBtn.getAttribute("data-v");
+        if (v) {
+          go(v);
+          return;
+        }
+      }
+    }
+
+    document.addEventListener("click", handleGlobalPointerEvent, true);
+    document.addEventListener("touchend", function(e) {
+      const target = e.target;
+      if (target && (target.closest(".bottom-nav button") || target.closest("#vipbtn"))) {
+        handleGlobalPointerEvent(e);
+      }
+    }, true);
+
   } catch(err) {
     console.error("initApp error:", err);
     if (m) m.innerHTML = `<div style="padding:40px;text-align:center"><h2 style="color:#ff4d4d">App Loading Error</h2><p style="color:#fff;margin-top:10px">${esc(err.message)}</p></div>`;
