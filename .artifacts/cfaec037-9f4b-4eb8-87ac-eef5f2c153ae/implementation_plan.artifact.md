@@ -1,25 +1,26 @@
-# Implementation Plan - Floating Rounded Dock Navigation Bar Matching Screenshot
+# Implementation Plan - Video Player Back Arrow Persistence, 0ms VIP Responsiveness, and Vibrant Community Colors
 
-Re-architect the bottom navigation bar into a **Floating Rounded Dock Bar** floating over content at the bottom of the screen, matching the exact 5-item layout and active icon box design from the user's screenshot.
+Fix video player back arrow persistence (so tapping the screen reliably toggles the controls and back arrow `‹` at any time), make the "Go VIP" header button respond in 0ms, and upgrade the Community page (`socialCommunityHtml`) with vibrant colored typography and dark cinematic gradients with zero white plain text or uncolored elements.
 
 ## User Review Required
 
 > [!IMPORTANT]
-> - **Floating Rounded Dock Container**: `.floating-dock` floating 12px above the screen bottom with `border-radius: 28px`, `backdrop-filter: blur(20px)`, and `box-shadow: 0 15px 40px rgba(0,0,0,0.8)`.
-> - **5-Item Dock Layout**:
->   1. 🏠 **Home**
->   2. 🗂️ **Library**
->   3. 🎬 **Movies**
->   4. 📥 **Download**
->   5. 👤 **Community**
-> - **Active Pill Icon Box**: When selected, the active item's icon highlights inside a vibrant hot-pink rounded icon box (`background: #ff4d8d; box-shadow: 0 4px 15px rgba(255,77,141,0.5)`) with a bold white label below, matching the screenshot!
+> - **Video Player Back Arrow Persistence (`showPlayer` & `togglePlayerControls`)**:
+>   - Tapping anywhere on the player screen reliably toggles the control bar (`#pbar` show/hide) with 0ms latency.
+>   - The top-left back arrow (`‹`) is permanently anchored and visible whenever controls are shown.
+> - **0ms VIP Button Responsiveness**:
+>   - The "Go VIP" button in the top bar is styled with a glowing gold gradient and wired with a direct 0ms pointer listener to open `openVip()` instantly.
+> - **Vibrant Community Page Upgrade (`socialCommunityHtml`)**:
+>   - Completely eliminates plain white text and uncolored icons/backgrounds.
+>   - Every card, description, title, and badge features rich dark cinematic gradients, neon glowing borders, and vibrant brand colors (cyan, emerald, gold, hot pink).
 
 ## Proposed Changes
 
 ### Web Application UI Engine
 #### [MODIFY] [index.html](file:///C:/Users/EAGLE/AndroidStudioProjects/FilmBox/app/src/main/assets/index.html)
-- Replace `.bottom-nav` with `.floating-dock` container and update CSS to render the floating rounded dock bar with active pill icon boxes.
-- Update `go(v)` view router to handle 5 items (`home`, `library`, `movie`, `download`, `social`).
+- **Video Player Controls**: Update `togglePlayerControls()` and `showPlayer()` to ensure tap-to-toggle always shows the top-left back arrow (`‹`).
+- **VIP Button**: Ensure `#vipbtn` in `header` has `pointer-events: auto !important; cursor: pointer !important` and instant 0ms touch/click response.
+- **Community Page (`socialCommunityHtml`)**: Upgrade all card backgrounds, text colors, and SVG icon containers to vibrant neon glowing theme with zero white text.
 
 ## Verification Plan
 
@@ -27,5 +28,6 @@ Re-architect the bottom navigation bar into a **Floating Rounded Dock Bar** floa
 - Run Gradle build `app:assembleDebug` to verify clean compilation.
 
 ### Manual Verification
-- Test opening the app to verify the floating rounded dock bar appears at the bottom.
-- Test tapping each item (`Home`, `Library`, `Movies`, `Download`, `Community`) to verify active pill icon highlights and instant view routing.
+- Test playing a video and tapping the screen multiple times to verify back arrow persistence.
+- Test tapping "★ Go VIP" in the top bar to verify instant modal opening.
+- Test opening Library -> Community Hub to verify vibrant colored text and glowing cards.

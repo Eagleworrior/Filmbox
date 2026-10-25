@@ -1,5 +1,6 @@
-# Task List - Floating Rounded Dock Navigation Bar
+# Task List - Video Player Back Arrow, VIP Responsiveness, and Community Colors
 
-- [ ] Update `.bottom-nav` markup & CSS to `.floating-dock` matching screenshot `[ ]`
-- [ ] Update `go(v)` view router to sync active pill icon highlights `[ ]`
+- [ ] Update `showPlayer()` and `togglePlayerControls()` for reliable back arrow persistence `[ ]`
+- [ ] Upgrade `#vipbtn` in header for instant 0ms responsiveness `[ ]`
+- [ ] Upgrade `socialCommunityHtml()` with vibrant colored text and cinematic gradients (zero white text) `[ ]`
 - [ ] Verify build via gradle `app:assembleDebug` `[ ]`
