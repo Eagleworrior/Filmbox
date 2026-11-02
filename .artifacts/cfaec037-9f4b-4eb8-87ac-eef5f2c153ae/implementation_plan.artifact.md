@@ -1,33 +1,36 @@
-# Implementation Plan - Video Player Back Arrow Persistence, 0ms VIP Responsiveness, and Vibrant Community Colors
+# Implementation Plan - Full Feature Set Restoration with Preserved Bottom Dock
 
-Fix video player back arrow persistence (so tapping the screen reliably toggles the controls and back arrow `‹` at any time), make the "Go VIP" header button respond in 0ms, and upgrade the Community page (`socialCommunityHtml`) with vibrant colored typography and dark cinematic gradients with zero white plain text or uncolored elements.
+Restore the complete, feature-rich Film Box application engine while preserving the exact fixed bottom navigation dock bar and multi-colored box buttons.
 
 ## User Review Required
 
 > [!IMPORTANT]
-> - **Video Player Back Arrow Persistence (`showPlayer` & `togglePlayerControls`)**:
->   - Tapping anywhere on the player screen reliably toggles the control bar (`#pbar` show/hide) with 0ms latency.
->   - The top-left back arrow (`‹`) is permanently anchored and visible whenever controls are shown.
-> - **0ms VIP Button Responsiveness**:
->   - The "Go VIP" button in the top bar is styled with a glowing gold gradient and wired with a direct 0ms pointer listener to open `openVip()` instantly.
-> - **Vibrant Community Page Upgrade (`socialCommunityHtml`)**:
->   - Completely eliminates plain white text and uncolored icons/backgrounds.
->   - Every card, description, title, and badge features rich dark cinematic gradients, neon glowing borders, and vibrant brand colors (cyan, emerald, gold, hot pink).
+> - **Preserved Bottom Navigation Dock**:
+>   - Keeps `.floating-dock` fixed at the bottom viewport (`z-index: 2147483647`).
+>   - Keeps individual colored boxes for Home (Pink), Movies (Cyan), Series (Green), and Library (Gold).
+> - **Restored Core Feature Engines**:
+>   1. **1-Character Live Search Autocomplete**: Instant search matching local master catalog and TMDb multi-search API.
+>   2. **TV Series Season & Episode Picker (`openTitle`)**: Load seasons, episodes, runtime, and episode play/download links.
+>   3. **M-Pesa STK Push with Real-Time Safaricom Polling**: Phone input, `queryMpesaSTKStatus` polling every 3 seconds, and live `ResultCode` error messages (insufficient funds, wrong PIN, cancelled).
+>   4. **PayPal VIP Checkout Links**: Direct plan mapping to official PayPal payment links.
+>   5. **30-Minute Free Trial Watch Timer**: Recurring 5-minute VIP upsell popups during video playback.
+>   6. **Video Player Overlay Controls**: Top-left back arrow (`‹`), 3-second auto-hide timer, and tap-to-vanish controls.
+>   7. **High-Graphic Community Hub & Support Sub-Tabs**: SVG brand icons for Facebook, WhatsApp, Instagram, Blogger, and PayPal, plus Contact Us (`filmboxindustries@gmail.com`), Privacy Policy, and About Us.
 
 ## Proposed Changes
 
 ### Web Application UI Engine
 #### [MODIFY] [index.html](file:///C:/Users/EAGLE/AndroidStudioProjects/FilmBox/app/src/main/assets/index.html)
-- **Video Player Controls**: Update `togglePlayerControls()` and `showPlayer()` to ensure tap-to-toggle always shows the top-left back arrow (`‹`).
-- **VIP Button**: Ensure `#vipbtn` in `header` has `pointer-events: auto !important; cursor: pointer !important` and instant 0ms touch/click response.
-- **Community Page (`socialCommunityHtml`)**: Upgrade all card backgrounds, text colors, and SVG icon containers to vibrant neon glowing theme with zero white text.
+- Combine the complete JS application engines (`openTitle`, `startMpesaPolling`, `payWithPayPal`, `startWatchTimer`, `fetchNews`, `search`) with the preserved fixed bottom navigation dock CSS and HTML markup.
 
 ## Verification Plan
 
 ### Automated Tests
-- Run Gradle build `app:assembleDebug` to verify clean compilation.
+- Run Gradle build `app:assembleDebug` to verify clean compilation with zero syntax errors.
 
 ### Manual Verification
-- Test playing a video and tapping the screen multiple times to verify back arrow persistence.
-- Test tapping "★ Go VIP" in the top bar to verify instant modal opening.
-- Test opening Library -> Community Hub to verify vibrant colored text and glowing cards.
+- Test bottom dock tabs to verify `Home`, `Movies`, `Series`, and `Library` switch views instantly.
+- Test typing in search bar to verify 1-character live autocomplete.
+- Test tapping a TV show card to verify seasons and episodes load in the details sheet.
+- Test playing a video to verify player controls, back arrow `‹`, and 3s auto-hide timer.
+- Test tapping "★ Go VIP" to verify M-Pesa STK push and PayPal plan cards.

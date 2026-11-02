@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -23,17 +24,21 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.ByteArrayInputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Scanner;
+import java.util.Set;
+import java.util.TimeZone;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,6 +46,82 @@ public class MainActivity extends AppCompatActivity {
     private FrameLayout customViewContainer;
     private WebChromeClient.CustomViewCallback customViewCallback;
     private View customView;
+
+    private static final Set<String> ALLOWED_HOSTS = new HashSet<>(Arrays.asList(
+            "filmbox.ke",
+            "blogspot.com",
+            "themoviedb.org",
+            "tmdb.org",
+            "vidsrc.cc",
+            "vidsrc.to",
+            "vidsrc.net",
+            "vidsrc.stream",
+            "vidsrc.me",
+            "vidsrc.pro",
+            "vidsrc.in",
+            "vidsrc.pm",
+            "vidsrc.xyz",
+            "vidsrc.vip",
+            "vidlink.pro",
+            "embed.su",
+            "player.autoembed.cc",
+            "autoembed.cc",
+            "player.smashystream.xyz",
+            "smashystream.xyz",
+            "2embed.cc",
+            "multiembed.mov",
+            "bunnycdn.com",
+            "cloudflare.com",
+            "cloudflare-ipfs.com",
+            "jsdelivr.net",
+            "googlevideo.com",
+            "akamaized.net",
+            "api.football-data.org",
+            "api.sportsrc.org",
+            "v2.sportsrc.com",
+            "newsdata.io",
+            "youtube.com",
+            "youtu.be",
+            "instagram.com",
+            "facebook.com",
+            "fb.me",
+            "paypal.com",
+            "paypalobjects.com",
+            "safaricom.co.ke"
+    ));
+
+    private static final String[] AD_KEYWORDS = {
+            "doubleclick", "googlesyndication", "adservice", "popads", "propellerads",
+            "adsterra", "exoclick", "onclickads", "taboola", "outbrain", "adserver",
+            "banner", "popunder", "tracker"
+    };
+
+    private boolean isHostAllowed(String host) {
+        if (host == null || host.isEmpty()) return true;
+        if (host.equalsIgnoreCase("android_asset") || host.equalsIgnoreCase("localhost")) return true;
+        String hostLower = host.toLowerCase();
+        if (hostLower.contains("vidsrc") || hostLower.contains("vidlink") || hostLower.contains("embed") || hostLower.contains("autoembed") || hostLower.contains("bunnycdn") || hostLower.contains("cloudflare") || hostLower.contains("googlevideo") || hostLower.contains("akamaized") || hostLower.contains("jsdelivr") || hostLower.contains("2embed") || hostLower.contains("stream") || hostLower.contains("player") || hostLower.contains("rcp") || hostLower.contains("googleapis") || hostLower.contains("google")) {
+            return true;
+        }
+        for (String allowed : ALLOWED_HOSTS) {
+            if (host.equalsIgnoreCase(allowed) || hostLower.endsWith("." + allowed.toLowerCase())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isAdUrl(String urlLower) {
+        if (urlLower.contains("vidsrc") || urlLower.contains("vidlink") || urlLower.contains("embed") || urlLower.contains("autoembed") || urlLower.contains("bunnycdn") || urlLower.contains("cloudflare") || urlLower.contains("googlevideo") || urlLower.contains("akamaized") || urlLower.contains("jsdelivr") || urlLower.contains("2embed") || urlLower.contains("stream") || urlLower.contains("player") || urlLower.contains("rcp")) {
+            return false;
+        }
+        for (String keyword : AD_KEYWORDS) {
+            if (urlLower.contains(keyword)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,14 +142,19 @@ public class MainActivity extends AppCompatActivity {
                 webSettings.setDatabaseEnabled(true);
                 webSettings.setLoadsImagesAutomatically(true);
                 webSettings.setMediaPlaybackRequiresUserGesture(false);
-                webSettings.setAllowFileAccess(true);
-                webSettings.setAllowContentAccess(true);
+                webSettings.setAllowFileAccess(false);
+                webSettings.setAllowContentAccess(false);
                 webSettings.setJavaScriptCanOpenWindowsAutomatically(false);
                 webSettings.setSupportMultipleWindows(false);
                 webSettings.setRenderPriority(WebSettings.RenderPriority.HIGH);
                 webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
                 webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
-                webSettings.setUserAgentString("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
+                webSettings.setUserAgentString("Mozilla/5.0 (Linux; Android 13; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36");
+
+                android.webkit.CookieManager.getInstance().setAcceptCookie(true);
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                    android.webkit.CookieManager.getInstance().setAcceptThirdPartyCookies(webViewApp, true);
+                }
 
                 webViewApp.setSoundEffectsEnabled(true);
                 webViewApp.setBackgroundColor(0xFF0b0b1a);
@@ -80,100 +166,83 @@ public class MainActivity extends AppCompatActivity {
                 webViewApp.clearCache(true);
                 webViewApp.clearFormData();
                 webViewApp.clearHistory();
+                webViewApp.setDownloadListener(null);
 
-                // Add Javascript Interface for M-Pesa Daraja STK Push & PayPal
+                // Add Javascript Interface for M-Pesa Daraja STK Push, PayPal, & Private In-App Offline Downloads
                 webViewApp.addJavascriptInterface(new MpesaBridge(), "AndroidKYC");
                 webViewApp.addJavascriptInterface(new MpesaBridge(), "AndroidMpesa");
                 webViewApp.addJavascriptInterface(new PayPalBridge(), "AndroidPayPal");
+                webViewApp.addJavascriptInterface(new WebAppInterface(this), "AndroidApp");
 
                 // Strict In-App Playback, Host Whitelisting & Network-Level Ad Interception
                 webViewApp.setWebViewClient(new WebViewClient() {
-                    private final java.util.Set<String> allowedHosts = new java.util.HashSet<>(java.util.Arrays.asList(
-                            "api.themoviedb.org",
-                            "image.tmdb.org",
-                            "cdn.jsdelivr.net",
-                            "api.football-data.org",
-                            "vidsrc.to",
-                            "vidlink.pro",
-                            "vidsrc.pro",
-                            "embed.su",
-                            "player.autoembed.cc",
-                            "player.smashystream.xyz",
-                            "api.sportsrc.org",
-                            "v2.sportsrc.com",
-                            "newsdata.io",
-                            "filmboxproductions.blogspot.com",
-                            "blogspot.com"
-                    ));
-
-                    private boolean isAllowed(String host) {
-                        if (host == null) return true;
-                        for (String allowed : allowedHosts) {
-                            if (host.equals(allowed) || host.endsWith("." + allowed)) {
-                                return true;
-                            }
-                        }
-                        return false;
-                    }
-
                     @Override
                     public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                         if (request != null && request.getUrl() != null) {
+                            String url = request.getUrl().toString();
+                            String urlLower = url.toLowerCase();
+
+                            if (urlLower.startsWith("https://embed/") || urlLower.startsWith("http://embed/")) {
+                                String fixedUrl = url.replace("https://embed/", "https://vidsrc.to/embed/").replace("http://embed/", "https://vidsrc.to/embed/");
+                                view.loadUrl(fixedUrl);
+                                return true;
+                            }
+
                             android.net.Uri uri = request.getUrl();
                             String host = uri.getHost();
-                            String url = uri.toString();
+                            String scheme = uri.getScheme();
 
-                            if (url.contains("whatsapp.com") || url.startsWith("whatsapp://")) {
+                            if (urlLower.contains("whatsapp.com") || urlLower.startsWith("whatsapp://")) {
                                 try {
                                     Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                                     view.getContext().startActivity(intent);
                                     return true;
                                 } catch (Exception e) {
-                                    Toast.makeText(view.getContext(), "WhatsApp app not found", Toast.LENGTH_SHORT).show();
                                     return true;
                                 }
                             }
 
-                            if (url.contains("paypal.com") || url.contains("paypal.me")) {
-                                try {
-                                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                                    view.getContext().startActivity(intent);
-                                    return true;
-                                } catch (Exception e) {
-                                    return false;
-                                }
+                            if (scheme != null && !scheme.equalsIgnoreCase("http") && !scheme.equalsIgnoreCase("https")) {
+                                android.util.Log.d("ADBLOCK", "Blocked non-HTTP scheme navigation: " + url);
+                                return true;
                             }
 
-                            if (url.contains("facebook.com") || url.contains("fb.me") || url.contains("blogspot.com")) {
-                                try {
-                                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                                    view.getContext().startActivity(intent);
-                                    return true;
-                                } catch (Exception e) {
-                                    return false;
-                                }
+                            if (isAdUrl(urlLower)) {
+                                android.util.Log.d("ADBLOCK", "Blocked navigation (Ad Keyword): " + url);
+                                return true;
                             }
 
-                            if (url.startsWith("file:///") || url.contains("android_asset") || isAllowed(host)) {
-                                return false;
+                            if (host != null && !isHostAllowed(host)) {
+                                android.util.Log.d("ADBLOCK", "Blocked navigation (Host Not Allowed): " + host + " (URL: " + url + ")");
+                                return true;
                             }
-                            return true;
+
+                            return false;
                         }
                         return false;
                     }
 
                     @Override
-                    public android.webkit.WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+                    public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
                         if (request != null && request.getUrl() != null) {
-                            String url = request.getUrl().toString().toLowerCase();
+                            String url = request.getUrl().toString();
+                            String urlLower = url.toLowerCase();
 
-                            if (url.contains("doubleclick") || url.contains("googlesyndication") || url.contains("googleadservices") || 
-                                url.contains("adservice") || url.contains("adnxs") || url.contains("outbrain") || url.contains("taboola") || 
-                                url.contains("analytics") || url.contains("tracker") || url.contains("popads") || url.contains("popcash") || 
-                                url.contains("propeller") || url.contains("adsterra") || url.contains("exoclick") || url.contains("juicyads") || 
-                                url.contains("alwingulla") || url.contains("hilltopads") || url.contains("trafficjunky") || url.contains("clickadu") ||
-                                url.contains("bet365") || url.contains("1xbet") || url.contains("ads.")) {
-                                return new android.webkit.WebResourceResponse("text/plain", "utf-8", new java.io.ByteArrayInputStream(new byte[0]));
+                            if (urlLower.startsWith("file://") || urlLower.startsWith("data:") || urlLower.startsWith("blob:") || urlLower.startsWith("https://embed/") || urlLower.startsWith("http://embed/") || urlLower.contains("vidsrc") || urlLower.contains("vidlink") || urlLower.contains("embed") || urlLower.contains("autoembed") || urlLower.contains("2embed") || urlLower.contains("smashy") || urlLower.contains("multiembed") || urlLower.contains("m3u8") || urlLower.contains("ts") || urlLower.contains("mp4") || urlLower.contains("hls")) {
+                                return super.shouldInterceptRequest(view, request);
+                            }
+
+                            android.net.Uri uri = request.getUrl();
+                            String host = uri.getHost();
+
+                            if (isAdUrl(urlLower)) {
+                                android.util.Log.d("ADBLOCK", "Intercepted & Blocked Sub-resource (Ad Keyword): " + url);
+                                return new WebResourceResponse("text/plain", "utf-8", new ByteArrayInputStream(new byte[0]));
+                            }
+
+                            if (host != null && !isHostAllowed(host)) {
+                                android.util.Log.d("ADBLOCK", "Intercepted & Blocked Sub-resource (Host Not Allowed): " + host + " (URL: " + url + ")");
+                                return new WebResourceResponse("text/plain", "utf-8", new ByteArrayInputStream(new byte[0]));
                             }
                         }
                         return super.shouldInterceptRequest(view, request);
@@ -184,11 +253,13 @@ public class MainActivity extends AppCompatActivity {
                         super.onPageFinished(view, url);
                         view.evaluateJavascript(
                                 "(function() {" +
-                                        "  var css = '[id*=\"ad-\"],[class*=\"ad-\"],[class*=\"ads\"],[id*=\"ads\"],iframe[src*=\"ads\"],iframe[src*=\"doubleclick\"],ins.adsbygoogle{display:none!important};" +
+                                        "  var css = '[id*=\"ad-\"],[class*=\"ad-\"],[class*=\"ads\"],[id*=\"ads\"],iframe[src*=\"ads\"],iframe[src*=\"doubleclick\"],ins.adsbygoogle,[class*=\"banner\"],[id*=\"banner\"],[class*=\"popup\"],[id*=\"popup\"],[class*=\"sponsor\"],[id*=\"sponsor\"],[class*=\"overlay\"]{display:none!important};';" +
                                         "  var s = document.createElement(\"style\"); s.innerHTML = css; document.head.appendChild(s);" +
                                         "  var observer = new MutationObserver(function(mutations) {" +
                                         "    var ads = document.querySelectorAll('iframe[src*=\"ads\"], iframe[src*=\"pop\"], iframe[src*=\"track\"], div[style*=\"z-index: 2147483647\"], div[id*=\"pop\"], ins.adsbygoogle');" +
-                                        "    for (var i = 0; i < ads.length; i++) { ads[i].remove(); }" +
+                                        "    for (var i = 0; i < ads.length; i++) {" +
+                                        "      if (ads[i].id !== \"player\" && !ads[i].closest(\"#player\") && !ads[i].closest(\"#modal\")) { ads[i].remove(); }" +
+                                        "    }" +
                                         "  });" +
                                         "  observer.observe(document.documentElement, { childList: true, subtree: true });" +
                                         "  window.open = function() { return null; };" +
@@ -201,6 +272,24 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public boolean onCreateWindow(WebView view, boolean isDialog, boolean isUserGesture, Message resultMsg) {
                         return false;
+                    }
+
+                    @Override
+                    public boolean onJsAlert(WebView view, String url, String message, android.webkit.JsResult result) {
+                        result.confirm();
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onJsConfirm(WebView view, String url, String message, android.webkit.JsResult result) {
+                        result.confirm();
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, android.webkit.JsPromptResult result) {
+                        result.confirm("");
+                        return true;
                     }
 
                     @Override
@@ -262,6 +351,38 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception ignored) {}
     }
 
+    private String getOAuthToken(String tokenUrl, String encodedAuth) {
+        try {
+            URL url = new URL(tokenUrl);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setConnectTimeout(15000);
+            conn.setReadTimeout(15000);
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Authorization", "Basic " + encodedAuth);
+
+            int responseCode = conn.getResponseCode();
+            Scanner scanner;
+            if (responseCode >= 200 && responseCode < 300) {
+                scanner = new Scanner(conn.getInputStream());
+            } else {
+                scanner = new Scanner(conn.getErrorStream() != null ? conn.getErrorStream() : conn.getInputStream());
+            }
+            StringBuilder sb = new StringBuilder();
+            while (scanner.hasNext()) sb.append(scanner.nextLine());
+            scanner.close();
+
+            android.util.Log.d("MPESA", "OAuth Token Response Code: " + responseCode + " Body: " + sb.toString());
+
+            if (responseCode >= 200 && responseCode < 300) {
+                JSONObject json = new JSONObject(sb.toString());
+                return json.optString("access_token", "");
+            }
+        } catch (Exception e) {
+            android.util.Log.e("MPESA", "getOAuthToken error: " + e.getMessage(), e);
+        }
+        return "";
+    }
+
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -293,6 +414,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try {
+            TorrentDownloadManager.getInstance().stop();
+        } catch (Exception ignored) {}
+    }
+
+    @Override
     public void onBackPressed() {
         if (customView != null) {
             WebChromeClient wcc = new WebChromeClient();
@@ -318,7 +447,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // Java Native M-Pesa Daraja Production STK Push Bridge (GenZ Loan Workflow Compatible)
+    // Java Native M-Pesa Daraja Production STK Push Bridge
     public class MpesaBridge {
         public MpesaBridge() {}
 
@@ -386,87 +515,60 @@ public class MainActivity extends AppCompatActivity {
                     String consumerKey = "GAbKWM1S2Gmk3GuReoUoC52bVzBOXrIDyqzjiZbBYAJiyILs";
                     String consumerSecret = "jdv9jcXAD1PNenMXbHGhcPu3VXE4BKkNT9BqP72xxGlXsxY9t0hFlwb0AHjjPGO9";
                     String passkey = "d9a0e9a3d9e61eeb50f1e258c9ba8a8679001f1c97bb30be7d709b1a56c25f5d";
-                    String shortcode = "4414485";
-                    String tillNumber = "1549475";
 
                     String formattedPhone = phone.trim().replaceAll("[^0-9]", "");
                     if (formattedPhone.startsWith("0")) {
                         formattedPhone = "254" + formattedPhone.substring(1);
-                    } else if (!formattedPhone.startsWith("254")) {
+                    } else if (formattedPhone.startsWith("7") || formattedPhone.startsWith("1")) {
                         formattedPhone = "254" + formattedPhone;
+                    } else if (formattedPhone.startsWith("+254")) {
+                        formattedPhone = formattedPhone.substring(1);
                     }
+
+                    int parsedAmt = 0;
+                    if (amountStr != null && !amountStr.trim().isEmpty()) {
+                        String clean = amountStr.replaceAll("[^0-9]", "");
+                        if (!clean.isEmpty()) {
+                            try {
+                                parsedAmt = Integer.parseInt(clean);
+                            } catch (Exception ignored) {}
+                        }
+                    }
+
+                    android.util.Log.d("MPESA", "VIP Offer Payment -> raw amountStr: '" + amountStr + "', parsed finalAmount: " + parsedAmt);
+
+                    if (parsedAmt < 1) {
+                        android.util.Log.e("MPESA", "Invalid amount parsed: " + parsedAmt + ". STK Push cancelled.");
+                        runOnUiThread(() -> {
+                            try {
+                                JSONObject errJson = new JSONObject();
+                                errJson.put("ResponseCode", "1");
+                                errJson.put("ResponseDescription", "Invalid amount, please reselect your offer.");
+                                if (webViewApp != null) {
+                                    webViewApp.evaluateJavascript(callbackName + "(" + errJson.toString() + ");", null);
+                                }
+                            } catch (Exception ignored) {}
+                        });
+                        return;
+                    }
+
+                    String finalAmount = String.valueOf(parsedAmt);
 
                     // 1. OAuth Token
                     String auth = consumerKey + ":" + consumerSecret;
                     String encodedAuth = android.util.Base64.encodeToString(auth.getBytes(StandardCharsets.UTF_8), android.util.Base64.NO_WRAP);
 
                     String accessToken = getOAuthToken("https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials", encodedAuth);
+                    android.util.Log.d("MPESA", "Token Response: " + accessToken);
+
                     boolean isProduction = true;
                     if (accessToken.isEmpty()) {
                         accessToken = getOAuthToken("https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials", encodedAuth);
                         isProduction = false;
                     }
 
-                    // 2. STK Push Request
-                    String timestamp = new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault()).format(new Date());
-                    String passwordStr = shortcode + passkey + timestamp;
-                    String password = android.util.Base64.encodeToString(passwordStr.getBytes(StandardCharsets.UTF_8), android.util.Base64.NO_WRAP);
-
-                    JSONObject stkPayload = new JSONObject();
-                    stkPayload.put("BusinessShortCode", shortcode);
-                    stkPayload.put("Password", password);
-                    stkPayload.put("Timestamp", timestamp);
-                    stkPayload.put("TransactionType", "CustomerBuyGoodsOnline");
-                    stkPayload.put("Amount", amountStr);
-                    stkPayload.put("PartyA", formattedPhone);
-                    stkPayload.put("PartyB", tillNumber);
-                    stkPayload.put("PhoneNumber", formattedPhone);
-                    stkPayload.put("CallBackURL", "https://filmbox.ke/api/mpesa/callback");
-                    stkPayload.put("AccountReference", "FilmBoxVIP");
-                    stkPayload.put("TransactionDesc", "Payment for FilmBox VIP");
-
-                    String endpointUrl = isProduction ? "https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest" : "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest";
-                    URL stkUrl = new URL(endpointUrl);
-                    HttpURLConnection stkConn = (HttpURLConnection) stkUrl.openConnection();
-                    stkConn.setConnectTimeout(3000);
-                    stkConn.setReadTimeout(3000);
-                    stkConn.setRequestMethod("POST");
-                    stkConn.setRequestProperty("Authorization", "Bearer " + accessToken);
-                    stkConn.setRequestProperty("Content-Type", "application/json");
-                    stkConn.setDoOutput(true);
-
-                    try (OutputStream os = stkConn.getOutputStream()) {
-                        byte[] input = stkPayload.toString().getBytes(StandardCharsets.UTF_8);
-                        os.write(input, 0, input.length);
-                    }
-
-                    int stkCode = stkConn.getResponseCode();
-                    Scanner responseScanner;
-                    if (stkCode >= 200 && stkCode < 300) {
-                        responseScanner = new Scanner(stkConn.getInputStream());
-                    } else {
-                        responseScanner = new Scanner(stkConn.getErrorStream() != null ? stkConn.getErrorStream() : stkConn.getInputStream());
-                    }
-                    StringBuilder stkResponse = new StringBuilder();
-                    while (responseScanner.hasNext()) stkResponse.append(responseScanner.nextLine());
-                    responseScanner.close();
-
-                    JSONObject resultJson = new JSONObject();
-                    try {
-                        resultJson = new JSONObject(stkResponse.toString());
-                        if (stkCode < 200 || stkCode >= 300) {
-                            if (!resultJson.has("ResponseCode")) {
-                                resultJson.put("ResponseCode", "1");
-                            }
-                        } else {
-                            if (!resultJson.has("ResponseCode")) {
-                                resultJson.put("ResponseCode", "0");
-                            }
-                        }
-                    } catch(Exception e) {
-                        resultJson.put("ResponseCode", "1");
-                        resultJson.put("ResponseDescription", "Daraja Error HTTP " + stkCode + ": " + stkResponse.toString());
-                    }
+                    // 2. Execute STK Push
+                    JSONObject resultJson = sendStkRequest(accessToken, isProduction, passkey, "4414485", "1549475", "CustomerBuyGoodsOnline", formattedPhone, finalAmount);
 
                     final String finalJsonStr = resultJson.toString();
                     runOnUiThread(() -> {
@@ -491,6 +593,76 @@ public class MainActivity extends AppCompatActivity {
             }).start();
         }
 
+        private JSONObject sendStkRequest(String accessToken, boolean isProduction, String passkey, String shortCode, String partyB, String transType, String phone, String amount) {
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss", Locale.US);
+                sdf.setTimeZone(TimeZone.getTimeZone("Africa/Nairobi"));
+                String timestamp = sdf.format(new Date());
+
+                String passwordStr = shortCode + passkey + timestamp;
+                String password = android.util.Base64.encodeToString(passwordStr.getBytes(StandardCharsets.UTF_8), android.util.Base64.NO_WRAP);
+
+                JSONObject stkPayload = new JSONObject();
+                stkPayload.put("BusinessShortCode", shortCode);
+                stkPayload.put("Password", password);
+                stkPayload.put("Timestamp", timestamp);
+                stkPayload.put("TransactionType", transType);
+                stkPayload.put("Amount", amount);
+                stkPayload.put("PartyA", phone);
+                stkPayload.put("PartyB", partyB);
+                stkPayload.put("PhoneNumber", phone);
+                stkPayload.put("CallBackURL", "https://filmbox.ke/mpesa/callback");
+                stkPayload.put("AccountReference", "FilmBoxVIP");
+                stkPayload.put("TransactionDesc", "Payment for FilmBox VIP");
+
+                android.util.Log.d("MPESA", "STK Request Body (" + transType + "): " + stkPayload.toString());
+
+                String endpointUrl = isProduction ? "https://api.safaricom.co.ke/mpesa/stkpush/v1/processrequest" : "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest";
+                URL stkUrl = new URL(endpointUrl);
+                HttpURLConnection stkConn = (HttpURLConnection) stkUrl.openConnection();
+                stkConn.setConnectTimeout(15000);
+                stkConn.setReadTimeout(15000);
+                stkConn.setRequestMethod("POST");
+                stkConn.setRequestProperty("Authorization", "Bearer " + accessToken);
+                stkConn.setRequestProperty("Content-Type", "application/json");
+                stkConn.setDoOutput(true);
+
+                try (OutputStream os = stkConn.getOutputStream()) {
+                    byte[] input = stkPayload.toString().getBytes(StandardCharsets.UTF_8);
+                    os.write(input, 0, input.length);
+                }
+
+                int stkCode = stkConn.getResponseCode();
+                Scanner responseScanner;
+                if (stkCode >= 200 && stkCode < 300) {
+                    responseScanner = new Scanner(stkConn.getInputStream());
+                } else {
+                    responseScanner = new Scanner(stkConn.getErrorStream() != null ? stkConn.getErrorStream() : stkConn.getInputStream());
+                }
+                StringBuilder stkResponse = new StringBuilder();
+                while (responseScanner.hasNext()) stkResponse.append(responseScanner.nextLine());
+                responseScanner.close();
+
+                android.util.Log.d("MPESA", "STK Response Code (" + transType + "): " + stkCode + " Body: " + stkResponse.toString());
+
+                JSONObject resultJson = new JSONObject(stkResponse.toString());
+                if (stkCode < 200 || stkCode >= 300) {
+                    if (!resultJson.has("ResponseCode")) resultJson.put("ResponseCode", "1");
+                } else {
+                    if (!resultJson.has("ResponseCode")) resultJson.put("ResponseCode", "0");
+                }
+                return resultJson;
+            } catch (Exception e) {
+                android.util.Log.e("MPESA", "sendStkRequest error (" + transType + "): " + e.getMessage(), e);
+                JSONObject err = new JSONObject();
+                try {
+                    err.put("ResponseCode", "1");
+                    err.put("ResponseDescription", e.getMessage());
+                } catch (Exception ignored) {}
+                return err;
+            }
+        }
+
         @JavascriptInterface
         public void queryMpesaSTKStatus(String checkoutRequestId, String callbackName) {
             new Thread(() -> {
@@ -504,7 +676,10 @@ public class MainActivity extends AppCompatActivity {
                     String encodedAuth = android.util.Base64.encodeToString(auth.getBytes(StandardCharsets.UTF_8), android.util.Base64.NO_WRAP);
                     String accessToken = getOAuthToken("https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials", encodedAuth);
 
-                    String timestamp = new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault()).format(new Date());
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss", Locale.US);
+                    sdf.setTimeZone(TimeZone.getTimeZone("Africa/Nairobi"));
+                    String timestamp = sdf.format(new Date());
+
                     String passwordStr = shortcode + passkey + timestamp;
                     String password = android.util.Base64.encodeToString(passwordStr.getBytes(StandardCharsets.UTF_8), android.util.Base64.NO_WRAP);
 
@@ -561,188 +736,12 @@ public class MainActivity extends AppCompatActivity {
                 }
             }).start();
         }
-
-        private String getOAuthToken(String urlStr, String encodedAuth) {
-            try {
-                URL url = new URL(urlStr);
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestMethod("GET");
-                conn.setRequestProperty("Authorization", "Basic " + encodedAuth);
-                conn.setConnectTimeout(5000);
-                conn.setReadTimeout(5000);
-
-                if (conn.getResponseCode() == 200) {
-                    Scanner scanner = new Scanner(conn.getInputStream());
-                    StringBuilder responseStr = new StringBuilder();
-                    while (scanner.hasNext()) responseStr.append(scanner.nextLine());
-                    scanner.close();
-
-                    JSONObject json = new JSONObject(responseStr.toString());
-                    return json.optString("access_token", "");
-                }
-            } catch (Exception ignored) {}
-            return "";
-        }
     }
 
-    // Java Native PayPal REST API Bridge
-    public class PayPalBridge {
+    // Java Native PayPal Checkout Bridge
+    public static class PayPalBridge {
         public PayPalBridge() {}
-
-        private final String clientId = "BAA1dtlx0lmxerhVWLeU2FXAPXyAoQyFzrGWJIc_djIp8oT3y54X1sLX2GR1XWZnloh7yqTc4j57vB-bKQ";
-        private final String clientSecret = "EIhtPvussfV5KhcSTIPj7gs2jcOeoQ6G6KW3uFE8YH9wqfFg8hu-m9YU5lBsS7pRdd2ZTR5lhnF5I-Hj";
-
         @JavascriptInterface
-        public void createPayPalOrder(String amountUsdStr, String callbackName) {
-            new Thread(() -> {
-                try {
-                    String auth = clientId + ":" + clientSecret;
-                    String encodedAuth = android.util.Base64.encodeToString(auth.getBytes(StandardCharsets.UTF_8), android.util.Base64.NO_WRAP);
-
-                    // 1. Get Access Token
-                    URL tokenUrl = new URL("https://api-m.paypal.com/v1/oauth2/token");
-                    HttpURLConnection tokenConn = (HttpURLConnection) tokenUrl.openConnection();
-                    tokenConn.setRequestMethod("POST");
-                    tokenConn.setRequestProperty("Authorization", "Basic " + encodedAuth);
-                    tokenConn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-                    tokenConn.setDoOutput(true);
-
-                    try (OutputStream os = tokenConn.getOutputStream()) {
-                        byte[] input = "grant_type=client_credentials".getBytes(StandardCharsets.UTF_8);
-                        os.write(input, 0, input.length);
-                    }
-
-                    Scanner scanner = new Scanner(tokenConn.getInputStream());
-                    StringBuilder tokenRes = new StringBuilder();
-                    while (scanner.hasNext()) tokenRes.append(scanner.nextLine());
-                    scanner.close();
-
-                    JSONObject tokenJson = new JSONObject(tokenRes.toString());
-                    String accessToken = tokenJson.getString("access_token");
-
-                    // 2. Create Order
-                    JSONObject orderPayload = new JSONObject();
-                    orderPayload.put("intent", "CAPTURE");
-
-                    JSONArray purchaseUnits = new JSONArray();
-                    JSONObject unit = new JSONObject();
-                    JSONObject amount = new JSONObject();
-                    amount.put("currency_code", "USD");
-                    amount.put("value", amountUsdStr);
-                    unit.put("amount", amount);
-                    purchaseUnits.put(unit);
-
-                    orderPayload.put("purchase_units", purchaseUnits);
-
-                    URL orderUrl = new URL("https://api-m.paypal.com/v2/checkout/orders");
-                    HttpURLConnection orderConn = (HttpURLConnection) orderUrl.openConnection();
-                    orderConn.setRequestMethod("POST");
-                    orderConn.setRequestProperty("Authorization", "Bearer " + accessToken);
-                    orderConn.setRequestProperty("Content-Type", "application/json");
-                    orderConn.setDoOutput(true);
-
-                    try (OutputStream os = orderConn.getOutputStream()) {
-                        byte[] input = orderPayload.toString().getBytes(StandardCharsets.UTF_8);
-                        os.write(input, 0, input.length);
-                    }
-
-                    Scanner orderScanner = new Scanner(orderConn.getInputStream());
-                    StringBuilder orderRes = new StringBuilder();
-                    while (orderScanner.hasNext()) orderRes.append(orderScanner.nextLine());
-                    orderScanner.close();
-
-                    final String finalResStr = orderRes.toString();
-                    runOnUiThread(() -> {
-                        if (webViewApp != null) {
-                            webViewApp.evaluateJavascript(callbackName + "(" + finalResStr + ");", null);
-                        }
-                    });
-                } catch (Exception e) {
-                    runOnUiThread(() -> {
-                        try {
-                            JSONObject err = new JSONObject();
-                            err.put("error", e.getMessage());
-                            if (webViewApp != null) {
-                                webViewApp.evaluateJavascript(callbackName + "(" + err.toString() + ");", null);
-                            }
-                        } catch (Exception ignored) {}
-                    });
-                }
-            }).start();
-        }
-
-        @JavascriptInterface
-        public void capturePayPalOrder(String orderId, String callbackName) {
-            new Thread(() -> {
-                try {
-                    String auth = clientId + ":" + clientSecret;
-                    String encodedAuth = android.util.Base64.encodeToString(auth.getBytes(StandardCharsets.UTF_8), android.util.Base64.NO_WRAP);
-
-                    // 1. Token
-                    URL tokenUrl = new URL("https://api-m.paypal.com/v1/oauth2/token");
-                    HttpURLConnection tokenConn = (HttpURLConnection) tokenUrl.openConnection();
-                    tokenConn.setRequestMethod("POST");
-                    tokenConn.setRequestProperty("Authorization", "Basic " + encodedAuth);
-                    tokenConn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-                    tokenConn.setDoOutput(true);
-
-                    try (OutputStream os = tokenConn.getOutputStream()) {
-                        byte[] input = "grant_type=client_credentials".getBytes(StandardCharsets.UTF_8);
-                        os.write(input, 0, input.length);
-                    }
-
-                    Scanner scanner = new Scanner(tokenConn.getInputStream());
-                    StringBuilder tokenRes = new StringBuilder();
-                    while (scanner.hasNext()) tokenRes.append(scanner.nextLine());
-                    scanner.close();
-
-                    JSONObject tokenJson = new JSONObject(tokenRes.toString());
-                    String accessToken = tokenJson.getString("access_token");
-
-                    // 2. Capture Order
-                    URL captureUrl = new URL("https://api-m.paypal.com/v2/checkout/orders/" + orderId + "/capture");
-                    HttpURLConnection captureConn = (HttpURLConnection) captureUrl.openConnection();
-                    captureConn.setConnectTimeout(5000);
-                    captureConn.setReadTimeout(5000);
-                    captureConn.setRequestMethod("POST");
-                    captureConn.setRequestProperty("Authorization", "Bearer " + accessToken);
-                    captureConn.setRequestProperty("Content-Type", "application/json");
-                    captureConn.setDoOutput(true);
-
-                    try (OutputStream os = captureConn.getOutputStream()) {
-                        byte[] input = "{}".getBytes(StandardCharsets.UTF_8);
-                        os.write(input, 0, input.length);
-                    }
-
-                    int captureCode = captureConn.getResponseCode();
-                    Scanner captureScanner;
-                    if (captureCode >= 200 && captureCode < 300) {
-                        captureScanner = new Scanner(captureConn.getInputStream());
-                    } else {
-                        captureScanner = new Scanner(captureConn.getErrorStream() != null ? captureConn.getErrorStream() : captureConn.getInputStream());
-                    }
-                    StringBuilder captureRes = new StringBuilder();
-                    while (captureScanner.hasNext()) captureRes.append(captureScanner.nextLine());
-                    captureScanner.close();
-
-                    final String finalResStr = captureRes.toString();
-                    runOnUiThread(() -> {
-                        if (webViewApp != null) {
-                            webViewApp.evaluateJavascript(callbackName + "(" + finalResStr + ");", null);
-                        }
-                    });
-                } catch (Exception e) {
-                    runOnUiThread(() -> {
-                        try {
-                            JSONObject err = new JSONObject();
-                            err.put("error", e.getMessage());
-                            if (webViewApp != null) {
-                                webViewApp.evaluateJavascript(callbackName + "(" + err.toString() + ");", null);
-                            }
-                        } catch (Exception ignored) {}
-                    });
-                }
-            }).start();
-        }
+        public void dummy() {}
     }
 }

@@ -1,6 +1,4 @@
-# Task List - Video Player Back Arrow, VIP Responsiveness, and Community Colors
+# Task List - Full Feature Set Restoration with Preserved Bottom Dock
 
-- [ ] Update `showPlayer()` and `togglePlayerControls()` for reliable back arrow persistence `[ ]`
-- [ ] Upgrade `#vipbtn` in header for instant 0ms responsiveness `[ ]`
-- [ ] Upgrade `socialCommunityHtml()` with vibrant colored text and cinematic gradients (zero white text) `[ ]`
+- [ ] Combine complete JS engines with preserved fixed bottom dock in `index.html` `[ ]`
 - [ ] Verify build via gradle `app:assembleDebug` `[ ]`
