@@ -789,7 +789,11 @@ const PAYPAL_PLAN_URLS = {
 
 async function payWithPayPal() {
   const url = PAYPAL_PLAN_URLS[PLAN] || PAYPAL_PLAN_URLS["p4"];
-  window.open(url, "_blank");
+  if (typeof AndroidPayPal !== 'undefined' && AndroidPayPal.openPayPalUrl) {
+    AndroidPayPal.openPayPalUrl(url);
+  } else {
+    window.location.href = url;
+  }
 }
 
 let stkPollTimer = null;
@@ -1791,7 +1795,7 @@ function checkOnlineStatus() {
 async function verifyActiveInternetAccess() {
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 4000);
+    const timeoutId = setTimeout(() => controller.abort(), 3500);
     const r = await fetch("https://api.themoviedb.org/3/configuration?api_key=ea220cf0b8ca48bb8aa393a5228b688b", { signal: controller.signal });
     clearTimeout(timeoutId);
     return r.ok;
@@ -1800,9 +1804,13 @@ async function verifyActiveInternetAccess() {
   }
 }
 
-let appInitialized = false;
-function checkOnlineStatus() {
+async function checkOnlineStatus() {
   if (typeof navigator.onLine !== 'undefined' && !navigator.onLine) {
+    showOfflineScreen();
+    return false;
+  }
+  const activeInternet = await verifyActiveInternetAccess();
+  if (!activeInternet) {
     showOfflineScreen();
     return false;
   }
@@ -1812,11 +1820,12 @@ function checkOnlineStatus() {
 function showOfflineScreen() {
   const m = $("#main");
   if (m) {
-    m.innerHTML = `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:75vh;padding:30px;text-align:center;background:#0b0b1a;color:#fff">
-      <div style="font-size:64px;margin-bottom:16px">📡</div>
-      <h2 style="color:#f43f5e;font-size:24px;font-weight:900;margin-bottom:10px">No Internet Connection</h2>
-      <p style="color:#cbd5e1;font-size:14px;line-height:1.6;max-width:400px;margin-bottom:24px">Film Box requires an active internet connection to stream movies, live sports, and verify VIP passes. Please check your network connection and try again.</p>
-      <button class="vip" onclick="window.location.reload()" style="background:linear-gradient(135deg,#a855f7,#38bdf8);color:#fff;font-weight:900;padding:12px 30px;border-radius:20px;border:none;cursor:pointer">Retry Connection</button>
+    m.innerHTML = `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:80vh;padding:30px;text-align:center;background:#090d16;color:#fff">
+      <div style="font-size:72px;margin-bottom:16px">📡</div>
+      <span style="display:inline-block;padding:4px 16px;background:rgba(244,63,94,0.2);border:1px solid #f43f5e;border-radius:20px;color:#f43f5e;font-size:11px;font-weight:900;letter-spacing:1px;margin-bottom:12px">ONLINE NETWORK REQUIRED</span>
+      <h2 style="color:#ffffff;font-size:26px;font-weight:900;margin-bottom:10px">Active Internet Access Required</h2>
+      <p style="color:#cbd5e1;font-size:14px;line-height:1.6;max-width:440px;margin-bottom:28px">Film Box requires active internet access to load movies, stream video, and verify VIP passes. Please connect to a Wi-Fi or mobile network with working internet access.</p>
+      <button class="vip" onclick="window.location.reload()" style="background:linear-gradient(135deg,#38bdf8,#0284c7);color:#fff;font-weight:900;padding:14px 36px;border-radius:24px;border:none;cursor:pointer;box-shadow:0 8px 25px rgba(56,189,248,0.4)">🔄 Retry Connection</button>
     </div>`;
   }
 }
@@ -1831,14 +1840,12 @@ function initApp() {
     return;
   }
   if (appInitialized) return;
+  appInitialized = true;
   try {
     checkVipActive();
     render();
-    appInitialized = true;
     start10MinVipBannerTimer();
-    if (typeof navigator.onLine !== 'undefined' && !navigator.onLine) {
-      showPurpleToast("📡 Offline mode active. Connect to internet for live updates.");
-    }
+    checkOnlineStatus();
   } catch(e) {
     if (m) m.innerHTML = `<div style="padding:30px;text-align:center"><h3 style="color:#ff4d4d">Error Loading App</h3><p>${esc(e.message)}</p></div>`;
   }

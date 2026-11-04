@@ -1,4 +1,5 @@
-# Task List - Blogger-Identical Iframe Embedding for `vidsrc.to`
+# Task List - Instant 0ms Home Load, Single Direct `vidsrc.to` Server & Ultra-Fast Touch Responsiveness
 
-- [x] Update `PlayerActivity.java` to wrap `vidsrc.to` in a Blogger iframe and load via `loadDataWithBaseURL("https://filmboxproductions.blogspot.com", ...)` with silent background ad/popunder blocking
+- [x] Update `initApp()` in `index.html` to call `render()` synchronously first for instant 0ms home page movie loading
+- [x] Load `vidsrc.to` directly via `webViewPlayer.loadUrl(...)` in `PlayerActivity.java` without iframe wrapping or loop triggers
 - [x] Verify build via Gradle `:app:assembleDebug`

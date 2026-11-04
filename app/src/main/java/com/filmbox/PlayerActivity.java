@@ -14,6 +14,7 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -78,10 +79,10 @@ public class PlayerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         try {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED, WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
-            hideSystemUI();
-
             setContentView(R.layout.activity_player);
+            hideSystemUI();
 
             webViewPlayer = findViewById(R.id.webViewPlayer);
             if (webViewPlayer != null) {
@@ -112,6 +113,11 @@ public class PlayerActivity extends AppCompatActivity {
                 btnBack.setOnClickListener(v -> finish());
             }
 
+            Button btnServer = findViewById(R.id.btnServer);
+            if (btnServer != null) {
+                btnServer.setVisibility(View.GONE);
+            }
+
             if (btnRotateScreen != null) {
                 btnRotateScreen.setOnClickListener(v -> {
                     if (isLandscape) {
@@ -124,7 +130,7 @@ public class PlayerActivity extends AppCompatActivity {
                 });
             }
 
-            loadVidsrcServer();
+            loadVidsrcMasterServer();
         } catch (Exception e) {
             Toast.makeText(this, "Error starting player: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             finish();
@@ -257,7 +263,7 @@ public class PlayerActivity extends AppCompatActivity {
         } catch (Exception ignored) {}
     }
 
-    private void loadVidsrcServer() {
+    private void loadVidsrcMasterServer() {
         try {
             String embedUrl;
             if ("tv".equalsIgnoreCase(mediaType)) {
@@ -266,16 +272,9 @@ public class PlayerActivity extends AppCompatActivity {
                 embedUrl = "https://vidsrc.to/embed/movie/" + tmdbId;
             }
 
-            String html = "<!DOCTYPE html>" +
-                    "<html><head>" +
-                    "<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'>" +
-                    "<style>html,body{margin:0;padding:0;width:100%;height:100%;background:#000;overflow:hidden;}iframe{width:100%;height:100%;border:0;}</style>" +
-                    "</head><body>" +
-                    "<iframe src='" + embedUrl + "' allowfullscreen='true' allow='autoplay; encrypted-media; fullscreen; picture-in-picture'></iframe>" +
-                    "</body></html>";
-
             if (webViewPlayer != null) {
-                webViewPlayer.loadDataWithBaseURL("https://filmboxproductions.blogspot.com", html, "text/html", "utf-8", null);
+                webViewPlayer.setBackgroundColor(0xFF000000);
+                webViewPlayer.loadUrl(embedUrl);
             }
         } catch (Exception e) {
             Toast.makeText(this, "Stream error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -283,11 +282,32 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onPause() {
+        super.onPause();
         try {
             if (webViewPlayer != null) {
-                webViewPlayer.loadUrl("about:blank");
+                webViewPlayer.onPause();
+            }
+        } catch (Exception ignored) {}
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        try {
+            if (webViewPlayer != null) {
+                webViewPlayer.onResume();
+            }
+        } catch (Exception ignored) {}
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try {
+            if (webViewPlayer != null) {
+                webViewPlayer.destroy();
+                webViewPlayer = null;
             }
         } catch (Exception ignored) {}
     }

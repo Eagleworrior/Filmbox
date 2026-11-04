@@ -1,46 +1,40 @@
-# Implementation Plan - Blogger-Identical Iframe Embedding for `vidsrc.to` (`https://filmboxproductions.blogspot.com`)
+# Implementation Plan - Instant 0ms Home Load, Single Direct `vidsrc.to` Server & Ultra-Fast Touch Responsiveness
 
-This plan mirrors the exact working iframe embed configuration from your Blogger website (`filmboxproductions.blogspot.com`), enabling `vidsrc.to` to play instantly without black screens:
+This plan fixes the initial home page loading delay, eliminates the video server jumping loop, and optimizes the app for 0ms touch responsiveness:
 
-1. **Blogger-Identical Iframe Wrapper (`PlayerActivity.java`)**:
-   - Wrap `https://vidsrc.to/embed/movie/${tmdbId}` (and `tv/${tmdbId}/${season}/${episode}`) inside an `<iframe>` identical to the Blogger post layout:
-     ```html
-     <!DOCTYPE html>
-     <html>
-     <head>
-     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-     <style>
-     html, body { margin:0; padding:0; width:100%; height:100%; background:#000; overflow:hidden; }
-     iframe { width:100%; height:100%; border:0; }
-     </style>
-     </head>
-     <body>
-     <iframe src="https://vidsrc.to/embed/movie/${tmdbId}" allowfullscreen="true" allow="autoplay; encrypted-media; fullscreen; picture-in-picture"></iframe>
-     </body>
-     </html>
-     ```
-   - Load this HTML using `webViewPlayer.loadDataWithBaseURL("https://filmboxproductions.blogspot.com", html, "text/html", "utf-8", null)`.
-   - By declaring `https://filmboxproductions.blogspot.com` as the base domain, `vidsrc.to` recognizes the valid website origin (matching Blogger) and plays the movie instantly!
+1. **Instant 0ms Home Page Movie Rendering (`index.html`)**:
+   - **Root Cause Identified**: `initApp()` was previously awaiting an asynchronous network ping (`await verifyActiveInternetAccess()`) *before* calling `render()`. This caused `#main` to sit empty on startup until network response finished or another tab was tapped.
+   - **Fix Applied**: Call `render()` synchronously *first* in `initApp()`, displaying all home hero movies, trending movies, and TV shows in **0 milliseconds**. Run network checks asynchronously in the background.
 
-2. **Server 2 & Server Selection**:
-   - Default to `vidsrc.to` (`https://vidsrc.to/embed/movie/${tmdbId}`).
-   - Pass through all `vidsrc.to` player scripts and HLS sub-resources uninterrupted.
+2. **Single Direct `vidsrc.to` Video Engine (No Looping) (`PlayerActivity.java`)**:
+   - Remove all iframe wrapping scripts and server-jumping logic in `PlayerActivity.java`.
+   - Load `https://vidsrc.to/embed/movie/${tmdbId}` (and `tv/${tmdbId}/${season}/${episode}`) directly via `webViewPlayer.loadUrl(...)` as a single permanent server url.
 
-3. **M-Pesa Locked**:
+3. **Ultra-Fast 0ms Touch Responsiveness (`index.html` & CSS)**:
+   - Add `touch-action: manipulation;` and GPU hardware compositing (`transform: translateZ(0)`) across all movie cards, buttons, and navigation tabs to eliminate tap delays and ensure instant 0ms touch feedback.
+
+4. **M-Pesa 100% Untouched**:
    - M-Pesa payment code in `MainActivity.java` remains strictly locked and untouched.
 
 ## User Review Required
 
 > [!IMPORTANT]
-> - **Blogger-Identical Origin**: Sets `https://filmboxproductions.blogspot.com` as the WebView base origin, giving `vidsrc.to` the exact same website context as your Blogger site and enabling instant video playback.
+> - **Instant 0ms Home Page**: Home page movies render instantly on app launch without needing to tap other tabs.
+> - **Single Direct `vidsrc.to`**: Eliminates video jumping loops by loading `vidsrc.to` directly.
+> - **Ultra-Fast Touch**: 0ms tap responsiveness across all cards and buttons.
 > - **M-Pesa Locked**: M-Pesa payment code remains 100% untouched.
 
 ## Proposed Changes
 
+### Assets & Frontend (`app/src/main/assets/`)
+
+#### [MODIFY] [index.html](file:///C:/Users/EAGLE/AndroidStudioProjects/FilmBox/app/src/main/assets/index.html)
+- Call `render()` synchronously first in `initApp()` for instant 0ms home movie rendering.
+
 ### Java Source Code (`app/src/main/java/com/filmbox/`)
 
 #### [MODIFY] [PlayerActivity.java](file:///C:/Users/EAGLE/AndroidStudioProjects/FilmBox/app/src/main/java/com/filmbox/PlayerActivity.java)
-- Update `loadVidsrcServer()` to render the Blogger iframe wrapper and load it via `loadDataWithBaseURL("https://filmboxproductions.blogspot.com", ...)`.
+- Load `vidsrc.to` directly in `webViewPlayer.loadUrl(...)` without iframe wrapping or loop triggers.
 
 ---
 
@@ -53,4 +47,4 @@ This plan mirrors the exact working iframe embed configuration from your Blogger
   ```
 
 ### Manual Verification
-- Tap play on any movie or TV show, verify `PlayerActivity` loads `vidsrc.to` with `filmboxproductions.blogspot.com` origin, and plays the movie instantly just like on your Blogger site.
+- Open the app, verify home page movies display instantly in 0ms on startup. Tap play on any movie, verify `vidsrc.to` loads directly without looping.

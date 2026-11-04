@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
                 webSettings.setJavaScriptCanOpenWindowsAutomatically(false);
                 webSettings.setSupportMultipleWindows(false);
                 webSettings.setRenderPriority(WebSettings.RenderPriority.HIGH);
-                webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
+                webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
                 webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
                 webSettings.setUserAgentString("Mozilla/5.0 (Linux; Android 13; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36");
 
@@ -163,9 +163,6 @@ public class MainActivity extends AppCompatActivity {
                 webViewApp.setFocusableInTouchMode(true);
                 webViewApp.requestFocus();
                 webViewApp.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-                webViewApp.clearCache(true);
-                webViewApp.clearFormData();
-                webViewApp.clearHistory();
                 webViewApp.setDownloadListener(null);
 
                 // Add Javascript Interface for M-Pesa Daraja STK Push, PayPal, & Private In-App Offline Downloads
@@ -739,9 +736,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Java Native PayPal Checkout Bridge
-    public static class PayPalBridge {
+    public class PayPalBridge {
         public PayPalBridge() {}
+
         @JavascriptInterface
-        public void dummy() {}
+        public void openPayPalUrl(String url) {
+            try {
+                if (url != null && !url.isEmpty()) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, android.net.Uri.parse(url));
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }
+            } catch (Exception e) {
+                android.util.Log.e("PayPalBridge", "Error opening PayPal URL: " + e.getMessage());
+            }
+        }
     }
 }

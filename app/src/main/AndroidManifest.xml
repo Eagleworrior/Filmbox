@@ -48,6 +48,7 @@
             android:name=".PlayerActivity"
             android:exported="false"
             android:screenOrientation="fullSensor"
+            android:hardwareAccelerated="true"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|smallestScreenSize" />
 
         <service
