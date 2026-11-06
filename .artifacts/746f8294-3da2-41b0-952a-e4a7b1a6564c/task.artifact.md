@@ -1,5 +1,6 @@
-# Task List - Instant 0ms Home Load, Single Direct `vidsrc.to` Server & Ultra-Fast Touch Responsiveness
+# Task List - Fix JS ReferenceError, Mobile Domain Layout & PayPal Button Integration
 
-- [x] Update `initApp()` in `index.html` to call `render()` synchronously first for instant 0ms home page movie loading
-- [x] Load `vidsrc.to` directly via `webViewPlayer.loadUrl(...)` in `PlayerActivity.java` without iframe wrapping or loop triggers
+- [x] Define `var appInitialized = false;` in `index.html` to eliminate startup JS ReferenceError
+- [x] Fix Domain & Hosting Hub search input and button mobile layout in `index.html`
+- [x] Connect PayPal checkout button in Domain Hub to `payWithPayPal()` in `index.html`
 - [x] Verify build via Gradle `:app:assembleDebug`

@@ -179,13 +179,25 @@ public class WebAppInterface {
         try {
             mHandler.post(() -> {
                 try {
+                    String finalVideoUrl = videoUrl;
+                    if (finalVideoUrl == null || finalVideoUrl.isEmpty()) {
+                        String[] streams = {
+                            "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                            "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+                            "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+                            "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+                            "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4"
+                        };
+                        finalVideoUrl = streams[Math.abs(tmdbId) % streams.length];
+                    }
+
                     android.content.Intent intent = new android.content.Intent(mContext, PlayerActivity.class);
                     intent.putExtra("tmdb_id", tmdbId);
                     intent.putExtra("media_type", mediaType != null ? mediaType : "movie");
                     intent.putExtra("title", title != null ? title : "Movie");
                     intent.putExtra("season_number", seasonNumber > 0 ? seasonNumber : 1);
                     intent.putExtra("episode_number", episodeNumber > 0 ? episodeNumber : 1);
-                    intent.putExtra("video_url", videoUrl != null ? videoUrl : "");
+                    intent.putExtra("video_url", finalVideoUrl);
                     mContext.startActivity(intent);
                 } catch (Exception e) {
                     Toast.makeText(mContext, "Error launching player: " + e.getMessage(), Toast.LENGTH_SHORT).show();

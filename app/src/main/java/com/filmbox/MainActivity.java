@@ -64,9 +64,7 @@ public class MainActivity extends AppCompatActivity {
             "vidsrc.vip",
             "vidlink.pro",
             "embed.su",
-            "player.autoembed.cc",
             "autoembed.cc",
-            "player.smashystream.xyz",
             "smashystream.xyz",
             "2embed.cc",
             "multiembed.mov",
@@ -87,24 +85,30 @@ public class MainActivity extends AppCompatActivity {
             "fb.me",
             "paypal.com",
             "paypalobjects.com",
-            "safaricom.co.ke"
+            "safaricom.co.ke",
+            "googleapis.com",
+            "google.com",
+            "gstatic.com",
+            "unpkg.com",
+            "cdnjs.com"
     ));
 
     private static final String[] AD_KEYWORDS = {
             "doubleclick", "googlesyndication", "adservice", "popads", "propellerads",
             "adsterra", "exoclick", "onclickads", "taboola", "outbrain", "adserver",
-            "banner", "popunder", "tracker"
+            "banner", "popunder", "monetag", "clickadu", "tsyndicate", "adtelligent",
+            "pubmatic", "rubiconproject", "openx", "amazon-adsystem", "popcash",
+            "hilltopads", "clickaine", "adcash", "yandex.rtb", "exdynsrv", "bet365",
+            "1xbet", "mostbet", "parimatch", "/popads/", "/adsterra/", "/exoclick/",
+            "/propeller/", "/popunder/", "/adserver/"
     };
 
     private boolean isHostAllowed(String host) {
         if (host == null || host.isEmpty()) return true;
         if (host.equalsIgnoreCase("android_asset") || host.equalsIgnoreCase("localhost")) return true;
         String hostLower = host.toLowerCase();
-        if (hostLower.contains("vidsrc") || hostLower.contains("vidlink") || hostLower.contains("embed") || hostLower.contains("autoembed") || hostLower.contains("bunnycdn") || hostLower.contains("cloudflare") || hostLower.contains("googlevideo") || hostLower.contains("akamaized") || hostLower.contains("jsdelivr") || hostLower.contains("2embed") || hostLower.contains("stream") || hostLower.contains("player") || hostLower.contains("rcp") || hostLower.contains("googleapis") || hostLower.contains("google")) {
-            return true;
-        }
         for (String allowed : ALLOWED_HOSTS) {
-            if (host.equalsIgnoreCase(allowed) || hostLower.endsWith("." + allowed.toLowerCase())) {
+            if (hostLower.equals(allowed) || hostLower.endsWith("." + allowed)) {
                 return true;
             }
         }
@@ -112,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean isAdUrl(String urlLower) {
-        if (urlLower.contains("vidsrc") || urlLower.contains("vidlink") || urlLower.contains("embed") || urlLower.contains("autoembed") || urlLower.contains("bunnycdn") || urlLower.contains("cloudflare") || urlLower.contains("googlevideo") || urlLower.contains("akamaized") || urlLower.contains("jsdelivr") || urlLower.contains("2embed") || urlLower.contains("stream") || urlLower.contains("player") || urlLower.contains("rcp")) {
+        if (urlLower.contains("m3u8") || urlLower.contains(".ts") || urlLower.contains(".mp4") || urlLower.contains("hls") || urlLower.contains("googlevideo") || urlLower.contains("akamaized")) {
             return false;
         }
         for (String keyword : AD_KEYWORDS) {
@@ -146,10 +150,9 @@ public class MainActivity extends AppCompatActivity {
                 webSettings.setAllowContentAccess(false);
                 webSettings.setJavaScriptCanOpenWindowsAutomatically(false);
                 webSettings.setSupportMultipleWindows(false);
-                webSettings.setRenderPriority(WebSettings.RenderPriority.HIGH);
                 webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
                 webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
-                webSettings.setUserAgentString("Mozilla/5.0 (Linux; Android 13; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36");
+                webSettings.setUserAgentString("Mozilla/5.0 (Linux; Android 13; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Mobile Safari/537.36");
 
                 android.webkit.CookieManager.getInstance().setAcceptCookie(true);
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
@@ -162,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
                 webViewApp.setFocusable(true);
                 webViewApp.setFocusableInTouchMode(true);
                 webViewApp.requestFocus();
-                webViewApp.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+                webViewApp.setLayerType(View.LAYER_TYPE_NONE, null);
                 webViewApp.setDownloadListener(null);
 
                 // Add Javascript Interface for M-Pesa Daraja STK Push, PayPal, & Private In-App Offline Downloads
@@ -225,17 +228,17 @@ public class MainActivity extends AppCompatActivity {
                             String url = request.getUrl().toString();
                             String urlLower = url.toLowerCase();
 
-                            if (urlLower.startsWith("file://") || urlLower.startsWith("data:") || urlLower.startsWith("blob:") || urlLower.startsWith("https://embed/") || urlLower.startsWith("http://embed/") || urlLower.contains("vidsrc") || urlLower.contains("vidlink") || urlLower.contains("embed") || urlLower.contains("autoembed") || urlLower.contains("2embed") || urlLower.contains("smashy") || urlLower.contains("multiembed") || urlLower.contains("m3u8") || urlLower.contains("ts") || urlLower.contains("mp4") || urlLower.contains("hls")) {
+                            if (isAdUrl(urlLower)) {
+                                android.util.Log.d("ADBLOCK", "Intercepted & Blocked Sub-resource (Ad Keyword): " + url);
+                                return new WebResourceResponse("text/plain", "utf-8", new ByteArrayInputStream(new byte[0]));
+                            }
+
+                            if (urlLower.startsWith("file://") || urlLower.startsWith("data:") || urlLower.startsWith("blob:") || urlLower.startsWith("https://embed/") || urlLower.startsWith("http://embed/") || urlLower.contains("m3u8") || urlLower.contains("ts") || urlLower.contains("mp4") || urlLower.contains("hls")) {
                                 return super.shouldInterceptRequest(view, request);
                             }
 
                             android.net.Uri uri = request.getUrl();
                             String host = uri.getHost();
-
-                            if (isAdUrl(urlLower)) {
-                                android.util.Log.d("ADBLOCK", "Intercepted & Blocked Sub-resource (Ad Keyword): " + url);
-                                return new WebResourceResponse("text/plain", "utf-8", new ByteArrayInputStream(new byte[0]));
-                            }
 
                             if (host != null && !isHostAllowed(host)) {
                                 android.util.Log.d("ADBLOCK", "Intercepted & Blocked Sub-resource (Host Not Allowed): " + host + " (URL: " + url + ")");
@@ -250,16 +253,44 @@ public class MainActivity extends AppCompatActivity {
                         super.onPageFinished(view, url);
                         view.evaluateJavascript(
                                 "(function() {" +
-                                        "  var css = '[id*=\"ad-\"],[class*=\"ad-\"],[class*=\"ads\"],[id*=\"ads\"],iframe[src*=\"ads\"],iframe[src*=\"doubleclick\"],ins.adsbygoogle,[class*=\"banner\"],[id*=\"banner\"],[class*=\"popup\"],[id*=\"popup\"],[class*=\"sponsor\"],[id*=\"sponsor\"],[class*=\"overlay\"]{display:none!important};';" +
+                                        "  var css = '[id*=\"ad-\"],[class*=\"ad-\"],[class*=\"ads\"],[id*=\"ads\"],iframe[src*=\"ads\"],iframe[src*=\"doubleclick\"],ins.adsbygoogle,[class*=\"banner\"],[id*=\"banner\"],[class*=\"popup\"],[id*=\"popup\"],[class*=\"sponsor\"],[id*=\"sponsor\"],[class*=\"overlay\"],div[style*=\"position: fixed\"][style*=\"z-index\"] { display:none!important; pointer-events:none!important; };';" +
                                         "  var s = document.createElement(\"style\"); s.innerHTML = css; document.head.appendChild(s);" +
                                         "  var observer = new MutationObserver(function(mutations) {" +
-                                        "    var ads = document.querySelectorAll('iframe[src*=\"ads\"], iframe[src*=\"pop\"], iframe[src*=\"track\"], div[style*=\"z-index: 2147483647\"], div[id*=\"pop\"], ins.adsbygoogle');" +
+                                        "    var ads = document.querySelectorAll('iframe[src*=\"ads\"], iframe[src*=\"pop\"], iframe[src*=\"track\"], iframe[src*=\"analytics\"], iframe[src*=\"stat\"], div[style*=\"z-index: 2147483647\"], div[id*=\"pop\"], ins.adsbygoogle');" +
                                         "    for (var i = 0; i < ads.length; i++) {" +
                                         "      if (ads[i].id !== \"player\" && !ads[i].closest(\"#player\") && !ads[i].closest(\"#modal\")) { ads[i].remove(); }" +
                                         "    }" +
                                         "  });" +
                                         "  observer.observe(document.documentElement, { childList: true, subtree: true });" +
                                         "  window.open = function() { return null; };" +
+                                        "  window.alert = function() { return true; };" +
+                                        "  window.confirm = function() { return true; };" +
+                                        "  var origFetch = window.fetch;" +
+                                        "  window.fetch = function(url, init) {" +
+                                        "    if (typeof url === 'string' && (url.includes('ad') || url.includes('pop') || url.includes('track') || url.includes('stat') || url.includes('analytics'))) {" +
+                                        "      return Promise.resolve(new Response('', {status: 204}));" +
+                                        "    }" +
+                                        "    return origFetch.apply(this, arguments);" +
+                                        "  };" +
+                                        "  var origCreate = document.createElement;" +
+                                        "  document.createElement = function(tag) {" +
+                                        "    var el = origCreate.call(document, tag);" +
+                                        "    if (tag.toLowerCase() === 'script') {" +
+                                        "      el.setAttribute = function(name, val) {" +
+                                        "        if (name === 'src' && (val.includes('ad') || val.includes('pop') || val.includes('track') || val.includes('stat'))) {" +
+                                        "          return;" +
+                                        "        }" +
+                                        "        HTMLScriptElement.prototype.setAttribute.call(this, name, val);" +
+                                        "      };" +
+                                        "    }" +
+                                        "    return el;" +
+                                        "  };" +
+                                        "  document.addEventListener('click', function(e) {" +
+                                        "    var t = e.target.closest('a');" +
+                                        "    if (t && t.href && (t.href.includes('http') && !t.href.includes('filmbox') && !t.href.includes('vidsrc') && !t.href.includes('vidlink') && !t.href.includes('embed') && !t.href.includes('tmdb'))) {" +
+                                        "      e.preventDefault(); e.stopPropagation();" +
+                                        "    }" +
+                                        "  }, true);" +
                                         "})();", null
                         );
                     }
@@ -732,6 +763,12 @@ public class MainActivity extends AppCompatActivity {
                     });
                 }
             }).start();
+        }
+    }
+
+    public void evaluateJavaScriptOnWebView(String script) {
+        if (webViewApp != null) {
+            runOnUiThread(() -> webViewApp.evaluateJavascript(script, null));
         }
     }
 

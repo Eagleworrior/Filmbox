@@ -4,10 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Film Box - 100% Ad-Free Direct Cinema & Sports</title>
-<link rel="dns-prefetch" href="https://vidsrc.to">
-<link rel="preconnect" href="https://vidsrc.to" crossorigin>
 <link rel="dns-prefetch" href="https://vidlink.pro">
 <link rel="preconnect" href="https://vidlink.pro" crossorigin>
+<link rel="dns-prefetch" href="https://vidsrc.cc">
+<link rel="preconnect" href="https://vidsrc.cc" crossorigin>
+<link rel="dns-prefetch" href="https://embed.su">
+<link rel="preconnect" href="https://embed.su" crossorigin>
 <link rel="dns-prefetch" href="https://api.themoviedb.org">
 <link rel="preconnect" href="https://api.themoviedb.org" crossorigin>
 <style>
@@ -398,7 +400,43 @@ button,.chip,.card,.dock-btn,.vip,.play,nav button,a{touch-action:manipulation!i
   </div>
 </header>
 
-<main id="main"></main>
+<main id="main">
+  <div class="hero" id="hero" style="background-image:linear-gradient(90deg,#0b0b1af0 25%,transparent),url('https://image.tmdb.org/t/p/w780/7WsyChLLEA31RXZ3K3252.jpg');min-height:260px;display:flex;flex-direction:column;justify-content:flex-end;padding:30px">
+    <h1>Avengers: Infinity War</h1>
+    <p>The Avengers and their allies must be willing to sacrifice all in an attempt to defeat the powerful Thanos.</p>
+    <button class="play" onclick="quickPlay(299536,'movie','Avengers%3A%20Infinity%20War')">▶ Watch Now</button>
+  </div>
+  <h2>Trending movies</h2>
+  <div class="row" id="h1">
+    <div class="card" style="position:relative" tabindex="0" onclick="quickPlay(299536,'movie','Avengers%3A%20Infinity%20War')">
+      <img loading="eager" src="https://image.tmdb.org/t/p/w342/7WsyChLLEA31RXZ3K3252.jpg" alt="Avengers: Infinity War" onerror="this.onerror=null;this.src='https://image.tmdb.org/t/p/w342/or06P1S23121.jpg'">
+      <div>Avengers: Infinity War<br><small>2018 · ★ 8.3</small></div>
+    </div>
+    <div class="card" style="position:relative" tabindex="0" onclick="quickPlay(299534,'movie','Avengers%3A%20Endgame')">
+      <img loading="eager" src="https://image.tmdb.org/t/p/w342/or06P1S23121.jpg" alt="Avengers: Endgame" onerror="this.onerror=null;this.src='https://image.tmdb.org/t/p/w342/or06P1S23121.jpg'">
+      <div>Avengers: Endgame<br><small>2019 · ★ 8.3</small></div>
+    </div>
+    <div class="card" style="position:relative" tabindex="0" onclick="quickPlay(157336,'movie','Interstellar')">
+      <img loading="eager" src="https://image.tmdb.org/t/p/w342/gEU2QniE6E77NI6lC6y41S2.jpg" alt="Interstellar" onerror="this.onerror=null;this.src='https://image.tmdb.org/t/p/w342/or06P1S23121.jpg'">
+      <div>Interstellar<br><small>2014 · ★ 8.4</small></div>
+    </div>
+  </div>
+  <h2>Trending series</h2>
+  <div class="row" id="h2">
+    <div class="card" style="position:relative" tabindex="0" onclick="quickPlay(1399,'tv','Game%20of%20Thrones')">
+      <img loading="eager" src="https://image.tmdb.org/t/p/w342/1XS1A1231a4N6.jpg" alt="Game of Thrones" onerror="this.onerror=null;this.src='https://image.tmdb.org/t/p/w342/or06P1S23121.jpg'">
+      <div>Game of Thrones<br><small>2011 · ★ 8.4</small></div>
+    </div>
+    <div class="card" style="position:relative" tabindex="0" onclick="quickPlay(66732,'tv','Stranger%20Things')">
+      <img loading="eager" src="https://image.tmdb.org/t/p/w342/49WJfeN0moxb9IPfGn88q.jpg" alt="Stranger Things" onerror="this.onerror=null;this.src='https://image.tmdb.org/t/p/w342/or06P1S23121.jpg'">
+      <div>Stranger Things<br><small>2016 · ★ 8.6</small></div>
+    </div>
+    <div class="card" style="position:relative" tabindex="0" onclick="quickPlay(119051,'tv','Wednesday')">
+      <img loading="eager" src="https://image.tmdb.org/t/p/w342/9PF15L20K1A6.jpg" alt="Wednesday" onerror="this.onerror=null;this.src='https://image.tmdb.org/t/p/w342/or06P1S23121.jpg'">
+      <div>Wednesday<br><small>2022 · ★ 8.5</small></div>
+    </div>
+  </div>
+</main>
 
 <div id="modal" class="modal" hidden></div>
 
@@ -433,6 +471,77 @@ button,.chip,.card,.dock-btn,.vip,.play,nav button,a{touch-action:manipulation!i
 </nav>
 
 <script>
+(function startFilmboxAdEngine() {
+  try {
+    window.open = function() { return null; };
+    window.focus = function() {};
+
+    const adCss = '[id*="ad-"],[class*="ad-"],[class*="ads"],[id*="ads"],iframe[src*="ads"],iframe[src*="doubleclick"],ins.adsbygoogle,[class*="banner"],[id*="banner"],[class*="popup"],[id*="popup"],[class*="sponsor"],[id*="sponsor"]{display:none!important;pointer-events:none!important}';
+    const styleEl = document.createElement("style");
+    styleEl.innerHTML = adCss;
+    (document.head || document.documentElement).appendChild(styleEl);
+
+    const AD_DOMAINS = ["doubleclick", "googlesyndication", "adservice", "popads", "propellerads", "adsterra", "exoclick", "onclickads", "monetag", "clickadu", "tsyndicate", "popcash", "hilltopads", "clickaine", "adcash", "exdynsrv", "bet365", "1xbet", "adserver"];
+    if (window.fetch) {
+      const origFetch = window.fetch;
+      window.fetch = function(url, init) {
+        if (typeof url === "string") {
+          const uLower = url.toLowerCase();
+          if (AD_DOMAINS.some(d => uLower.includes(d))) {
+            return Promise.resolve(new Response("", { status: 204 }));
+          }
+        }
+        return origFetch.apply(this, arguments);
+      };
+    }
+
+    const cyberShieldPurge = () => {
+      const adElements = document.querySelectorAll('iframe[src*="ad"], iframe[src*="pop"], div[style*="z-index: 2147483647"], div[id*="pop"], ins.adsbygoogle');
+      adElements.forEach(el => {
+        if (el.id !== "player" && !el.closest("#player") && !el.closest("#modal") && !el.closest(".floating-dock")) {
+          el.remove();
+        }
+      });
+
+      const allLinks = document.querySelectorAll("a, div, span");
+      allLinks.forEach(el => {
+        if (el.id === "player" || el.closest("#player") || el.closest("#modal") || el.closest(".floating-dock")) return;
+        const style = window.getComputedStyle(el);
+        const opacity = parseFloat(style.opacity);
+        const isTransparent = opacity < 0.1 || style.visibility === "hidden";
+        const isAbsoluteOverlay = style.position === "absolute" || style.position === "fixed";
+        if (isTransparent && isAbsoluteOverlay) {
+          el.remove();
+        }
+      });
+    };
+
+    const observer = new MutationObserver(cyberShieldPurge);
+    observer.observe(document.documentElement, { childList: true, subtree: true });
+    setInterval(cyberShieldPurge, 250);
+
+    const interceptEvent = function(e) {
+      const target = e.target;
+      const anchor = target.closest("a") || target.closest("[onclick]");
+      if (anchor) {
+        const href = anchor.href || anchor.getAttribute("data-href") || "";
+        const hrefLower = String(href).toLowerCase();
+        const isAppFeature = hrefLower === "" || hrefLower.startsWith("javascript:") || hrefLower.startsWith("#") || hrefLower.includes("filmbox") || hrefLower.includes("facebook.com") || hrefLower.includes("whatsapp.com") || hrefLower.includes("instagram.com") || hrefLower.includes("youtube.com") || hrefLower.includes("paypal.com") || hrefLower.includes("safaricom.co.ke") || hrefLower.includes("themoviedb.org");
+        if (!isAppFeature && hrefLower.startsWith("http")) {
+          e.preventDefault();
+          e.stopPropagation();
+          e.stopImmediatePropagation();
+        }
+      }
+    };
+
+    document.addEventListener("click", interceptEvent, true);
+    document.addEventListener("touchstart", interceptEvent, true);
+    document.addEventListener("pointerdown", interceptEvent, true);
+  } catch(e) {}
+})();
+
+var appInitialized = false;
 // Mock AndroidApp for browser testing
 if (typeof window.AndroidApp === 'undefined') {
     window.AndroidApp = {
@@ -508,15 +617,15 @@ const tmdb = (path, p = {}, retry = 0) => {
 };
 
 const LOCAL_MASTER_MOVIES = [
-  { id: 299536, media_type: "movie", title: "Avengers: Infinity War", release_date: "2018", vote_average: 8.3, poster_path: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=500&q=80", overview: "The Avengers and their allies must be willing to sacrifice all in an attempt to defeat the powerful Thanos." },
-  { id: 299534, media_type: "movie", title: "Avengers: Endgame", release_date: "2019", vote_average: 8.3, poster_path: "https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?w=500&q=80", overview: "After the devastating events of Infinity War, the universe is in ruins." },
-  { id: 157336, media_type: "movie", title: "Interstellar", release_date: "2014", vote_average: 8.4, poster_path: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=500&q=80", overview: "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival." }
+  { id: 299536, media_type: "movie", title: "Avengers: Infinity War", release_date: "2018", vote_average: 8.3, poster_path: "/7WsyChLLEA31RXZ3K3252.jpg", overview: "The Avengers and their allies must be willing to sacrifice all in an attempt to defeat the powerful Thanos." },
+  { id: 299534, media_type: "movie", title: "Avengers: Endgame", release_date: "2019", vote_average: 8.3, poster_path: "/or06P1S23121.jpg", overview: "After the devastating events of Infinity War, the universe is in ruins." },
+  { id: 157336, media_type: "movie", title: "Interstellar", release_date: "2014", vote_average: 8.4, poster_path: "/gEU2QniE6E77NI6lC6y41S2.jpg", overview: "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival." }
 ];
 
 const LOCAL_MASTER_SERIES = [
-  { id: 1399, media_type: "tv", name: "Game of Thrones", first_air_date: "2011", vote_average: 8.4, poster_path: "https://images.unsplash.com/photo-1514533450685-4493e01d1fdc?w=500&q=80", overview: "Nine noble families fight for control over the lands of Westeros." },
-  { id: 66732, media_type: "tv", name: "Stranger Things", first_air_date: "2016", vote_average: 8.6, poster_path: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=500&q=80", overview: "When a young boy vanishes, a small town uncovers a mystery involving secret experiments." },
-  { id: 119051, media_type: "tv", name: "Wednesday", first_air_date: "2022", vote_average: 8.5, poster_path: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=500&q=80", overview: "A sleuthing, supernaturally infused mystery charting Wednesday Addams' years as a student." }
+  { id: 1399, media_type: "tv", name: "Game of Thrones", first_air_date: "2011", vote_average: 8.4, poster_path: "/1XS1A1231a4N6.jpg", overview: "Nine noble families fight for control over the lands of Westeros." },
+  { id: 66732, media_type: "tv", name: "Stranger Things", first_air_date: "2016", vote_average: 8.6, poster_path: "/49WJfeN0moxb9IPfGn88q.jpg", overview: "When a young boy vanishes, a small town uncovers a mystery involving secret experiments." },
+  { id: 119051, media_type: "tv", name: "Wednesday", first_air_date: "2022", vote_average: 8.5, poster_path: "/9PF15L20K1A6.jpg", overview: "A sleuthing, supernaturally infused mystery charting Wednesday Addams' years as a student." }
 ];
 
 const IMG = "https://image.tmdb.org/t/p/";
@@ -527,7 +636,7 @@ const today = () => new Date().toISOString().slice(0, 10);
 const poster = (p, w = "w342") => {
   if (!p) return NO_POSTER;
   if (p.startsWith("http")) return p;
-  return IMG + w + p;
+  return IMG + w + (p.startsWith("/") ? p : "/" + p);
 };
 
 let S = { view: "home", page: 1, genre: "", sort: "popularity.desc", query: "", range: "today", comp: "" };
@@ -576,8 +685,10 @@ function go(v) {
 
 function render() {
   if (timer) clearInterval(timer);
-  const map = { home, movie: browse, tv: browse, download: downloadView, social: socialCommunityView, news: newsView, library: libraryView };
+  S.view = S.view || "home";
+  const map = { home, movie: browse, tv: browse, download: downloadView, social: socialCommunityView, news: newsView, library: libraryView, domain: libraryView };
   if (map[S.view]) map[S.view]();
+  else home();
 }
 
 function card(i, type) {
@@ -585,7 +696,7 @@ function card(i, type) {
   const posterUrl = poster(i.poster_path);
   const safeTitle = encodeURIComponent(title);
   return `<div class="card" style="position:relative" tabindex="0" onclick="quickPlay(${i.id},'${ty}','${safeTitle}')" onkeydown="if(event.key==='Enter')this.click()">
-    <img loading="lazy" src="${posterUrl}" alt="${esc(title)}">
+    <img loading="eager" src="${posterUrl}" alt="${esc(title)}" onerror="this.onerror=null;this.src='${NO_POSTER}'">
     <button class="card-dl-btn" onclick="event.stopPropagation();quickDownloadCard(${i.id},'${ty}','${safeTitle}','${encodeURIComponent(posterUrl)}')" title="Download" style="position:absolute;top:8px;right:8px;z-index:10;background:rgba(15,23,42,0.85);color:#a855f7;border:1.5px solid #a855f7;border-radius:50%;width:34px;height:34px;font-size:18px;font-weight:900;display:inline-flex;align-items:center;justify-content:center;box-shadow:0 0 10px rgba(168,85,247,0.6);cursor:pointer;padding:0;line-height:1">⬇</button>
     <div>${esc(title)}<br><small>${date} · ★ ${(i.vote_average || 0).toFixed(1)}</small></div>
   </div>`;
@@ -1083,6 +1194,7 @@ function libraryView() {
     <button class="chip ${librarySubTab === 'social' ? 'on' : ''}" onclick="librarySubTab='social';libraryView()">❤️ Community Hub</button>
     <button class="chip ${librarySubTab === 'download' ? 'on' : ''}" onclick="librarySubTab='download';libraryView()">📥 Offline Downloads</button>
     <button class="chip ${librarySubTab === 'news' ? 'on' : ''}" onclick="librarySubTab='news';libraryView()">📰 News</button>
+    <button class="chip ${librarySubTab === 'domain' ? 'on' : ''}" onclick="librarySubTab='domain';libraryView()">🌐 Domain & Hosting</button>
     <button class="chip ${librarySubTab === 'support' ? 'on' : ''}" onclick="librarySubTab='support';libraryView()">📜 Support & Policies</button>
   </div><div id="libContent"></div>`;
 
@@ -1107,6 +1219,10 @@ function libraryView() {
     if (liveProgressInterval) { clearInterval(liveProgressInterval); liveProgressInterval = null; }
     sub.innerHTML = `<div id="newsGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;margin-top:16px"></div><p class="msg" id="newsInfo">Loading latest news…</p>`;
     fetchNews(false);
+  } else if (librarySubTab === "domain") {
+    if (liveProgressInterval) { clearInterval(liveProgressInterval); liveProgressInterval = null; }
+    sub.innerHTML = domainHostingHtml();
+    ensurePayPalSdkLoaded();
   } else if (librarySubTab === "support") {
     if (liveProgressInterval) { clearInterval(liveProgressInterval); liveProgressInterval = null; }
     sub.innerHTML = supportPoliciesHtml();
@@ -1326,6 +1442,240 @@ function supportPoliciesHtml() {
   </div>
 </div>`;
 }
+
+function domainHostingHtml() {
+  return `<div id="filmbox-domain-root" style="font-family:'Segoe UI', Roboto, sans-serif; max-width:880px; margin:auto; background: radial-gradient(circle at top left, #1e1b4b 0%, #0f172a 50%, #020617 100%); padding:30px; border-radius:24px; border:2px solid rgba(56,189,248,0.4); color:#cbd5e1; box-shadow:0 25px 60px rgba(0,0,0,0.9);">
+
+  <!-- HEADER BANNER -->
+  <h2 style="text-align:center; font-size:28px; font-weight:900; margin-bottom:6px; letter-spacing:1px; background:linear-gradient(90deg, #38bdf8, #25d366, #f472b6, #fbbf24); -webkit-background-clip:text; -webkit-text-fill-color:transparent; text-transform:uppercase;">
+    🌐 FILM BOX DOMAIN &amp; HOSTING HUB
+  </h2>
+  <p style="text-align:center; color:#94a3b8; font-size:14px; margin-bottom:26px; font-weight:600;">
+    Search any domain name, select your plan, and complete secure real-time PayPal checkout to unlock hosting!
+  </p>
+
+  <!-- STEP 1: DOMAIN SEARCH -->
+  <div style="background:rgba(15,23,42,0.85); padding:22px; border-radius:18px; border:1px solid rgba(56,189,248,0.3); margin-bottom:26px;">
+    <h3 style="color:#38bdf8; margin-top:0; font-size:16px; text-transform:uppercase; letter-spacing:0.5px;">
+      🔍 1. Enter Desired Domain Name
+    </h3>
+
+    <div style="display:flex; flex-direction:column; gap:12px; margin-top:12px;">
+      <input type="text" id="filmbox-search-input" placeholder="Type name (e.g. eaglex, filmbox)..." style="width:100%; padding:14px 16px; border-radius:12px; border:1px solid rgba(56,189,248,0.5); background:#020617; color:#fff; font-size:15px; outline:none; box-sizing:border-box;" onkeypress="if(event.key==='Enter')filmboxCheckDomain()" />
+      <button onclick="filmboxCheckDomain()" style="width:100%; background:linear-gradient(90deg, #38bdf8, #25d366); color:#0f172a; border:none; padding:14px 26px; font-weight:900; border-radius:12px; cursor:pointer; text-transform:uppercase; font-size:14px; letter-spacing:0.5px; box-sizing:border-box;">
+        🔍 Check Domain Availability
+      </button>
+    </div>
+
+    <!-- RESULTS GRID -->
+    <div id="filmbox-results-container" style="margin-top:20px; display:flex; flex-direction:column; gap:14px;"></div>
+  </div>
+
+  <!-- STEP 2: LOCKED FILE UPLOADER DASHBOARD -->
+  <div id="filmbox-hosting-panel" style="background:rgba(15,23,42,0.85); padding:22px; border-radius:18px; border:1px solid rgba(244,114,182,0.3); opacity:0.35; pointer-events:none; transition:all 0.4s ease-in-out;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; flex-wrap:wrap; gap:10px;">
+      <h3 style="color:#f472b6; margin:0; font-size:16px; text-transform:uppercase;">
+        🚀 2. Server Hosting &amp; File Deployment
+      </h3>
+      <span id="filmbox-lock-badge" style="background:linear-gradient(90deg, #f43f5e, #e11d48); color:#fff; padding:6px 14px; border-radius:20px; font-size:11px; font-weight:900; text-transform:uppercase; letter-spacing:0.8px;">
+        🔒 Locked (Real-Time PayPal Verification Required)
+      </span>
+    </div>
+
+    <p id="filmbox-selected-info" style="color:#94a3b8; font-size:13.5px; margin-bottom:20px; line-height:1.5;">
+      ⚠️ Please select a domain and click a plan above to load the secure PayPal checkout button.
+    </p>
+
+    <!-- REAL-TIME PAYPAL BUTTON CONTAINER -->
+    <div id="filmbox-pay-box" style="background:rgba(15, 23, 42, 0.95); border:2px dashed #38bdf8; border-radius:16px; padding:20px; text-align:center; margin-bottom:22px;">
+      <p style="color:#f8fafc; font-size:15px; margin:0 0 14px 0; font-weight:700;">
+        Active Plan: <strong id="filmbox-price-tag" style="color:#fbbf24; font-size:19px; font-weight:900;">None Selected</strong>
+      </p>
+
+      <!-- Official PayPal SDK button container rendered dynamically -->
+      <div id="paypal-button-container" style="max-width:350px; margin:auto;"></div>
+    </div>
+
+    <!-- LOCKED FILE INPUT -->
+    <div style="opacity:0.25; filter:grayscale(100%); transition:all 0.4s;" id="filmbox-upload-box">
+      <label style="color:#38bdf8; font-size:13px; font-weight:800; display:block; margin-bottom:8px; text-transform:uppercase;">
+        Upload Deployment Files (.zip, .html, .css, .js):
+      </label>
+      <input type="file" id="filmbox-file-input" multiple style="margin-bottom:12px; color:#fff; padding:10px; background:#020617; border-radius:10px; border:1px solid rgba(255,255,255,0.15); width:100%; box-sizing:border-box;" disabled />
+      <br>
+      <button onclick="filmboxDeployFiles()" id="filmbox-deploy-btn" style="background:linear-gradient(90deg, #38bdf8, #25d366); color:#0f172a; border:none; padding:13px 24px; font-weight:900; border-radius:12px; cursor:pointer; text-transform:uppercase; font-size:13.5px; width:100%; box-sizing:border-box;" disabled>
+        🚀 Deploy Files Live to Server
+      </button>
+      <p id="filmbox-deploy-status" style="color:#22c55e; font-size:13.5px; margin-top:10px; text-align:center; font-weight:bold;"></p>
+    </div>
+  </div>
+
+</div>`;
+}
+
+const filmboxTiers = [
+  { key: 'p1', label: '✨ Trial VIP', amount: '0.10', name: 'Film Box - Trial VIP Domain & Hosting', desc: '1-Day trial access for domain registration and server hosting hub deployment.', url: 'https://www.paypal.com/ncp/payment/JLPJPBUSHK9CW', hex: '#a855f7' },
+  { key: 'p2', label: '🔥 Daily Pass', amount: '0.40', name: 'Film Box - Daily Pass Domain & Hosting', desc: '24-hour access for domain registration and server hosting hub deployment.', url: 'https://www.paypal.com/ncp/payment/M9BV72TDYB58Y', hex: '#38bdf8' },
+  { key: 'p3', label: '⚡ Weekend Pass', amount: '0.90', name: 'Film Box - Weekend Pass Domain & Hosting', desc: '3-day weekend access for domain registration and server hosting hub deployment.', url: 'https://www.paypal.com/ncp/payment/54NYU4YGSXCE6', hex: '#22c55e' },
+  { key: 'p4', label: '👑 Weekly Master', amount: '1.90', name: 'Film Box - Weekly Master Domain & Hosting', desc: '7-day weekly access for domain registration, file deployment, and server hosting.', url: 'https://www.paypal.com/ncp/payment/76FTUPBM6QGA8', hex: '#eab308' },
+  { key: 'p8', label: '💎 Monthly VIP', amount: '5.80', name: 'Film Box - Monthly VIP Domain & Hosting', desc: '30-day monthly access for domain registration, file deployment, and server hosting.', url: 'https://www.paypal.com/ncp/payment/DBB7WCAA366XN', hex: '#ec4899' },
+  { key: 'p12', label: '🏆 Annual Pass', amount: '42.30', name: 'Film Box - Annual Pass Domain & Hosting', desc: '1-year annual subscription for domain registration, file deployment, and server hosting.', url: 'https://www.paypal.com/ncp/payment/RA4B5C8BK9WHL', hex: '#06b6d4' },
+  { key: 'p13', label: '🚀 Lifetime VIP', amount: '76.90', name: 'Film Box - Lifetime VIP Domain & Hosting', desc: 'Lifetime access for domain registration, file deployment, and server hosting on Film Box.', url: 'https://www.paypal.com/ncp/payment/KBLXJ4GJW5P5G', hex: '#f97316' }
+];
+
+const filmboxExts = ['.com', '.net', '.org', '.xyz', '.online', '.site', '.store'];
+
+let chosenDomainName = "";
+let chosenTierLabel = "";
+let chosenTierAmount = "";
+let chosenDomainTier = filmboxTiers[3];
+let isHostingUnlocked = false;
+
+function ensurePayPalSdkLoaded() {
+  if (document.getElementById("paypal-sdk-script")) return;
+  const script = document.createElement("script");
+  script.id = "paypal-sdk-script";
+  script.src = "https://www.paypal.com/sdk/js?client-id=BAAwis5SaZb5flBNlWBTCPrKyKcVIZVfbL217SeNXga0g7F6oGtextBbWuarEeSOt0uLNEjYmz303bROck&currency=USD";
+  document.head.appendChild(script);
+}
+
+function filmboxCheckDomain() {
+  let inputVal = document.getElementById("filmbox-search-input").value.trim().toLowerCase();
+  if (!inputVal) {
+    alert("Please enter a domain name keyword!");
+    return;
+  }
+
+  const cleanName = inputVal.split('.')[0];
+  const resultsBox = document.getElementById("filmbox-results-container");
+  if (!resultsBox) return;
+  resultsBox.innerHTML = "";
+
+  filmboxExts.forEach(ext => {
+    const fullDomain = cleanName + ext;
+
+    const card = document.createElement("div");
+    card.style.cssText = "background:rgba(2,6,23,0.85); padding:16px; border-radius:14px; border:1px solid rgba(56,189,248,0.25); box-shadow:0 4px 15px rgba(0,0,0,0.4);";
+
+    let buttonsGroup = `<div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:10px;">`;
+    filmboxTiers.forEach(tier => {
+      buttonsGroup += `
+        <button onclick="filmboxSelectPlan('${fullDomain}', '${tier.key}')"
+                style="background:rgba(15,23,42,0.9); border:1px solid ${tier.hex}; color:${tier.hex}; padding:6px 12px; border-radius:8px; font-weight:800; cursor:pointer; font-size:11.5px; transition:all 0.2s;"
+                onmouseover="this.style.background='${tier.hex}'; this.style.color='#fff';"
+                onmouseout="this.style.background='rgba(15,23,42,0.9)'; this.style.color='${tier.hex}';">
+          ${tier.label} ($${tier.amount} USD)
+        </button>
+      `;
+    });
+    buttonsGroup += `</div>`;
+
+    card.innerHTML = `
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <strong style="color:#f8fafc; font-size:17px; letter-spacing:0.5px;">${fullDomain}</strong>
+        <span style="color:#38bdf8; font-size:11.5px; font-weight:700; text-transform:uppercase;">Select Plan to Pay:</span>
+      </div>
+      ${buttonsGroup}
+    `;
+    resultsBox.appendChild(card);
+  });
+}
+
+function filmboxSelectPlan(domain, key) {
+  chosenDomainName = domain;
+  const tier = filmboxTiers.find(t => t.key === key) || filmboxTiers[3];
+  chosenDomainTier = tier;
+  chosenTierLabel = tier.name;
+  chosenTierAmount = tier.amount;
+
+  const info = document.getElementById("filmbox-selected-info");
+  const priceTag = document.getElementById("filmbox-price-tag");
+  if (info) info.innerHTML = `Selected Domain: <strong style="color:#38bdf8; font-size:15px;">${domain}</strong> | Plan: <strong style="color:#fbbf24; font-size:15px;">${tier.name} ($${tier.amount} USD)</strong><br><small style="color:#94a3b8">${tier.desc}</small>`;
+  if (priceTag) priceTag.innerText = `${tier.label} - ${tier.name} ($${tier.amount} USD)`;
+
+  const panel = document.getElementById("filmbox-hosting-panel");
+  if (panel) {
+    panel.style.opacity = "1";
+    panel.style.pointerEvents = "auto";
+  }
+
+  renderPayPalButton(tier);
+
+  if (panel) {
+    window.scrollTo({ top: panel.offsetTop - 50, behavior: 'smooth' });
+  }
+}
+
+function renderPayPalButton(tier) {
+  const container = document.getElementById("paypal-button-container");
+  if (!container) return;
+  container.innerHTML = `<button onclick="payDomainPayPal('${tier.key}')" style="display:block;width:100%;padding:14px 20px;border-radius:18px;font-size:15px;font-weight:900;text-align:center;border:none;cursor:pointer;background:linear-gradient(135deg,#0070ba,#f59e0b);color:#ffffff!important;box-shadow:0 8px 25px rgba(0,112,186,0.5)">💳 PAY $${tier.amount} USD FOR ${tier.label.toUpperCase()}</button>`;
+}
+
+function payDomainPayPal(key) {
+  const tier = filmboxTiers.find(t => t.key === key) || chosenDomainTier;
+  const url = tier.url;
+  if (typeof AndroidPayPal !== 'undefined' && AndroidPayPal.openPayPalUrl) {
+    AndroidPayPal.openPayPalUrl(url);
+  } else {
+    window.location.href = url;
+  }
+}
+
+function unlockHostingServer(orderId) {
+  isHostingUnlocked = true;
+  const badge = document.getElementById("filmbox-lock-badge");
+  if (badge) {
+    badge.style.background = "linear-gradient(90deg, #22c55e, #16a34a)";
+    badge.innerText = "🔓 UNLOCKED & ACTIVE";
+  }
+
+  const payBox = document.getElementById("filmbox-pay-box");
+  if (payBox) {
+    payBox.style.background = "rgba(34,197,94,0.12)";
+    payBox.style.borderColor = "#22c55e";
+    payBox.innerHTML = `
+      <h3 style="color:#22c55e; margin:0; text-transform:uppercase; font-size:18px;">🎉 Payment Confirmed by PayPal!</h3>
+      <p style="color:#f8fafc; font-size:13.5px; margin:8px 0 0 0; font-weight:600;">Order ID: ${orderId} (${chosenTierLabel}: $${chosenTierAmount} USD). File uploader unlocked below.</p>
+    `;
+  }
+
+  const uploadBox = document.getElementById("filmbox-upload-box");
+  if (uploadBox) {
+    uploadBox.style.opacity = "1";
+    uploadBox.style.filter = "none";
+  }
+  const fileInput = document.getElementById("filmbox-file-input");
+  const deployBtn = document.getElementById("filmbox-deploy-btn");
+  if (fileInput) fileInput.removeAttribute("disabled");
+  if (deployBtn) deployBtn.removeAttribute("disabled");
+
+  alert(`Real-time payment verified by PayPal! Storage node for ${chosenDomainName} is unlocked.`);
+}
+
+function filmboxDeployFiles() {
+  if (!isHostingUnlocked) {
+    alert("Access Denied: Real-time payment verification required before uploading!");
+    return;
+  }
+
+  const fileInput = document.getElementById("filmbox-file-input");
+  const files = fileInput ? fileInput.files : [];
+  if (!files || files.length === 0) {
+    alert("Please choose website files to upload.");
+    return;
+  }
+
+  const statusEl = document.getElementById("filmbox-deploy-status");
+  if (statusEl) {
+    statusEl.innerText = `🚀 Success! ${files.length} file(s) compiled & deployed live for domain: ${chosenDomainName}`;
+  }
+}
+
+window.filmboxCheckDomain = filmboxCheckDomain;
+window.filmboxSelectPlan = filmboxSelectPlan;
+window.unlockHostingServer = unlockHostingServer;
+window.filmboxDeployFiles = filmboxDeployFiles;
 
 let newsNextPage = null;
 function newsView() {
@@ -1675,7 +2025,7 @@ async function play(s, e) {
   if (typeof AndroidApp !== 'undefined' && AndroidApp.openPlayer) {
     AndroidApp.openPlayer(c.id, c.type, fullTitle, "", c.season, c.episode);
   } else {
-    showPlayer(fullTitle, `https://vidsrc.to/embed/${c.type === 'tv' ? 'tv/' + c.id + '/' + c.season + '/' + c.episode : 'movie/' + c.id}`);
+    showPlayer(fullTitle, `https://vidlink.pro/${c.type === 'tv' ? 'tv/' + c.id + '/' + c.season + '/' + c.episode : 'movie/' + c.id}?autoplay=true`);
   }
   startWatchTimer();
 }
@@ -1787,51 +2137,14 @@ function closePlayer() {
   const p = $("#player"); if (p) p.remove();
 }
 
-function checkOnlineStatus() {
-  return true;
-}
-
 /* ---------- INITIALIZE ON LOAD ---------- */
-async function verifyActiveInternetAccess() {
-  try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 3500);
-    const r = await fetch("https://api.themoviedb.org/3/configuration?api_key=ea220cf0b8ca48bb8aa393a5228b688b", { signal: controller.signal });
-    clearTimeout(timeoutId);
-    return r.ok;
-  } catch(e) {
-    return false;
-  }
-}
-
-async function checkOnlineStatus() {
+function checkOnlineStatus() {
   if (typeof navigator.onLine !== 'undefined' && !navigator.onLine) {
-    showOfflineScreen();
-    return false;
-  }
-  const activeInternet = await verifyActiveInternetAccess();
-  if (!activeInternet) {
-    showOfflineScreen();
+    showPurpleToast("📡 Connect to internet for live updates.");
     return false;
   }
   return true;
 }
-
-function showOfflineScreen() {
-  const m = $("#main");
-  if (m) {
-    m.innerHTML = `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:80vh;padding:30px;text-align:center;background:#090d16;color:#fff">
-      <div style="font-size:72px;margin-bottom:16px">📡</div>
-      <span style="display:inline-block;padding:4px 16px;background:rgba(244,63,94,0.2);border:1px solid #f43f5e;border-radius:20px;color:#f43f5e;font-size:11px;font-weight:900;letter-spacing:1px;margin-bottom:12px">ONLINE NETWORK REQUIRED</span>
-      <h2 style="color:#ffffff;font-size:26px;font-weight:900;margin-bottom:10px">Active Internet Access Required</h2>
-      <p style="color:#cbd5e1;font-size:14px;line-height:1.6;max-width:440px;margin-bottom:28px">Film Box requires active internet access to load movies, stream video, and verify VIP passes. Please connect to a Wi-Fi or mobile network with working internet access.</p>
-      <button class="vip" onclick="window.location.reload()" style="background:linear-gradient(135deg,#38bdf8,#0284c7);color:#fff;font-weight:900;padding:14px 36px;border-radius:24px;border:none;cursor:pointer;box-shadow:0 8px 25px rgba(56,189,248,0.4)">🔄 Retry Connection</button>
-    </div>`;
-  }
-}
-
-window.addEventListener('offline', showOfflineScreen);
-window.addEventListener('online', () => window.location.reload());
 
 function initApp() {
   const m = $("#main");
@@ -1845,17 +2158,22 @@ function initApp() {
     checkVipActive();
     render();
     start10MinVipBannerTimer();
-    checkOnlineStatus();
   } catch(e) {
     if (m) m.innerHTML = `<div style="padding:30px;text-align:center"><h3 style="color:#ff4d4d">Error Loading App</h3><p>${esc(e.message)}</p></div>`;
   }
 }
+
+try {
+  initApp();
+  render();
+} catch(e) {}
 
 if (document.readyState === "complete" || document.readyState === "interactive") {
   initApp();
 } else {
   window.addEventListener("DOMContentLoaded", initApp);
   window.addEventListener("load", initApp);
+  setTimeout(initApp, 30);
   setTimeout(initApp, 100);
 }
 

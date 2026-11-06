@@ -14,7 +14,6 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,26 +36,67 @@ public class PlayerActivity extends AppCompatActivity {
     private String movieTitle = "Movie";
 
     private static final Set<String> ALLOWED_HOSTS = new HashSet<>(Arrays.asList(
-            "vidsrc.to", "vidsrc.net", "vidsrc.pro", "vidsrc.cc", "vidsrc.me", "vidsrc.stream", "vidsrc.in", "vidsrc.pm",
-            "vidlink.pro", "embed.su", "autoembed.cc", "2embed.cc", "smashystream.xyz", "multiembed.mov",
-            "bunnycdn.com", "cloudflare.com", "googlevideo.com", "akamaized.net", "jsdelivr.net", "googleapis.com"
+            "filmbox.ke",
+            "blogspot.com",
+            "themoviedb.org",
+            "tmdb.org",
+            "vidsrc.cc",
+            "vidsrc.to",
+            "vidsrc.net",
+            "vidsrc.stream",
+            "vidsrc.me",
+            "vidsrc.pro",
+            "vidsrc.in",
+            "vidsrc.pm",
+            "vidsrc.xyz",
+            "vidsrc.vip",
+            "vidlink.pro",
+            "embed.su",
+            "autoembed.cc",
+            "smashystream.xyz",
+            "2embed.cc",
+            "multiembed.mov",
+            "bunnycdn.com",
+            "cloudflare.com",
+            "cloudflare-ipfs.com",
+            "jsdelivr.net",
+            "googlevideo.com",
+            "akamaized.net",
+            "api.football-data.org",
+            "api.sportsrc.org",
+            "v2.sportsrc.com",
+            "newsdata.io",
+            "youtube.com",
+            "youtu.be",
+            "instagram.com",
+            "facebook.com",
+            "fb.me",
+            "paypal.com",
+            "paypalobjects.com",
+            "safaricom.co.ke",
+            "googleapis.com",
+            "google.com",
+            "gstatic.com",
+            "unpkg.com",
+            "cdnjs.com"
     ));
 
     private static final String[] AD_KEYWORDS = {
             "doubleclick", "googlesyndication", "adservice", "popads", "propellerads",
             "adsterra", "exoclick", "onclickads", "taboola", "outbrain", "adserver",
-            "banner", "popunder", "tracker", "click", "redirect"
+            "banner", "popunder", "monetag", "clickadu", "tsyndicate", "adtelligent",
+            "pubmatic", "rubiconproject", "openx", "amazon-adsystem", "popcash",
+            "hilltopads", "clickaine", "adcash", "yandex.rtb", "exdynsrv", "bet365",
+            "1xbet", "mostbet", "parimatch", "/popads/", "/adsterra/", "/exoclick/",
+            "/propeller/", "/popunder/", "/adserver/"
     };
 
     private boolean isHostAllowed(String host) {
         if (host == null || host.isEmpty()) return true;
         if (host.equalsIgnoreCase("android_asset") || host.equalsIgnoreCase("localhost")) return true;
         String hostLower = host.toLowerCase();
-        if (hostLower.contains("vidsrc") || hostLower.contains("vidlink") || hostLower.contains("embed") || hostLower.contains("autoembed") || hostLower.contains("bunnycdn") || hostLower.contains("cloudflare") || hostLower.contains("googlevideo") || hostLower.contains("akamaized") || hostLower.contains("jsdelivr") || hostLower.contains("2embed") || hostLower.contains("stream") || hostLower.contains("player") || hostLower.contains("rcp") || hostLower.contains("cloud") || hostLower.contains("m3u8") || hostLower.contains("ts") || hostLower.contains("mp4") || hostLower.contains("hls")) {
-            return true;
-        }
         for (String allowed : ALLOWED_HOSTS) {
-            if (host.equalsIgnoreCase(allowed) || hostLower.endsWith("." + allowed.toLowerCase())) {
+            if (hostLower.equals(allowed) || hostLower.endsWith("." + allowed)) {
                 return true;
             }
         }
@@ -64,7 +104,7 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     private boolean isAdUrl(String urlLower) {
-        if (urlLower.contains("vidsrc") || urlLower.contains("vidlink") || urlLower.contains("embed") || urlLower.contains("autoembed") || urlLower.contains("bunnycdn") || urlLower.contains("cloudflare") || urlLower.contains("googlevideo") || urlLower.contains("akamaized") || urlLower.contains("jsdelivr") || urlLower.contains("2embed") || urlLower.contains("stream") || urlLower.contains("player") || urlLower.contains("rcp") || urlLower.contains("cloud") || urlLower.contains("m3u8") || urlLower.contains("ts") || urlLower.contains("mp4") || urlLower.contains("hls")) {
+        if (urlLower.contains("m3u8") || urlLower.contains(".ts") || urlLower.contains(".mp4") || urlLower.contains("hls") || urlLower.contains("googlevideo") || urlLower.contains("akamaized") || urlLower.contains("vidlink.pro") || urlLower.contains("vidsrc.to") || urlLower.contains("vidsrc.cc") || urlLower.contains("embed.su") || urlLower.contains("tmdb.org") || urlLower.contains("cloudflare.com")) {
             return false;
         }
         for (String keyword : AD_KEYWORDS) {
@@ -85,7 +125,10 @@ public class PlayerActivity extends AppCompatActivity {
             hideSystemUI();
 
             webViewPlayer = findViewById(R.id.webViewPlayer);
+            View playerView = findViewById(R.id.playerView);
+            if (playerView != null) playerView.setVisibility(View.GONE);
             if (webViewPlayer != null) {
+                webViewPlayer.setVisibility(View.VISIBLE);
                 setupWebView();
             }
 
@@ -102,7 +145,7 @@ public class PlayerActivity extends AppCompatActivity {
                 episodeNumber = getIntent().getIntExtra("episode_number", 1);
 
                 movieTitle = getIntent().getStringExtra("title");
-                if (movieTitle == null) movieTitle = "Kenya Movie Box Cinema";
+                if (movieTitle == null) movieTitle = "Film Box Cinema";
             }
 
             if (tvPlayerTitle != null) {
@@ -111,11 +154,6 @@ public class PlayerActivity extends AppCompatActivity {
 
             if (btnBack != null) {
                 btnBack.setOnClickListener(v -> finish());
-            }
-
-            Button btnServer = findViewById(R.id.btnServer);
-            if (btnServer != null) {
-                btnServer.setVisibility(View.GONE);
             }
 
             if (btnRotateScreen != null) {
@@ -130,7 +168,7 @@ public class PlayerActivity extends AppCompatActivity {
                 });
             }
 
-            loadVidsrcMasterServer();
+            loadMasterServer();
         } catch (Exception e) {
             Toast.makeText(this, "Error starting player: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             finish();
@@ -165,25 +203,29 @@ public class PlayerActivity extends AppCompatActivity {
             webSettings.setDatabaseEnabled(true);
             webSettings.setLoadsImagesAutomatically(true);
             webSettings.setMediaPlaybackRequiresUserGesture(false);
-            webSettings.setAllowFileAccess(false);
-            webSettings.setAllowContentAccess(false);
-            webSettings.setJavaScriptCanOpenWindowsAutomatically(false);
+            webSettings.setAllowFileAccess(true);
+            webSettings.setAllowContentAccess(true);
+            webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
             webSettings.setSupportMultipleWindows(false);
-            webSettings.setRenderPriority(WebSettings.RenderPriority.HIGH);
             webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
             webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
-            webSettings.setUserAgentString("Mozilla/5.0 (Linux; Android 13; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36");
+            webSettings.setUserAgentString("Mozilla/5.0 (Linux; Android 13; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Mobile Safari/537.36");
 
             android.webkit.CookieManager.getInstance().setAcceptCookie(true);
             android.webkit.CookieManager.getInstance().setAcceptThirdPartyCookies(webViewPlayer, true);
 
-            webViewPlayer.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+            webViewPlayer.setLayerType(View.LAYER_TYPE_NONE, null);
             webViewPlayer.setDownloadListener(null);
 
             webViewPlayer.setWebChromeClient(new WebChromeClient() {
                 @Override
                 public boolean onCreateWindow(WebView view, boolean isDialog, boolean isUserGesture, android.os.Message resultMsg) {
                     return false;
+                }
+
+                @Override
+                public void onPermissionRequest(android.webkit.PermissionRequest request) {
+                    request.grant(request.getResources());
                 }
             });
 
@@ -195,25 +237,30 @@ public class PlayerActivity extends AppCompatActivity {
                         String urlLower = url.toLowerCase();
 
                         if (urlLower.startsWith("https://embed/") || urlLower.startsWith("http://embed/")) {
-                            String fixedUrl = url.replace("https://embed/", "https://vidsrc.to/embed/").replace("http://embed/", "https://vidsrc.to/embed/");
+                            String fixedUrl = url.replace("https://embed/", "https://vidlink.pro/embed/").replace("http://embed/", "https://vidlink.pro/embed/");
                             view.loadUrl(fixedUrl);
                             return true;
                         }
 
                         android.net.Uri uri = request.getUrl();
                         String host = uri.getHost();
+                        String scheme = uri.getScheme();
+
+                        if (scheme != null && !scheme.equalsIgnoreCase("http") && !scheme.equalsIgnoreCase("https")) {
+                            return true;
+                        }
 
                         if (isAdUrl(urlLower)) {
-                            Log.d("ADBLOCK", "Blocked popup/ad navigation: " + url);
+                            Log.d("PLAYER_ADBLOCK", "Blocked player navigation (Ad Keyword): " + url);
                             return true;
                         }
 
-                        if (host != null && !isHostAllowed(host)) {
-                            Log.d("ADBLOCK", "Blocked navigation: " + host);
-                            return true;
+                        if (host != null && isHostAllowed(host)) {
+                            return false;
                         }
 
-                        return false;
+                        Log.d("PLAYER_ADBLOCK", "Blocked external player ad redirect (Unallowed Host): " + host);
+                        return true;
                     }
                     return false;
                 }
@@ -224,17 +271,8 @@ public class PlayerActivity extends AppCompatActivity {
                         String url = request.getUrl().toString();
                         String urlLower = url.toLowerCase();
 
-                        if (urlLower.startsWith("file://") || urlLower.startsWith("data:") || urlLower.startsWith("blob:") || urlLower.startsWith("https://embed/") || urlLower.startsWith("http://embed/") || urlLower.contains("vidsrc") || urlLower.contains("vidlink") || urlLower.contains("embed") || urlLower.contains("autoembed") || urlLower.contains("2embed") || urlLower.contains("smashy") || urlLower.contains("multiembed") || urlLower.contains("m3u8") || urlLower.contains("ts") || urlLower.contains("mp4") || urlLower.contains("hls")) {
-                            return super.shouldInterceptRequest(view, request);
-                        }
-
                         if (isAdUrl(urlLower)) {
-                            return new WebResourceResponse("text/plain", "utf-8", new ByteArrayInputStream(new byte[0]));
-                        }
-
-                        android.net.Uri uri = request.getUrl();
-                        String host = uri.getHost();
-                        if (host != null && !isHostAllowed(host)) {
+                            Log.d("PLAYER_ADBLOCK", "Intercepted & Blocked Sub-resource (Ad Keyword): " + url);
                             return new WebResourceResponse("text/plain", "utf-8", new ByteArrayInputStream(new byte[0]));
                         }
                     }
@@ -245,16 +283,17 @@ public class PlayerActivity extends AppCompatActivity {
                 public void onPageFinished(WebView view, String url) {
                     super.onPageFinished(view, url);
                     try {
-                        String unblockScript = "(function() { " +
-                                "try { " +
-                                "  if (window.top !== window.self) { " +
-                                "    Object.defineProperty(window, 'top', { get: () => window.self, configurable: true }); " +
-                                "    Object.defineProperty(window, 'parent', { get: () => window.self, configurable: true }); " +
-                                "  } " +
-                                "} catch(e) {} " +
-                                "var css = '[id*=\"ad-\"],[class*=\"ad-\"],[class*=\"ads\"],[id*=\"ads\"],iframe[src*=\"ads\"],iframe[src*=\"doubleclick\"],ins.adsbygoogle,[class*=\"banner\"],[id*=\"banner\"],[class*=\"popup\"],[id*=\"popup\"],[class*=\"sponsor\"],[id*=\"sponsor\"],[class*=\"overlay\"]{display:none!important};';" +
-                                "var s = document.createElement(\"style\"); s.innerHTML = css; document.head.appendChild(s);" +
-                                "window.open = function() { return null; };" +
+                        String unblockScript = "(function() {" +
+                                "  var css = '[id*=\"ad-\"],[class*=\"ad-\"],[class*=\"ads\"],[id*=\"ads\"],iframe[src*=\"ads\"],iframe[src*=\"doubleclick\"],ins.adsbygoogle,[class*=\"banner\"],[id*=\"banner\"],[class*=\"popup\"],[id*=\"popup\"],[class*=\"sponsor\"],[id*=\"sponsor\"],[class*=\"overlay\"],div[style*=\"position: fixed\"][style*=\"z-index\"] { display:none!important; pointer-events:none!important; };';" +
+                                "  var s = document.createElement(\"style\"); s.innerHTML = css; document.head.appendChild(s);" +
+                                "  var observer = new MutationObserver(function(mutations) {" +
+                                "    var ads = document.querySelectorAll('iframe[src*=\"ads\"], iframe[src*=\"pop\"], iframe[src*=\"track\"], ins.adsbygoogle');" +
+                                "    for (var i = 0; i < ads.length; i++) {" +
+                                "      if (ads[i].id !== \"player\" && !ads[i].closest(\"#player\")) { ads[i].remove(); }" +
+                                "    }" +
+                                "  });" +
+                                "  observer.observe(document.documentElement, { childList: true, subtree: true });" +
+                                "  window.open = function() { return null; };" +
                                 "})();";
                         view.evaluateJavascript(unblockScript, null);
                     } catch (Exception ignored) {}
@@ -263,18 +302,13 @@ public class PlayerActivity extends AppCompatActivity {
         } catch (Exception ignored) {}
     }
 
-    private void loadVidsrcMasterServer() {
+    private void loadMasterServer() {
         try {
-            String embedUrl;
-            if ("tv".equalsIgnoreCase(mediaType)) {
-                embedUrl = "https://vidsrc.to/embed/tv/" + tmdbId + "/" + seasonNumber + "/" + episodeNumber;
-            } else {
-                embedUrl = "https://vidsrc.to/embed/movie/" + tmdbId;
-            }
+            String playerUrl = "file:///android_asset/player.html?id=" + tmdbId + "&type=" + mediaType + "&s=" + seasonNumber + "&e=" + episodeNumber;
 
             if (webViewPlayer != null) {
                 webViewPlayer.setBackgroundColor(0xFF000000);
-                webViewPlayer.loadUrl(embedUrl);
+                webViewPlayer.loadUrl(playerUrl);
             }
         } catch (Exception e) {
             Toast.makeText(this, "Stream error: " + e.getMessage(), Toast.LENGTH_SHORT).show();

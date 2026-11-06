@@ -1,27 +1,27 @@
-# Implementation Plan - Instant 0ms Home Load, Single Direct `vidsrc.to` Server & Ultra-Fast Touch Responsiveness
+# Implementation Plan - Fix JS ReferenceError, Mobile Domain Layout & PayPal Button Integration
 
-This plan fixes the initial home page loading delay, eliminates the video server jumping loop, and optimizes the app for 0ms touch responsiveness:
+This plan resolves the startup JavaScript error, fixes mobile layout clipping in the Domain & Hosting Hub, and connects PayPal checkout:
 
-1. **Instant 0ms Home Page Movie Rendering (`index.html`)**:
-   - **Root Cause Identified**: `initApp()` was previously awaiting an asynchronous network ping (`await verifyActiveInternetAccess()`) *before* calling `render()`. This caused `#main` to sit empty on startup until network response finished or another tab was tapped.
-   - **Fix Applied**: Call `render()` synchronously *first* in `initApp()`, displaying all home hero movies, trending movies, and TV shows in **0 milliseconds**. Run network checks asynchronously in the background.
+1. **Fix Startup JS ReferenceError (`app/src/main/assets/index.html`)**:
+   - **Root Cause Identified**: `if (appInitialized) return;` in `initApp()` threw `Uncaught ReferenceError: appInitialized is not defined` on initial load because `appInitialized` was missing global scope declaration.
+   - **Fix Applied**: Declare `var appInitialized = false;` in global script scope. Home page movies will now render instantly on app startup without requiring tab switching.
 
-2. **Single Direct `vidsrc.to` Video Engine (No Looping) (`PlayerActivity.java`)**:
-   - Remove all iframe wrapping scripts and server-jumping logic in `PlayerActivity.java`.
-   - Load `https://vidsrc.to/embed/movie/${tmdbId}` (and `tv/${tmdbId}/${season}/${episode}`) directly via `webViewPlayer.loadUrl(...)` as a single permanent server url.
+2. **Fix Mobile Domain & Hosting Hub Layout (`app/src/main/assets/index.html`)**:
+   - **Mobile Layout Responsive Fix**: Stack the domain input field and search button vertically (`flex-direction: column; width: 100%`) so the "Check Domain" button is 100% visible, centered, and perfectly formatted on all phone screens.
+   - **PayPal Button Checkout**: Update `renderPayPalButton(amount)` to render a native PayPal checkout button calling `payWithPayPal()`, opening PayPal's secure checkout URL directly via `AndroidPayPal.openPayPalUrl(...)`.
 
-3. **Ultra-Fast 0ms Touch Responsiveness (`index.html` & CSS)**:
-   - Add `touch-action: manipulation;` and GPU hardware compositing (`transform: translateZ(0)`) across all movie cards, buttons, and navigation tabs to eliminate tap delays and ensure instant 0ms touch feedback.
+3. **Background Ad-Blocking (`PlayerActivity.java` & `MainActivity.java`)**:
+   - Intercept and block known popunder ad networks (`popads`, `adsterra`, `exoclick`, `propellerads`, `doubleclick`) while allowing video player sub-resources (`vidsrc`, `vidlink`, `embed`, `m3u8`, `ts`, `mp4`, `hls`).
 
-4. **M-Pesa 100% Untouched**:
-   - M-Pesa payment code in `MainActivity.java` remains strictly locked and untouched.
+4. **M-Pesa 100% Untouched (STRICT CONSTRAINT)**:
+   - M-Pesa payment code in `MainActivity.java` (`MpesaBridge`) and `index.html` remains strictly locked and 100% untouched.
 
 ## User Review Required
 
 > [!IMPORTANT]
-> - **Instant 0ms Home Page**: Home page movies render instantly on app launch without needing to tap other tabs.
-> - **Single Direct `vidsrc.to`**: Eliminates video jumping loops by loading `vidsrc.to` directly.
-> - **Ultra-Fast Touch**: 0ms tap responsiveness across all cards and buttons.
+> - **JS Error Fixed**: Defines `var appInitialized = false;`, eliminating the startup ReferenceError so movies load on initial app launch.
+> - **Mobile Domain Layout Fixed**: Stacks input and button vertically so "Check Domain" is 100% visible and formatted on all phone screens.
+> - **PayPal Checkout Connected**: Domain Hub PayPal button directly invokes native PayPal checkout.
 > - **M-Pesa Locked**: M-Pesa payment code remains 100% untouched.
 
 ## Proposed Changes
@@ -29,12 +29,14 @@ This plan fixes the initial home page loading delay, eliminates the video server
 ### Assets & Frontend (`app/src/main/assets/`)
 
 #### [MODIFY] [index.html](file:///C:/Users/EAGLE/AndroidStudioProjects/FilmBox/app/src/main/assets/index.html)
-- Call `render()` synchronously first in `initApp()` for instant 0ms home movie rendering.
+- Define `var appInitialized = false;` in global scope.
+- Update `domainHostingHtml()` layout for mobile screens (`flex-direction: column`).
+- Update `renderPayPalButton(amount)` to invoke `payWithPayPal()`.
 
 ### Java Source Code (`app/src/main/java/com/filmbox/`)
 
 #### [MODIFY] [PlayerActivity.java](file:///C:/Users/EAGLE/AndroidStudioProjects/FilmBox/app/src/main/java/com/filmbox/PlayerActivity.java)
-- Load `vidsrc.to` directly in `webViewPlayer.loadUrl(...)` without iframe wrapping or loop triggers.
+- Block popunder ad networks while passing through streaming sub-resources.
 
 ---
 
@@ -47,4 +49,4 @@ This plan fixes the initial home page loading delay, eliminates the video server
   ```
 
 ### Manual Verification
-- Open the app, verify home page movies display instantly in 0ms on startup. Tap play on any movie, verify `vidsrc.to` loads directly without looping.
+- Open app, verify home page movies render immediately without ReferenceError. Open Domain & Hosting Hub, verify "Check Domain" button is 100% visible and formatted, and test PayPal checkout button.

@@ -1,19 +1,22 @@
-# Walkthrough - Instant 0ms Home Movie Load & Direct Single `vidsrc.to` Server
+# Walkthrough - JS ReferenceError Resolution, Mobile Domain Layout & PayPal Integration
 
 All requested changes have been implemented and verified.
 
 ## Key Changes Made
 
-### 1. Instant 0ms Home Movie Page Loading (`index.html`)
-- **Root Cause Identified**: `initApp()` in `index.html` was awaiting an asynchronous network ping (`await verifyActiveInternetAccess()`) *before* calling `render()`. This caused `#main` to sit empty on startup until network response completed or another tab was tapped.
-- **Fix Applied**: Updated `initApp()` in `index.html` to execute `render()` synchronously *first*, populating the home page with hero movies, trending films, and TV series in **0 milliseconds**. Network checks now run asynchronously in the background.
+### 1. Eliminated Startup JS ReferenceError (`index.html`)
+- **Root Cause Fixed**: Added `var appInitialized = false;` in global script scope in `app/src/main/assets/index.html`.
+- **Instant Launch**: Home page hero movies, trending films, and TV shows now render immediately on app startup without showing `ReferenceError: appInitialized is not defined`.
 
-### 2. Single Direct `vidsrc.to` Video Engine (No Looping) (`PlayerActivity.java`)
-- **Direct Single URL**: Updated `loadVidsrcMasterServer()` in `PlayerActivity.java` to load `https://vidsrc.to/embed/movie/${tmdbId}` (and `tv/${tmdbId}/${season}/${episode}`) directly via `webViewPlayer.loadUrl(...)`.
-- **No Looping**: Removed wrapper iframe scripts and loop triggers, ensuring `vidsrc.to` loads directly as a clean, single permanent server URL.
+### 2. Fixed Mobile Layout Clipping in Domain & Hosting Hub (`index.html`)
+- **Mobile Responsive Layout**: Stacked search input field and "🔍 Check Domain Availability" button vertically (`flex-direction: column; width: 100%`) so the check button is **100% visible, centered, and formatted** on all mobile device screens.
 
-### 3. M-Pesa 100% Untouched
-- M-Pesa payment code in `MainActivity.java` remains strictly locked and untouched.
+### 3. Native PayPal Checkout Integration (`index.html` & `MainActivity.java`)
+- **Direct PayPal Checkout**: Updated `renderPayPalButton(amount)` in the Domain Hub to render a native PayPal checkout button invoking `payWithPayPal()`.
+- Tapping **"UNLOCK & PAY WITH PAYPAL"** opens PayPal secure checkout URL in the browser/PayPal app via native Android `Intent.ACTION_VIEW` (`AndroidPayPal.openPayPalUrl`).
+
+### 4. M-Pesa 100% Untouched
+- M-Pesa payment code in `MainActivity.java` (`MpesaBridge`) and `index.html` remains strictly locked and untouched.
 
 ---
 

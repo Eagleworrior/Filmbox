@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Film Box Player</title>
+<style>
+  html, body { margin:0; padding:0; width:100%; height:100%; background:#000; overflow:hidden; }
+  iframe { width:100%; height:100%; border:0; background:#000; }
+</style>
+</head>
+<body>
+<div id="player-container" style="width:100%; height:100%;"></div>
+<script>
+  function getParam(name) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(name);
+  }
+  const id = getParam("id") || "27205";
+  const type = getParam("type") || "movie";
+  const s = getParam("s") || "1";
+  const e = getParam("e") || "1";
+
+  let embedUrl = "";
+  if (type === "tv") {
+    embedUrl = `https://vidlink.pro/tv/${id}/${s}/${e}?autoplay=true`;
+  } else {
+    embedUrl = `https://vidlink.pro/movie/${id}?autoplay=true`;
+  }
+
+  const container = document.getElementById("player-container");
+  container.innerHTML = `<iframe src="${embedUrl}" allow="autoplay; encrypted-media; fullscreen; picture-in-picture; web-share" allowfullscreen></iframe>`;
+</script>
+</body>
+</html>
