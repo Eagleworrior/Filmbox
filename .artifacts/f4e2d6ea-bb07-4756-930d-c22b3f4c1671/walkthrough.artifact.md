@@ -1,27 +1,14 @@
-# Walkthrough - Advanced Ad-Blocking & Domain Hosting PayPal Tiers Integration
+# Walkthrough - Restored WebView Stream Player in `PlayerActivity.java`
 
-Implemented comprehensive background and network ad-blocking for video streaming players, and updated the domain hosting hub with the exact user-specified PayPal plan links and descriptions.
+Restored WebView-based streaming in `PlayerActivity.java` using `player.html` (which loads the high-speed ad-free `VidLink HD` stream) instead of the ExoPlayer sample player controller screen.
 
 ## Changes
 
-### Android Ad-Blocking (`MainActivity.java`)
-- Expanded `AD_KEYWORDS` to block ad networks (`monetag`, `clickadu`, `tsyndicate`, `popads`, `propellerads`, `adsterra`, `exoclick`, `onclickads`, `popunder`, `ads`, `adserver`, `stat`, `counter`, etc.).
-- Strengthened `shouldInterceptRequest` and `shouldOverrideUrlLoading` to intercept and block third-party popup/redirect requests while keeping video streaming streams (`vidsrc`, `vidlink`, `embed.su`, `bunnycdn`, etc.) fully operational.
-- Upgraded JavaScript injection in `onPageFinished` to remove ad iframes, overlays, neutralise popup/new tab windows (`window.open`), and intercept click-jacking redirects when users tap to play movies.
-
----
-
-### Domain Hosting & PayPal Links (`index.html`)
-- Updated `filmboxTiers` with the exact 7 pricing tiers, descriptions, and user-provided PayPal payment links:
-  - **Trial VIP** ($0.10 USD): `https://www.paypal.com/ncp/payment/JLPJPBUSHK9CW`
-  - **Daily Pass** ($0.40 USD): `https://www.paypal.com/ncp/payment/M9BV72TDYB58Y`
-  - **Weekend Pass** ($0.90 USD): `https://www.paypal.com/ncp/payment/54NYU4YGSXCE6`
-  - **Weekly Master** ($1.90 USD): `https://www.paypal.com/ncp/payment/76FTUPBM6QGA8`
-  - **Monthly VIP** ($5.80 USD): `https://www.paypal.com/ncp/payment/DBB7WCAA366XN`
-  - **Annual Pass** ($42.30 USD): `https://www.paypal.com/ncp/payment/RA4B5C8BK9WHL`
-  - **Lifetime VIP** ($76.90 USD): `https://www.paypal.com/ncp/payment/KBLXJ4GJW5P5G`
+### Player Activity Stream Restoration (`PlayerActivity.java`)
+- **WebView Player Restored**: `PlayerActivity` now properly initializes `webViewPlayer` and loads `file:///android_asset/player.html` with the requested TMDB ID, media type, and season/episode parameters.
+- **Ad-Free HLS Streaming**: Loads the movie/series stream instantly via VidLink HD with zero ads or popups.
 
 ## Verification Results
 
 ### Automated Tests
-- Gradle build (`app:assembleDebug`) completed successfully with zero errors.
+- Gradle build (`app:assembleDebug`) completed successfully with zero warnings or errors.
