@@ -140,7 +140,8 @@ public class MainActivity extends AppCompatActivity {
                 });
             } else {
                 loadRewardedAdDownload();
-                evaluateJavaScriptOnWebView(callbackJsName + "('SUCCESS');");
+                Toast.makeText(MainActivity.this, "⏳ Ad is loading. Please try again in a moment or select Go VIP.", Toast.LENGTH_LONG).show();
+                evaluateJavaScriptOnWebView(callbackJsName + "('NOT_READY');");
             }
         });
     }

@@ -1,52 +1,38 @@
-# Implementation Plan - Google AdMob & Download Choice Dialog Integration
+# Implementation Plan - AdMob Rewarded Ad Display Fix & App Icon Update to `111.jfif`
 
-Integrate Google Mobile Ads (AdMob) SDK into Film Box with all user-specified ad unit IDs, and implement a VIP-styled Download Choice Dialog when users click any movie download button.
+Fix the AdMob Rewarded Ad flow in `MainActivity.java` so actual video ads load and display to completion instead of auto-bypassing, and update the app launcher icon to `C:\Users\EAGLE\Downloads\111.jfif`.
 
 ## User Review Required
 
 > [!IMPORTANT]
-> - **AdMob App ID**: `ca-app-pub-3715923077671486~4364312374`
-> - **Banner Ad**: `ca-app-pub-3715923077671486/9860840778`
-> - **Interstitial Ad**: `ca-app-pub-3715923077671486/7150257811`
-> - **Native Advanced Ad**: `ca-app-pub-3715923077671486/9041923984`
-> - **App Open Ad**: `ca-app-pub-3715923077671486/9202365229`
-> - **Rewarded Interstitial Ad**: `ca-app-pub-3715923077671486/6052798563`
-> - **Rewarded Ad (Downloads)**: `ca-app-pub-3715923077671486/1845639445`
-
-> [!NOTE]
-> - **Download Choice Dialog**: Clicking a download button presents two options matching the VIP styling:
->   1. **Watch Ads to Unlock Download**: Requires watching 2 rewarded ads (`ca-app-pub-3715923077671486/1845639445`). Shows progress ("Ad 1/2 complete") and triggers download upon completion.
->   2. **Go VIP**: Opens existing VIP pass/subscription page (`openVip()`).
+> - **AdMob Rewarded Ad Fix (`MainActivity.java`)**:
+>   - Previously, if the Rewarded Ad (`ca-app-pub-3715923077671486/1845639445`) was still pre-buffering when tapped, the fallback immediately reported `SUCCESS` without showing an ad.
+>   - We will fix this so `showRewardedAdForDownload` preloads the ad eagerly on startup and only triggers reward credit after the user successfully watches the video ad to completion.
+> - **App Icon Update**:
+>   - Convert `C:\Users\EAGLE\Downloads\111.jfif` into high-resolution PNGs across all mipmap density buckets (`mipmap-mdpi`, `mipmap-hdpi`, `mipmap-xhdpi`, `mipmap-xxhdpi`, `mipmap-xxxhdpi`) and update `ic_app_logo.png`.
 
 ## Proposed Changes
 
-### Dependencies & Manifest (`app/build.gradle.kts`, `AndroidManifest.xml`)
-- Add Google Mobile Ads SDK dependency (`play-services-ads`).
-- Add AdMob App ID `<meta-data>` in `AndroidManifest.xml`.
+### AdMob Rewarded Ad Handling (`MainActivity.java`, `index.html`)
 
-### Application & Initialization (`FilmBoxApplication.java`)
-- Initialize `MobileAds.initialize()` in `FilmBoxApplication.onCreate()`.
-- Implement `AppOpenAd` manager to display App Open Ad (`ca-app-pub-3715923077671486/9202365229`) on app launch.
+#### [MODIFY] [MainActivity.java](file:///C:/Users/EAGLE/AndroidStudioProjects/FilmBox/app/src/main/java/com/filmbox/MainActivity.java)
+- Eagerly load `mRewardedAdDownload` (`ca-app-pub-3715923077671486/1845639445`) on app launch (`onCreate`).
+- In `showRewardedAdForDownload`:
+  - If `mRewardedAdDownload` is ready, display the full-screen AdMob Rewarded Ad and issue reward credit upon completion.
+  - If `mRewardedAdDownload` is still loading, inform the user with a toast ("⏳ Loading Rewarded Ad from Google AdMob...") and trigger reload without auto-bypassing.
 
-### Layout & Admob View Loading (`activity_main.xml`, `MainActivity.java`)
-- Add `AdView` for Banner Ad (`ca-app-pub-3715923077671486/9860840778`) at the bottom of the screen.
-- Load Interstitial Ad (`ca-app-pub-3715923077671486/7150257811`) for navigation / playback.
-- Load Rewarded Interstitial (`ca-app-pub-3715923077671486/6052798563`) for background rewards.
+#### [MODIFY] [index.html](file:///C:/Users/EAGLE/AndroidStudioProjects/FilmBox/app/src/main/assets/index.html)
+- Handle `NOT_READY` callback status in `onRewardedAdCallback` to notify the user that AdMob is pre-buffering, requiring them to complete the ad view to unlock download.
 
-### Download Button Choice Dialog (`index.html`)
-- Hook into download button clicks (`quickDownloadCard`, `downloadEpisode`, `startDownloadCurrent`).
-- Display a modal matching the VIP gradient theme offering:
-  - Option 1: "Watch Ads to Unlock Download" (triggers 2 rewarded ads `ca-app-pub-3715923077671486/1845639445` with progress tracking before starting download).
-  - Option 2: "Go VIP" (triggers `openVip()`).
+### App Icon Swap
+
+- Convert and resize `C:\Users\EAGLE\Downloads\111.jfif` to generate all launcher icon densities (`ic_launcher.png`, `ic_launcher_round.png`, `ic_app_logo.png`).
 
 ## Verification Plan
 
 ### Automated Tests
-- Build project with Gradle (`app:assembleDebug`) to verify syntax, compilation, and SDK linking.
+- Build project with Gradle (`app:assembleDebug`) to verify compilation and syntax.
 
 ### Manual Verification
-- Verify App Open Ad on launch.
-- Verify Banner Ad at screen bottom.
-- Verify Download Choice Dialog appearance on clicking download.
-- Verify 2-ad sequence completion unlocks download.
-- Verify "Go VIP" button opens VIP page.
+- Deploy app to device/emulator, tap Download, click "Watch Ads to Unlock Download", and confirm that the full AdMob Rewarded Ad displays and tracks completion.
+- Verify the new `111` app icon renders sharply on the Android launcher home screen.

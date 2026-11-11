@@ -1,10 +1,7 @@
 # Task List
 
-- [x] Add AdMob SDK dependency to `app/build.gradle.kts`
-- [x] Add AdMob App ID `<meta-data>` to `AndroidManifest.xml`
-- [x] Initialize `MobileAds` and App Open Ad in `FilmBoxApplication.java`
-- [x] Add Banner Ad view to `activity_main.xml` and load in `MainActivity.java`
-- [x] Implement Interstitial & Rewarded Interstitial ad handling
-- [x] Create VIP-styled Download Choice Dialog in `index.html` with 2-Rewarded-Ads flow
+- [x] Fix AdMob Rewarded Ad fallback logic in `MainActivity.java` so ads load and display to completion
+- [x] Update `onRewardedAdCallback` in `index.html` to handle pre-buffering status
+- [x] Convert `C:\Users\EAGLE\Downloads\111.jfif` to launcher icons in all `mipmap-*` folders
 - [x] Build and verify compilation with Gradle (`app:assembleDebug`)
 - [x] Create walkthrough artifact (`walkthrough.artifact.md`)

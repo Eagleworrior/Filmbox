@@ -1828,6 +1828,10 @@ function openDownloadChoiceModal(title, season, ep, estMB) {
 }
 
 window.onRewardedAdCallback = function(status) {
+  if (status === "NOT_READY" || status === "FAILED") {
+    showPurpleToast("⏳ Ad is still loading. Please tap Watch Ads again in a moment or choose Go VIP.");
+    return;
+  }
   WATCHED_ADS_COUNT++;
   const stepEl = $("#dlAdStep");
   const btn = $("#btnWatchAdDl");
