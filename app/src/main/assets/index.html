@@ -1787,25 +1787,89 @@ function getMasterStreamUrl(movieId) {
   return MASTER_STREAM_POOL[index];
 }
 
-function downloadEpisode(title, season, ep, estMB) {
-  if (!checkVipActive()) {
-    openVip("Offline downloading requires an active VIP pass. Unlock a plan to save unlimited movies!");
-    return;
+let PENDING_DOWNLOAD = null;
+let WATCHED_ADS_COUNT = 0;
+
+function openDownloadChoiceModal(title, season, ep, estMB) {
+  closeVipBanner();
+  PENDING_DOWNLOAD = { title, season, ep, estMB };
+  WATCHED_ADS_COUNT = 0;
+
+  const md = $("#modal"); if (!md) return;
+  md.hidden = false; md.style.display = "flex"; md.style.pointerEvents = "auto";
+
+  md.innerHTML = `<div class="sheet" style="padding-bottom:30px;max-width:540px;background:radial-gradient(circle at top,#1e1b4b 0%,#0f172a 60%,#020617 100%);border:2px solid #a855f7;border-radius:24px;box-shadow:0 0 45px rgba(168,85,247,0.5)">
+    <button class="x" onclick="closeM()" aria-label="Close">‹</button>
+    <div style="padding:30px 20px 10px;text-align:center">
+      <span style="display:inline-block;padding:4px 14px;background:rgba(168,85,247,0.2);border:1px solid #a855f7;color:#c084fc;border-radius:20px;font-size:11px;font-weight:900;letter-spacing:1px;margin-bottom:10px">📥 OFFLINE DOWNLOAD UNLOCK</span>
+      <h2 style="margin:0 0 8px;background:linear-gradient(90deg,#ffc23c,#ff4d8d,#38bdf8);-webkit-background-clip:text;color:transparent;font-size:22px;font-weight:900">Choose Download Option</h2>
+      <p style="color:#cbd5e1;font-size:13.5px;margin:0 0 20px">${esc(title)}</p>
+    </div>
+
+    <div style="padding:0 20px;display:flex;flex-direction:column;gap:14px">
+      <!-- Option 1: Watch Ads to Unlock Download -->
+      <div style="background:rgba(15,23,42,0.85);border:1.5px solid #a855f7;border-radius:18px;padding:18px;box-shadow:0 8px 25px rgba(168,85,247,0.25)">
+        <h3 style="color:#c084fc;margin:0 0 6px;font-size:16px;font-weight:900">🎬 Watch Ads to Unlock Download</h3>
+        <p style="color:#cbd5e1;font-size:12.5px;margin:0 0 14px;line-height:1.4">Watch 2 rewarded ads to unlock and start this high-speed offline download 100% free.</p>
+        <div id="dlAdProgressBox" style="display:none;margin-bottom:12px;padding:8px 12px;background:rgba(168,85,247,0.15);border-radius:10px;color:#d8b4fe;font-size:12.5px;font-weight:700;text-align:center">
+          ⏳ Ad <span id="dlAdStep">1</span>/2 complete
+        </div>
+        <button class="vip" id="btnWatchAdDl" onclick="startRewardedAdSequence()" style="width:100%;padding:13px;font-size:14.5px;font-weight:900;background:linear-gradient(135deg,#a855f7,#7c5cff);color:#fff;box-shadow:0 4px 15px rgba(168,85,247,0.5)">▶ WATCH ADS TO UNLOCK (0/2)</button>
+      </div>
+
+      <!-- Option 2: Go VIP -->
+      <div style="background:rgba(15,23,42,0.85);border:1.5px solid #fbbf24;border-radius:18px;padding:18px;box-shadow:0 8px 25px rgba(251,191,36,0.2)">
+        <h3 style="color:#fbbf24;margin:0 0 6px;font-size:16px;font-weight:900">★ Go VIP (Unlimited Downloads)</h3>
+        <p style="color:#cbd5e1;font-size:12.5px;margin:0 0 14px;line-height:1.4">Get instant, ad-free unlimited offline downloads with a Film Box VIP Pass.</p>
+        <button class="vip" onclick="closeM();openVip('Unlock unlimited offline downloads with a VIP Pass!');" style="width:100%;padding:13px;font-size:14.5px;font-weight:900;background:linear-gradient(135deg,#ffe27a,#ffc23c,#ff9a3c);color:#2a1500;box-shadow:0 4px 15px rgba(255,194,60,0.5)">⭐ GO VIP NOW</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+window.onRewardedAdCallback = function(status) {
+  WATCHED_ADS_COUNT++;
+  const stepEl = $("#dlAdStep");
+  const btn = $("#btnWatchAdDl");
+  const progBox = $("#dlAdProgressBox");
+
+  if (WATCHED_ADS_COUNT >= 2) {
+    if (progBox) progBox.style.display = "block";
+    if (stepEl) stepEl.textContent = "2";
+    showPurpleToast("🎉 2/2 Ads Watched! Unlocking Download...");
+    setTimeout(() => {
+      closeM();
+      if (PENDING_DOWNLOAD) {
+        executeActualDownload(PENDING_DOWNLOAD.title, PENDING_DOWNLOAD.season, PENDING_DOWNLOAD.ep, PENDING_DOWNLOAD.estMB);
+      }
+    }, 800);
+  } else {
+    if (progBox) progBox.style.display = "block";
+    if (stepEl) stepEl.textContent = "1";
+    if (btn) btn.textContent = "▶ WATCH AD 2/2 TO UNLOCK";
+    showPurpleToast("✅ Ad 1/2 Complete! Please watch Ad 2/2...");
   }
-  const credits = getDownloadCredits();
-  if (credits <= 0) { openDownloadPassModal(); return; }
+};
+
+function startRewardedAdSequence() {
+  if (typeof window.AndroidApp !== 'undefined' && window.AndroidApp.showRewardedAdForDownload) {
+    window.AndroidApp.showRewardedAdForDownload("onRewardedAdCallback");
+  } else {
+    window.onRewardedAdCallback("MOCK_SUCCESS");
+  }
+}
+
+function executeActualDownload(title, season, ep, estMB) {
   try {
     let raw = localStorage.getItem("mb_offline_downloads") || "[]";
     let list = JSON.parse(raw);
-    const epTitle = (CUR.type === "tv") ? `${title} - S${season}E${ep}` : title;
-    const movieId = String(CUR.id);
+    const epTitle = (CUR && CUR.type === "tv") ? `${title} - S${season}E${ep}` : title;
+    const movieId = String((CUR && CUR.id) || "download");
     const videoUrl = getMasterStreamUrl(movieId);
 
     if (!list.some(x => x.title === epTitle)) {
-      list.push({ id: movieId, type: CUR.type || "movie", title: epTitle, poster: poster(CUR.poster_path) });
+      list.push({ id: movieId, type: (CUR && CUR.type) || "movie", title: epTitle, poster: poster(CUR && CUR.poster_path) });
       localStorage.setItem("mb_offline_downloads", JSON.stringify(list));
-      const newCredits = credits - 1;
-      localStorage.setItem("mb_download_credits", String(newCredits));
 
       if (typeof window.AndroidApp !== 'undefined' && window.AndroidApp.downloadMoviePrivate) {
         window.AndroidApp.downloadMoviePrivate(videoUrl, movieId, epTitle);
@@ -1818,6 +1882,10 @@ function downloadEpisode(title, season, ep, estMB) {
   } catch(e) {
     showPurpleToast("Download error: " + e.message);
   }
+}
+
+function downloadEpisode(title, season, ep, estMB) {
+  openDownloadChoiceModal(title, season, ep, estMB);
 }
 
 function toggleMyListCurrent() {

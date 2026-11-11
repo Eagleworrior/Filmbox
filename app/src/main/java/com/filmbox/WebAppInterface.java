@@ -175,6 +175,13 @@ public class WebAppInterface {
     }
 
     @JavascriptInterface
+    public void showRewardedAdForDownload(String callbackJsName) {
+        if (mContext instanceof MainActivity) {
+            ((MainActivity) mContext).showRewardedAdForDownload(callbackJsName);
+        }
+    }
+
+    @JavascriptInterface
     public void openPlayer(int tmdbId, String mediaType, String title, String videoUrl, int seasonNumber, int episodeNumber) {
         try {
             mHandler.post(() -> {
@@ -191,14 +198,18 @@ public class WebAppInterface {
                         finalVideoUrl = streams[Math.abs(tmdbId) % streams.length];
                     }
 
-                    android.content.Intent intent = new android.content.Intent(mContext, PlayerActivity.class);
-                    intent.putExtra("tmdb_id", tmdbId);
-                    intent.putExtra("media_type", mediaType != null ? mediaType : "movie");
-                    intent.putExtra("title", title != null ? title : "Movie");
-                    intent.putExtra("season_number", seasonNumber > 0 ? seasonNumber : 1);
-                    intent.putExtra("episode_number", episodeNumber > 0 ? episodeNumber : 1);
-                    intent.putExtra("video_url", finalVideoUrl);
-                    mContext.startActivity(intent);
+                    if (mContext instanceof MainActivity) {
+                        ((MainActivity) mContext).showInterstitialAndOpenPlayer(tmdbId, mediaType, title, finalVideoUrl, seasonNumber, episodeNumber);
+                    } else {
+                        android.content.Intent intent = new android.content.Intent(mContext, PlayerActivity.class);
+                        intent.putExtra("tmdb_id", tmdbId);
+                        intent.putExtra("media_type", mediaType != null ? mediaType : "movie");
+                        intent.putExtra("title", title != null ? title : "Movie");
+                        intent.putExtra("season_number", seasonNumber > 0 ? seasonNumber : 1);
+                        intent.putExtra("episode_number", episodeNumber > 0 ? episodeNumber : 1);
+                        intent.putExtra("video_url", finalVideoUrl);
+                        mContext.startActivity(intent);
+                    }
                 } catch (Exception e) {
                     Toast.makeText(mContext, "Error launching player: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }

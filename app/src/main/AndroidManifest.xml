@@ -22,6 +22,10 @@
         android:usesCleartextTraffic="true"
         android:theme="@style/Theme.FilmBox">
 
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3715923077671486~4364312374"/>
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

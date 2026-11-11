@@ -24,6 +24,18 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.ads.AdError;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
+import com.google.android.gms.ads.rewarded.RewardedAd;
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
+import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd;
+import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAdLoadCallback;
+
 import org.json.JSONObject;
 
 import java.io.ByteArrayInputStream;
@@ -46,6 +58,124 @@ public class MainActivity extends AppCompatActivity {
     private FrameLayout customViewContainer;
     private WebChromeClient.CustomViewCallback customViewCallback;
     private View customView;
+
+    private InterstitialAd mInterstitialAd;
+    private RewardedInterstitialAd mRewardedInterstitialAd;
+    private RewardedAd mRewardedAdDownload;
+
+    public void loadBannerAd() {
+        try {
+            AdView adView = findViewById(R.id.adView);
+            if (adView != null) {
+                adView.loadAd(new AdRequest.Builder().build());
+            }
+        } catch (Exception ignored) {}
+    }
+
+    public void loadInterstitial() {
+        try {
+            AdRequest adRequest = new AdRequest.Builder().build();
+            InterstitialAd.load(this, "ca-app-pub-3715923077671486/7150257811", adRequest, new InterstitialAdLoadCallback() {
+                @Override
+                public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                    mInterstitialAd = interstitialAd;
+                }
+                @Override
+                public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                    mInterstitialAd = null;
+                }
+            });
+        } catch (Exception ignored) {}
+    }
+
+    public void loadRewardedInterstitialAd() {
+        try {
+            RewardedInterstitialAd.load(this, "ca-app-pub-3715923077671486/6052798563", new AdRequest.Builder().build(), new RewardedInterstitialAdLoadCallback() {
+                @Override
+                public void onAdLoaded(@NonNull RewardedInterstitialAd rewardedInterstitialAd) {
+                    mRewardedInterstitialAd = rewardedInterstitialAd;
+                }
+                @Override
+                public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                    mRewardedInterstitialAd = null;
+                }
+            });
+        } catch (Exception ignored) {}
+    }
+
+    public void loadRewardedAdDownload() {
+        try {
+            RewardedAd.load(this, "ca-app-pub-3715923077671486/1845639445", new AdRequest.Builder().build(), new RewardedAdLoadCallback() {
+                @Override
+                public void onAdLoaded(@NonNull RewardedAd rewardedAd) {
+                    mRewardedAdDownload = rewardedAd;
+                }
+                @Override
+                public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                    mRewardedAdDownload = null;
+                }
+            });
+        } catch (Exception ignored) {}
+    }
+
+    public void showRewardedAdForDownload(String callbackJsName) {
+        runOnUiThread(() -> {
+            if (mRewardedAdDownload != null) {
+                mRewardedAdDownload.setFullScreenContentCallback(new FullScreenContentCallback() {
+                    @Override
+                    public void onAdDismissedFullScreenContent() {
+                        mRewardedAdDownload = null;
+                        loadRewardedAdDownload();
+                    }
+
+                    @Override
+                    public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
+                        mRewardedAdDownload = null;
+                        loadRewardedAdDownload();
+                        evaluateJavaScriptOnWebView(callbackJsName + "('FAILED');");
+                    }
+                });
+                mRewardedAdDownload.show(this, rewardItem -> {
+                    evaluateJavaScriptOnWebView(callbackJsName + "('SUCCESS');");
+                });
+            } else {
+                loadRewardedAdDownload();
+                evaluateJavaScriptOnWebView(callbackJsName + "('SUCCESS');");
+            }
+        });
+    }
+
+    public void showInterstitialAndOpenPlayer(int tmdbId, String mediaType, String title, String finalVideoUrl, int seasonNumber, int episodeNumber) {
+        runOnUiThread(() -> {
+            Intent intent = new Intent(MainActivity.this, PlayerActivity.class);
+            intent.putExtra("tmdb_id", tmdbId);
+            intent.putExtra("media_type", mediaType != null ? mediaType : "movie");
+            intent.putExtra("title", title != null ? title : "Movie");
+            intent.putExtra("season_number", seasonNumber > 0 ? seasonNumber : 1);
+            intent.putExtra("episode_number", episodeNumber > 0 ? episodeNumber : 1);
+            intent.putExtra("video_url", finalVideoUrl);
+
+            if (mInterstitialAd != null) {
+                mInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                    @Override
+                    public void onAdDismissedFullScreenContent() {
+                        mInterstitialAd = null;
+                        loadInterstitial();
+                        startActivity(intent);
+                    }
+                    @Override
+                    public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
+                        mInterstitialAd = null;
+                        loadInterstitial();
+                        startActivity(intent);
+                    }
+                });
+                mInterstitialAd.show(MainActivity.this);
+            } else {
+                startActivity(intent);
+            }
+        });
+    }
 
     private static final Set<String> ALLOWED_HOSTS = new HashSet<>(Arrays.asList(
             "filmbox.ke",
@@ -135,6 +265,9 @@ public class MainActivity extends AppCompatActivity {
 
             // Audio Focus & Volume Setup
             requestDeviceAudioFocus();
+
+            loadBannerAd();
+            loadInterstitial();
 
             webViewApp = findViewById(R.id.webViewApp);
             customViewContainer = findViewById(R.id.customViewContainer);

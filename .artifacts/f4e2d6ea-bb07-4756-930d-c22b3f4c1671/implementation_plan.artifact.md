@@ -1,28 +1,52 @@
-# Implementation Plan - "2099 Technology" Anti-Ad Cyber-Shield
+# Implementation Plan - Google AdMob & Download Choice Dialog Integration
 
-Implement an ultra-advanced "2099 Technology" anti-ad cyber-shield in `index.html` and `MainActivity.java` that detects and annihilates invisible click-jacking overlays, transparent ad links, background network trackers, and unwanted tab redirections instantly.
+Integrate Google Mobile Ads (AdMob) SDK into Film Box with all user-specified ad unit IDs, and implement a VIP-styled Download Choice Dialog when users click any movie download button.
 
 ## User Review Required
 
 > [!IMPORTANT]
-> - **Invisible Overlay Vaporizer**: A real-time DOM scanner that detects and destroys transparent or zero-opacity click-jacking elements sitting over movie cards and play buttons.
-> - **Bulletproof Event-Capturing Interceptor**: Captures clicks and taps at the root document level, instantly halting (`preventDefault` / `stopPropagation`) any touch or click attempting to open external ad pages or new tabs.
-> - **Network & Server Shield**: Strengthens background network interception against dynamic ad network changes.
+> - **AdMob App ID**: `ca-app-pub-3715923077671486~4364312374`
+> - **Banner Ad**: `ca-app-pub-3715923077671486/9860840778`
+> - **Interstitial Ad**: `ca-app-pub-3715923077671486/7150257811`
+> - **Native Advanced Ad**: `ca-app-pub-3715923077671486/9041923984`
+> - **App Open Ad**: `ca-app-pub-3715923077671486/9202365229`
+> - **Rewarded Interstitial Ad**: `ca-app-pub-3715923077671486/6052798563`
+> - **Rewarded Ad (Downloads)**: `ca-app-pub-3715923077671486/1845639445`
+
+> [!NOTE]
+> - **Download Choice Dialog**: Clicking a download button presents two options matching the VIP styling:
+>   1. **Watch Ads to Unlock Download**: Requires watching 2 rewarded ads (`ca-app-pub-3715923077671486/1845639445`). Shows progress ("Ad 1/2 complete") and triggers download upon completion.
+>   2. **Go VIP**: Opens existing VIP pass/subscription page (`openVip()`).
 
 ## Proposed Changes
 
-### Web Asset Cyber-Shield (`index.html`)
+### Dependencies & Manifest (`app/build.gradle.kts`, `AndroidManifest.xml`)
+- Add Google Mobile Ads SDK dependency (`play-services-ads`).
+- Add AdMob App ID `<meta-data>` in `AndroidManifest.xml`.
 
-#### [MODIFY] [index.html](file:///C:/Users/EAGLE/AndroidStudioProjects/FilmBox/app/src/main/assets/index.html)
-- Upgrade `startFilmboxAdEngine()` with 2099 Cyber-Shield defenses:
-  1. **Invisible Element Purger**: Scans every 100ms for transparent (`opacity < 0.1` or `alpha`) anchor tags (`<a>`) or overlay `<div>` elements positioned over interactive elements and removes them.
-  2. **Root-Level Event Interceptor**: Captures `click`, `touchstart`, and `pointerdown` events in the capture phase (`true`), verifying the target. If any unwhitelisted external link or invisible ad anchor is tapped, propagation is instantly killed.
-  3. **Navigation Lockdown**: Overrides `window.open`, `window.location`, and anchor navigation to block background tab spawning.
+### Application & Initialization (`FilmBoxApplication.java`)
+- Initialize `MobileAds.initialize()` in `FilmBoxApplication.onCreate()`.
+- Implement `AppOpenAd` manager to display App Open Ad (`ca-app-pub-3715923077671486/9202365229`) on app launch.
+
+### Layout & Admob View Loading (`activity_main.xml`, `MainActivity.java`)
+- Add `AdView` for Banner Ad (`ca-app-pub-3715923077671486/9860840778`) at the bottom of the screen.
+- Load Interstitial Ad (`ca-app-pub-3715923077671486/7150257811`) for navigation / playback.
+- Load Rewarded Interstitial (`ca-app-pub-3715923077671486/6052798563`) for background rewards.
+
+### Download Button Choice Dialog (`index.html`)
+- Hook into download button clicks (`quickDownloadCard`, `downloadEpisode`, `startDownloadCurrent`).
+- Display a modal matching the VIP gradient theme offering:
+  - Option 1: "Watch Ads to Unlock Download" (triggers 2 rewarded ads `ca-app-pub-3715923077671486/1845639445` with progress tracking before starting download).
+  - Option 2: "Go VIP" (triggers `openVip()`).
 
 ## Verification Plan
 
 ### Automated Tests
-- Build project with Gradle (`app:assembleDebug`) to verify syntax and compilation.
+- Build project with Gradle (`app:assembleDebug`) to verify syntax, compilation, and SDK linking.
 
 ### Manual Verification
-- Deploy app, tap film cards, search bars, and play buttons on `index.html` and verify that all movie interactions work smoothly while any invisible click-jacking ads or background redirects are instantly blocked.
+- Verify App Open Ad on launch.
+- Verify Banner Ad at screen bottom.
+- Verify Download Choice Dialog appearance on clicking download.
+- Verify 2-ad sequence completion unlocks download.
+- Verify "Go VIP" button opens VIP page.
