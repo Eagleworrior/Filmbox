@@ -1,6 +1,7 @@
 # Task List
 
-- [x] Transition search & discovery in `index.html` to pure dynamic TMDb API requests
-- [x] Convert `C:\Users\EAGLE\Downloads\Gemini_Generated_Image_4v09g74v09g74v09.jfif` to launcher icons across all `mipmap-*` folders
+- [x] Clean up deprecated storage permissions in `AndroidManifest.xml` for Google Play Protect compliance
+- [x] Implement instant real-time typing search on every keystroke in `index.html`
+- [x] Gracefully handle `window.onerror` in `index.html` to eliminate runtime error boxes
 - [x] Build and verify compilation with Gradle (`app:assembleDebug`)
 - [x] Create walkthrough artifact (`walkthrough.artifact.md`)

@@ -571,14 +571,8 @@ function showPurpleToast(msg) {
 }
 
 window.onerror = function(msg, url, line) {
-  if (msg === "Script error." || line === 0) return true;
-  const m = document.querySelector("#main");
-  if (m) {
-    m.innerHTML = `<div style="padding:30px;text-align:center;background:#201b18;border:2px solid red;border-radius:12px;margin:20px">
-      <h3 style="color:#ff4d4d;margin-bottom:8px">Runtime Script Error</h3>
-      <p style="color:#fff;font-size:13px">${msg}<br><small>Line: ${line}</small></p>
-    </div>`;
-  }
+  console.warn("Script exception logged:", msg, "Line:", line);
+  return true;
 };
 
 const FOOTBALL_DATA_TOKEN = "e87d3a0e691845bb8d8d3df624bfbe83";
@@ -1933,15 +1927,28 @@ if (searchInput) {
     clearTimeout(searchDebounce);
     const query = e.target.value.trim();
     if (query.length >= 1) {
+      const qLower = query.toLowerCase();
+      const localMatches = [...LOCAL_MASTER_MOVIES, ...LOCAL_MASTER_SERIES].filter(item => {
+        const name = (item.title || item.name || "").toLowerCase();
+        return name.includes(qLower);
+      });
+      if (localMatches.length > 0) {
+        showSearchDropdown(localMatches);
+      }
+
       searchDebounce = setTimeout(async () => {
         try {
           const d = await tmdb("/search/multi", { query: query, page: 1 });
           const liveResults = (d.results || []).filter(i => (i.media_type === "movie" || i.media_type === "tv"));
-          showSearchDropdown(liveResults);
+          if (liveResults.length > 0) {
+            showSearchDropdown(liveResults);
+          } else if (localMatches.length === 0) {
+            showSearchDropdown([]);
+          }
         } catch(err) {
-          showSearchDropdown([]);
+          if (localMatches.length === 0) showSearchDropdown([]);
         }
-      }, 150);
+      }, 100);
     } else {
       hideSearchDropdown();
     }
