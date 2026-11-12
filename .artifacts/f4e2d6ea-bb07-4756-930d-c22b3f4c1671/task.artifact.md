@@ -1,7 +1,6 @@
 # Task List
 
-- [x] Fix AdMob Rewarded Ad fallback logic in `MainActivity.java` so ads load and display to completion
-- [x] Update `onRewardedAdCallback` in `index.html` to handle pre-buffering status
-- [x] Convert `C:\Users\EAGLE\Downloads\111.jfif` to launcher icons in all `mipmap-*` folders
+- [x] Transition search & discovery in `index.html` to pure dynamic TMDb API requests
+- [x] Convert `C:\Users\EAGLE\Downloads\Gemini_Generated_Image_4v09g74v09g74v09.jfif` to launcher icons across all `mipmap-*` folders
 - [x] Build and verify compilation with Gradle (`app:assembleDebug`)
 - [x] Create walkthrough artifact (`walkthrough.artifact.md`)

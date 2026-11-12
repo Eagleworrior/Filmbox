@@ -1,15 +1,15 @@
-# Walkthrough - AdMob Rewarded Ad Fix & New App Icon (`111.jfif`)
+# Walkthrough - 100% Dynamic TMDb API Search & App Icon Update (`4v09g7`)
 
-Fixed the AdMob Rewarded Ad fallback logic so ads must load and finish watching before unlocking downloads, and updated the app launcher icon using the new `111.jfif` image.
+Transitioned search and discovery in `index.html` to pure dynamic TMDb API calls and updated the app launcher icon to `Gemini_Generated_Image_4v09g74v09g74v09`.
 
 ## Changes
 
-### 1. AdMob Rewarded Ad Fix (`MainActivity.java`, `index.html`)
-- **No More Auto-Bypass**: Removed the old fallback that granted downloads instantly if the AdMob Rewarded Ad wasn't ready yet.
-- **Pre-buffering Notification**: If the ad is still loading when tapped, the app informs the user ("⏳ Ad is loading. Please try again in a moment or select Go VIP.") and triggers background pre-loading without counting fake watched progress.
+### 1. 100% Dynamic TMDb API Search (`index.html`)
+- **Live Search Autocomplete**: Search input (`#q`) directly queries TMDb API (`tmdb('/search/multi', ...)`), rendering dynamic live search results on every keystroke.
+- **Enter-Key Search Grid**: Pressing Enter in the search bar triggers a dynamic grid search render directly from TMDb's cloud servers.
 
-### 2. App Icon Update (`111.jfif`)
-- Converted and resized `C:\Users\EAGLE\Downloads\111.jfif` into high-resolution launcher icons across all density buckets (`mipmap-mdpi`, `mipmap-hdpi`, `mipmap-xhdpi`, `mipmap-xxhdpi`, `mipmap-xxxhdpi` for `ic_launcher.png`, `ic_launcher_round.png`) and `drawable/ic_app_logo.png`.
+### 2. App Icon Update (`Gemini_Generated_Image_4v09g74v09g74v09`)
+- Converted and resized `C:\Users\EAGLE\Downloads\Gemini_Generated_Image_4v09g74v09g74v09.jfif` into high-resolution PNG launcher icons across all density buckets (`mipmap-mdpi`, `mipmap-hdpi`, `mipmap-xhdpi`, `mipmap-xxhdpi`, `mipmap-xxxhdpi` for `ic_launcher.png`, `ic_launcher_round.png`) and `drawable/ic_app_logo.png`.
 
 ## Verification Results
 
