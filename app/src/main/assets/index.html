@@ -1927,30 +1927,49 @@ if (searchInput) {
     clearTimeout(searchDebounce);
     const query = e.target.value.trim();
     if (query.length >= 1) {
+      if (S.view !== "movie" && S.view !== "tv") {
+        S.view = "movie";
+        const m = $("#main");
+        if (m) {
+          m.innerHTML = `<h2>Results for “${esc(query)}”</h2><div class="grid" id="grid"></div><p class="msg" id="info"></p>`;
+        }
+      } else {
+        const titleHeading = $("#main h2");
+        if (titleHeading) titleHeading.textContent = `Results for “${esc(query)}”`;
+      }
+      S.query = query;
+      S.page = 1;
+
       const qLower = query.toLowerCase();
       const localMatches = [...LOCAL_MASTER_MOVIES, ...LOCAL_MASTER_SERIES].filter(item => {
         const name = (item.title || item.name || "").toLowerCase();
         return name.includes(qLower);
       });
-      if (localMatches.length > 0) {
-        showSearchDropdown(localMatches);
+      const gridEl = $("#grid");
+      const infoEl = $("#info");
+      if (gridEl && localMatches.length > 0) {
+        gridEl.innerHTML = localMatches.map(i => card(i, i.media_type || "movie")).join("");
       }
 
       searchDebounce = setTimeout(async () => {
         try {
           const d = await tmdb("/search/multi", { query: query, page: 1 });
-          const liveResults = (d.results || []).filter(i => (i.media_type === "movie" || i.media_type === "tv"));
-          if (liveResults.length > 0) {
-            showSearchDropdown(liveResults);
-          } else if (localMatches.length === 0) {
-            showSearchDropdown([]);
+          const liveResults = (d.results || []).filter(i => (i.media_type === "movie" || i.media_type === "tv") && i.poster_path);
+          if (gridEl && S.query === query) {
+            if (liveResults.length > 0) {
+              gridEl.innerHTML = liveResults.map(i => card(i, i.media_type || "movie")).join("");
+              if (infoEl) infoEl.textContent = `${d.total_results.toLocaleString()} titles found for “${esc(query)}”`;
+            } else if (localMatches.length === 0) {
+              gridEl.innerHTML = `<p class="msg">No films found matching “${esc(query)}”</p>`;
+              if (infoEl) infoEl.textContent = "";
+            }
           }
-        } catch(err) {
-          if (localMatches.length === 0) showSearchDropdown([]);
-        }
-      }, 100);
+        } catch(err) {}
+      }, 80);
     } else {
+      S.query = "";
       hideSearchDropdown();
+      render();
     }
   };
 }
