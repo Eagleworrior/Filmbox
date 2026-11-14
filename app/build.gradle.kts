@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.filmbox"
+    namespace = "com.filmboxapp"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.filmbox"
+        applicationId = "com.filmboxapp"
         minSdk = 24
         targetSdk = 35
         versionCode = 1

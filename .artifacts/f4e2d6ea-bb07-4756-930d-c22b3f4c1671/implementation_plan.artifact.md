@@ -1,38 +1,27 @@
-# Implementation Plan - AdMob Ad Unit IDs Update & Instant Pre-buffering Optimization
+# Implementation Plan - Refactor Package Name to `com.filmboxapp`
 
-Update all Google AdMob Ad Unit IDs across the project to the user's new IDs, optimize eager pre-buffering on startup for faster ad delivery, and ensure clear messaging when an ad is pre-buffering.
+Refactor the Android application package name and namespace from `com.filmbox` to `com.filmboxapp` across build scripts, directory structures, Java package statements, and imports.
 
 ## User Review Required
 
 > [!IMPORTANT]
-> - **New AdMob App ID**: `ca-app-pub-3715923077671486~7235293381`
-> - **Banner Ad**: `ca-app-pub-3715923077671486~7235293381` (or banner unit ID)
-> - **Interstitial Ad**: `ca-app-pub-3715923077671486/9321245725`
-> - **Rewarded Interstitial Ad**: `ca-app-pub-3715923077671486/1791395019`
-> - **Rewarded Ad**: `ca-app-pub-3715923077671486/6907990322`
-> - **Native Advanced Ad**: `ca-app-pub-3715923077671486/3416127013`
-> - **App Open Ad**: `ca-app-pub-3715923077671486/9538682234`
+> - **New Application ID & Namespace**: `com.filmboxapp`
+> - **Java Package Refactoring**: Moves directory `app/src/main/java/com/filmbox` -> `app/src/main/java/com/filmboxapp` and updates all Java `package` and `import` statements.
 
 ## Proposed Changes
 
-### Manifest & Application Configuration (`AndroidManifest.xml`, `FilmBoxApplication.java`)
-- Update `AndroidManifest.xml` `<meta-data>` with new App ID: `ca-app-pub-3715923077671486~7235293381`.
-- Update `FilmBoxApplication.java` App Open Ad ID: `ca-app-pub-3715923077671486/9538682234`.
+### Build Scripts & Manifest (`app/build.gradle.kts`, `AndroidManifest.xml`)
+- Update `namespace = "com.filmboxapp"` and `applicationId = "com.filmboxapp"` in `app/build.gradle.kts`.
+- Update activity and service action constants in `AndroidManifest.xml` / `TorrentDownloadService.java`.
 
-### Layout & Main Activity Ad Unit IDs (`activity_main.xml`, `MainActivity.java`)
-- Update `activity_main.xml` AdView unit ID.
-- Update `MainActivity.java` with new IDs:
-  - Interstitial: `ca-app-pub-3715923077671486/9321245725`
-  - Rewarded Interstitial: `ca-app-pub-3715923077671486/1791395019`
-  - Rewarded Ad: `ca-app-pub-3715923077671486/6907990322`
-  - Native Advanced: `ca-app-pub-3715923077671486/3416127013`
-- Pre-buffer all ad units eagerly on startup for instant availability.
-- Provide clear feedback ("⏳ AdMob Ad is buffering. Please try again in a few seconds or select Go VIP.") if an ad is still loading when clicked.
+### Java Source Code Refactoring (`app/src/main/java/com/filmboxapp/`)
+- Rename directory structure `com/filmbox` to `com/filmboxapp`.
+- Update package declarations (`package com.filmboxapp;`) and all references/imports (`import com.filmboxapp.R;`).
 
 ## Verification Plan
 
 ### Automated Tests
-- Build project with Gradle (`app:assembleDebug`) to verify compilation and syntax.
+- Sync Gradle and build project (`app:assembleDebug`) to verify clean compilation with the new `com.filmboxapp` package name.
 
 ### Manual Verification
-- Deploy app, verify App Open Ad on launch, Banner at bottom, Interstitial before player, and Rewarded Ad flow for offline downloads using new AdMob unit IDs.
+- Deploy app to device/emulator and verify package name is `com.filmboxapp`.
