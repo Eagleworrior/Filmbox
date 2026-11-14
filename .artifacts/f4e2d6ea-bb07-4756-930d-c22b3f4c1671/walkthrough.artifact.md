@@ -1,18 +1,21 @@
-# Walkthrough - Play Protect Compliance, Instant Typing Search & Error Box Elimination
+# Walkthrough - New AdMob Ad Unit IDs & Eager Pre-buffering Optimization
 
-Cleaned up deprecated storage permissions in `AndroidManifest.xml` for Google Play Protect compliance, implemented instant real-time search on every keystroke, and eliminated runtime error boxes.
+Updated all AdMob Ad Unit IDs across the project to the user's new IDs, enabled eager startup pre-buffering for instant ad availability, and styled ad notification overlays with gold and purple typography.
 
 ## Changes
 
-### 1. Google Play Protect Compliance (`AndroidManifest.xml`)
-- Removed `WRITE_EXTERNAL_STORAGE` and `READ_EXTERNAL_STORAGE` permissions from `AndroidManifest.xml`.
-- **Play Protect Safety**: App storage uses Android's private app directory (`getFilesDir()`), which requires zero risk permissions and scans cleanly with Google Play Protect on modern Android versions (10–15).
+### 1. AdMob App ID & Open Ad Updates (`AndroidManifest.xml`, `FilmBoxApplication.java`)
+- **New App ID**: `ca-app-pub-3715923077671486~7235293381` in `AndroidManifest.xml`.
+- **New App Open Ad ID**: `ca-app-pub-3715923077671486/9538682234` in `FilmBoxApplication.java`.
 
-### 2. Instant Real-Time Typing Search (`index.html`)
-- Updated `searchInput.oninput` in `index.html` to perform instant 0ms local matching as you type *each letter*, instantly displaying matching movies and series in the dropdown while fetching live TMDb cloud results.
+### 2. Main Activity Ad Unit IDs (`MainActivity.java`)
+- **Interstitial Ad**: `ca-app-pub-3715923077671486/9321245725`
+- **Rewarded Interstitial Ad**: `ca-app-pub-3715923077671486/1791395019`
+- **Rewarded Ad (Downloads)**: `ca-app-pub-3715923077671486/6907990322`
+- **Eager Startup Buffering**: Called `loadRewardedInterstitialAd()` and `loadRewardedAdDownload()` in `onCreate()` so all ad units are buffered in memory as soon as the app opens.
 
-### 3. Runtime Error Box Elimination (`index.html`)
-- Updated `window.onerror` handler in `index.html` to log non-fatal script exceptions to console instead of displaying red error boxes on screen.
+### 3. Styled Notifications (`index.html`)
+- Upgraded `showPurpleToast` overlay styling with radial gold-and-purple gradient (`#2e1065` / `#0f172a`), glowing gold border (`#fbbf24`), and vibrant typography (`#ffe27a`).
 
 ## Verification Results
 

@@ -1,36 +1,38 @@
-# Implementation Plan - Play Protect Safety, Instant Typing Search & Runtime Error Elimination
+# Implementation Plan - AdMob Ad Unit IDs Update & Instant Pre-buffering Optimization
 
-Clean up high-risk manifest permissions to resolve Google Play Protect "App Blocked / Harmful" warnings, implement real-time instant typing search in `index.html`, and silence non-fatal script error dialogs on startup.
+Update all Google AdMob Ad Unit IDs across the project to the user's new IDs, optimize eager pre-buffering on startup for faster ad delivery, and ensure clear messaging when an ad is pre-buffering.
 
 ## User Review Required
 
 > [!IMPORTANT]
-> - **Google Play Protect Compliance (`AndroidManifest.xml`)**:
->   - Remove deprecated high-risk storage permissions (`WRITE_EXTERNAL_STORAGE`, `READ_EXTERNAL_STORAGE`) that trigger Play Protect flags on modern Android 10-15 (API 29-35). App storage uses Android's private app directory (`getFilesDir()`), which requires zero risk permissions.
-> - **Instant Real-Time Typing Search (`index.html`)**:
->   - Movies and TV shows will appear instantly in real-time as the user types *each letter* (0ms local match + fast TMDb cloud query).
-> - **Runtime Error Elimination (`index.html`)**:
->   - Non-fatal third-party script exceptions will be caught silently without displaying red error boxes on screen.
+> - **New AdMob App ID**: `ca-app-pub-3715923077671486~7235293381`
+> - **Banner Ad**: `ca-app-pub-3715923077671486~7235293381` (or banner unit ID)
+> - **Interstitial Ad**: `ca-app-pub-3715923077671486/9321245725`
+> - **Rewarded Interstitial Ad**: `ca-app-pub-3715923077671486/1791395019`
+> - **Rewarded Ad**: `ca-app-pub-3715923077671486/6907990322`
+> - **Native Advanced Ad**: `ca-app-pub-3715923077671486/3416127013`
+> - **App Open Ad**: `ca-app-pub-3715923077671486/9538682234`
 
 ## Proposed Changes
 
-### Manifest Permission Safety (`AndroidManifest.xml`)
+### Manifest & Application Configuration (`AndroidManifest.xml`, `FilmBoxApplication.java`)
+- Update `AndroidManifest.xml` `<meta-data>` with new App ID: `ca-app-pub-3715923077671486~7235293381`.
+- Update `FilmBoxApplication.java` App Open Ad ID: `ca-app-pub-3715923077671486/9538682234`.
 
-#### [MODIFY] [AndroidManifest.xml](file:///C:/Users/EAGLE/AndroidStudioProjects/FilmBox/app/src/main/AndroidManifest.xml)
-- Remove `WRITE_EXTERNAL_STORAGE` and `READ_EXTERNAL_STORAGE` permissions to ensure clean Play Protect compliance.
-
-### Web Asset Real-Time Search & Error Prevention (`index.html`)
-
-#### [MODIFY] [index.html](file:///C:/Users/EAGLE/AndroidStudioProjects/FilmBox/app/src/main/assets/index.html)
-- Update `searchInput.oninput` to perform instant local matching on *every single keystroke*, followed by TMDb live API queries.
-- Update `window.onerror` to log minor exceptions gracefully to console rather than interrupting the user interface.
+### Layout & Main Activity Ad Unit IDs (`activity_main.xml`, `MainActivity.java`)
+- Update `activity_main.xml` AdView unit ID.
+- Update `MainActivity.java` with new IDs:
+  - Interstitial: `ca-app-pub-3715923077671486/9321245725`
+  - Rewarded Interstitial: `ca-app-pub-3715923077671486/1791395019`
+  - Rewarded Ad: `ca-app-pub-3715923077671486/6907990322`
+  - Native Advanced: `ca-app-pub-3715923077671486/3416127013`
+- Pre-buffer all ad units eagerly on startup for instant availability.
+- Provide clear feedback ("⏳ AdMob Ad is buffering. Please try again in a few seconds or select Go VIP.") if an ad is still loading when clicked.
 
 ## Verification Plan
 
 ### Automated Tests
-- Build project with Gradle (`app:assembleDebug`) to verify syntax, permission compilation, and clean APK output.
+- Build project with Gradle (`app:assembleDebug`) to verify compilation and syntax.
 
 ### Manual Verification
-- Deploy app, verify Play Protect scans cleanly without high-risk permission warnings.
-- Type queries letter-by-letter in search input `#q` and confirm search results update dynamically on every keystroke.
-- Confirm app launches smoothly with zero red runtime error dialogs.
+- Deploy app, verify App Open Ad on launch, Banner at bottom, Interstitial before player, and Rewarded Ad flow for offline downloads using new AdMob unit IDs.

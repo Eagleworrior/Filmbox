@@ -17,7 +17,7 @@ import com.google.android.gms.ads.appopen.AppOpenAd;
 
 public class FilmBoxApplication extends Application implements Application.ActivityLifecycleCallbacks {
     private static final String TAG = "FilmBoxApp";
-    private static final String APP_OPEN_AD_ID = "ca-app-pub-3715923077671486/9202365229";
+    private static final String APP_OPEN_AD_ID = "ca-app-pub-3715923077671486/9538682234";
     private AppOpenAd appOpenAd = null;
     private boolean isLoadingAd = false;
     private Activity currentActivity = null;

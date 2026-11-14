@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
     public void loadInterstitial() {
         try {
             AdRequest adRequest = new AdRequest.Builder().build();
-            InterstitialAd.load(this, "ca-app-pub-3715923077671486/7150257811", adRequest, new InterstitialAdLoadCallback() {
+            InterstitialAd.load(this, "ca-app-pub-3715923077671486/9321245725", adRequest, new InterstitialAdLoadCallback() {
                 @Override
                 public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
                     mInterstitialAd = interstitialAd;
@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void loadRewardedInterstitialAd() {
         try {
-            RewardedInterstitialAd.load(this, "ca-app-pub-3715923077671486/6052798563", new AdRequest.Builder().build(), new RewardedInterstitialAdLoadCallback() {
+            RewardedInterstitialAd.load(this, "ca-app-pub-3715923077671486/1791395019", new AdRequest.Builder().build(), new RewardedInterstitialAdLoadCallback() {
                 @Override
                 public void onAdLoaded(@NonNull RewardedInterstitialAd rewardedInterstitialAd) {
                     mRewardedInterstitialAd = rewardedInterstitialAd;
@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void loadRewardedAdDownload() {
         try {
-            RewardedAd.load(this, "ca-app-pub-3715923077671486/1845639445", new AdRequest.Builder().build(), new RewardedAdLoadCallback() {
+            RewardedAd.load(this, "ca-app-pub-3715923077671486/6907990322", new AdRequest.Builder().build(), new RewardedAdLoadCallback() {
                 @Override
                 public void onAdLoaded(@NonNull RewardedAd rewardedAd) {
                     mRewardedAdDownload = rewardedAd;
@@ -269,6 +269,8 @@ public class MainActivity extends AppCompatActivity {
 
             loadBannerAd();
             loadInterstitial();
+            loadRewardedInterstitialAd();
+            loadRewardedAdDownload();
 
             webViewApp = findViewById(R.id.webViewApp);
             customViewContainer = findViewById(R.id.customViewContainer);
